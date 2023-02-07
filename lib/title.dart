@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget title(String title, String image) {
+Widget title(String title, String image, String text, String image2) {
   return Column(
     children: [
       Row(
@@ -27,16 +27,18 @@ Widget title(String title, String image) {
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-              height: 15,
-              width: 15,
-              margin: EdgeInsets.only(right: 5),
-              child: Image.asset(
-                "images/love.png",
-                fit: BoxFit.fill,
-              )),
+          image2 == ""
+              ? Text("")
+              : Container(
+                  height: 15,
+                  width: 15,
+                  margin: EdgeInsets.only(right: 5),
+                  child: Image.asset(
+                    image2,
+                    fit: BoxFit.fill,
+                  )),
           Text(
-            "نحن في انتظارك في اقرأ سجل الان",
+            text,
             style: TextStyle(color: Colors.black54),
           ),
         ],
