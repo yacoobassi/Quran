@@ -1,13 +1,13 @@
+import 'dart:html';
+
 import 'package:Quran/new_pass.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'Signin.dart';
 import 'title.dart';
 
 Icon eye = Icon(Icons.remove_red_eye_outlined);
 bool presed = false;
 bool saveUser = false;
-double x, y;
+double x, y, fontSize;
 
 class Signup extends StatefulWidget {
   @override
@@ -18,38 +18,80 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
-    if (screen > 700) {
-      x = 250;
-      y = 283;
-    } else if (screen > 500) {
-      x = 160;
-      y = 180;
-    } else {
-      x = 120;
-      y = 136;
-    }
+    screen < 290 ? fontSize = 25 : fontSize = 35;
     return Scaffold(
       appBar: null,
       body: Container(
         color: Colors.white,
         alignment: Alignment.center,
-        padding: EdgeInsets.only(top: 30, right: 20, left: 20),
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 500),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                title("إنشاء حساب طالب جديد", "images/quran.png"),
-                icon(),
-                enter(),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
-          ),
+        padding: EdgeInsets.only(top: 30, right: 15, left: 15),
+        child: SingleChildScrollView(child: screen < 750 ? small() : big()),
+      ),
+    );
+  }
+}
+
+class small extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    x = 120;
+    y = 136;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        title("إنشاء حساب طالب جديد", "images/man.png", "", "", fontSize),
+        icon(),
+        enter(),
+        SizedBox(
+          height: 30,
         ),
+      ],
+    );
+  }
+}
+
+class big extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    x = 250;
+    y = 300;
+    return Container(
+      margin: EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 450,
+              ),
+              child: Container(
+                margin: EdgeInsets.only(right: 30),
+                child: Column(
+                  children: [
+                    title("إنشاء حساب طالب جديد", "images/man.png", "", "", 35),
+                    SizedBox(
+                      height: 60,
+                    ),
+                    enter(),
+                    SizedBox(
+                      height: 60,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 200,
+                ),
+                child: icon())
+          ]),
+          SizedBox(
+            height: 60,
+          ),
+        ],
       ),
     );
   }
@@ -59,7 +101,7 @@ Widget icon() {
   return Container(
     margin: EdgeInsets.symmetric(vertical: 20),
     child: Image.asset(
-      "images/new.png",
+      "images/quran.png",
       width: x,
       height: y,
     ),

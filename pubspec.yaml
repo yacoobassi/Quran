@@ -25,6 +25,8 @@ dependencies:
   share: ^2.0.4
   lottie: ^1.2.1
   flutter_native_splash: ^2.2.16
+  badges: ^3.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -78,3 +80,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  

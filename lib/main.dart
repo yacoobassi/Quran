@@ -1,4 +1,5 @@
-import 'package:Quran/Signin.dart';
+import 'package:Quran/sign_in.dart';
+import 'package:Quran/stdPage.dart';
 import 'package:flutter/material.dart';
 
 main() {
@@ -12,6 +13,6 @@ class Myapp extends StatelessWidget {
         title: "Quran",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
-        home: Signin());
+        home: student_page());
   }
 }
