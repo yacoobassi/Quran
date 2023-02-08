@@ -36,7 +36,7 @@ Widget title(String title, String image) {
                 fit: BoxFit.fill,
               )),
           Text(
-            "نحن في انتظارك في اقرأ سجل الان",
+            "سجل الآن",
             style: TextStyle(color: Colors.black54),
           ),
         ],

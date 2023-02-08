@@ -1,4 +1,5 @@
 import 'package:Quran/new_pass.dart';
+import 'package:Quran/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'title.dart';
@@ -274,11 +275,11 @@ class _noEmailState extends State<toSignUp> {
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return newPass();
+              return Signup();
             }));
           },
         ),
-        Text("ليس لدي حساب"),
+        Text("   ليس لدي حساب"),
       ],
     );
   }
