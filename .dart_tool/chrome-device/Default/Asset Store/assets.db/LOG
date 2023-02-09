@@ -1,4 +1,2 @@
-2023/02/08-12:54:08.382 3eec Reusing MANIFEST C:\Users\MOHAMM~1\AppData\Local\Temp\flutter_tools.9d7ea2ea\flutter_tools_chrome_device.7e4eef53\Default\Asset Store\assets.db/MANIFEST-000001
-2023/02/08-12:54:08.383 3eec Recovering log #4
-2023/02/08-12:54:08.384 3eec Reusing old log C:\Users\MOHAMM~1\AppData\Local\Temp\flutter_tools.9d7ea2ea\flutter_tools_chrome_device.7e4eef53\Default\Asset Store\assets.db/000004.log 
-2023/02/08-12:54:08.385 3eec Delete type=0 #3
+2023/02/08-20:38:30.040 3968 Creating DB C:\Users\MOHAMM~1\AppData\Local\Temp\flutter_tools.5b9fc8a\flutter_tools_chrome_device.5657946\Default\Asset Store\assets.db since it was missing.
+2023/02/08-20:38:30.126 3968 Reusing MANIFEST C:\Users\MOHAMM~1\AppData\Local\Temp\flutter_tools.5b9fc8a\flutter_tools_chrome_device.5657946\Default\Asset Store\assets.db/MANIFEST-000001

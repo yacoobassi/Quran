@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
@@ -53,19 +51,23 @@ class _topState extends State<top> {
       height: 150,
       color: Colors.green,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        
         InkWell(
           child: Badge(
             badgeContent: Text("$messagesNum"),
             showBadge: true,
             child: Container(
                 width: 50, height: 50, child: Image.asset("images/chat.png")),
-          ),
+         ),
           onTap: () {
             setState(() {
               messagesNum++;
             });
+            
           },
+          
         ),
+        
         Row(
           children: [
             name(),
