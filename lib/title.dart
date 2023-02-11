@@ -5,8 +5,15 @@ Widget title(
   return Column(
     children: [
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Container(
+              width: 40,
+              height: 40,
+              padding: EdgeInsets.only(left: 10),
+              child: Image.asset(
+                image,
+                fit: BoxFit.fill,
+              )),
           Text(
             title,
             style: TextStyle(
@@ -15,19 +22,14 @@ Widget title(
               fontWeight: FontWeight.bold,
             ),
           ),
-          Container(
-              width: 40,
-              height: 40,
-              padding: EdgeInsets.only(left: 10),
-              child: Image.asset(
-                image,
-                fit: BoxFit.fill,
-              ))
         ],
       ),
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Text(
+            text,
+            style: TextStyle(color: Colors.black54),
+          ),
           image2 == ""
               ? Text("")
               : Container(
@@ -38,10 +40,6 @@ Widget title(
                     image2,
                     fit: BoxFit.fill,
                   )),
-          Text(
-            text,
-            style: TextStyle(color: Colors.black54),
-          ),
         ],
       )
     ],
