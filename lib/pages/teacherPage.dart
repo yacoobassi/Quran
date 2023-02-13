@@ -1,9 +1,12 @@
-import 'package:Quran/appBar.dart';
-import 'package:Quran/profileBar.dart';
+import 'package:Quran/widgets/Bar/profileBar.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/Bar/appBar.dart';
 
 int messagesNum = 5, selected = 2;
 double opacity = 1;
+bool visible = false;
 var drawerlist = [
   {
     'page': 'الصفحة الرئيسية',
@@ -39,6 +42,12 @@ class teacher_page extends StatefulWidget {
 
 class _teacher_pageState extends State<teacher_page> {
   @override
+  show() {
+    visible = !visible;
+
+    setState(() {});
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -65,7 +74,7 @@ class _teacher_pageState extends State<teacher_page> {
               }),
         ],
       )),
-      appBar: appBar("صفحة المدرس"),
+      appBar: appbar(title: "صفحة المدرس", show: show),
       body: Container(
           child: Column(
         children: [profileBar(text: "محمد مسعود", image: "images/face.jpg")],
