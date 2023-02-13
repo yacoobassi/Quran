@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
 double opacity = 1;
@@ -29,7 +30,7 @@ class _profileBarState extends State<profileBar> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Badge(
+            badges.Badge(
               badgeContent: Icon(Icons.edit),
               badgeStyle: BadgeStyle(badgeColor: Colors.white),
               position: BadgePosition.bottomStart(),

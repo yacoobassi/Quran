@@ -1,5 +1,6 @@
 import 'package:Quran/pages/posts.dart';
 import 'package:Quran/pages/teacherPage.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class _appBarState extends State<appbar> {
       centerTitle: true,
       actions: [
         IconButton(
-          icon: Badge(
+          icon: badges.Badge(
               position: BadgePosition.topStart(),
               badgeContent: Text("$notification_num"),
               child: Icon(Icons.add_alert)),
@@ -50,7 +51,7 @@ class _appBarState extends State<appbar> {
         ),
         GestureDetector(
           child: IconButton(
-            icon: Badge(
+            icon: badges.Badge(
                 position: BadgePosition.topStart(),
                 badgeContent: Text("$messege_num"),
                 child: Icon(Icons.email)),

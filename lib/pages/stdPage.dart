@@ -32,6 +32,10 @@ var drawerlist = [
     'page': 'البوم الصور',
     'icon': Icon(Icons.picture_in_picture),
   },
+  {
+    'page': 'تسجيل الخروج ',
+    'icon': Icon(Icons.exit_to_app),
+  },
 ];
 
 class student_page extends StatefulWidget {
@@ -107,6 +111,9 @@ class _student_page extends State<student_page> {
             show: visible,
             infinty: infinity,
           )
-        ]));
+        ])
+      
+
+        );
   }
 }

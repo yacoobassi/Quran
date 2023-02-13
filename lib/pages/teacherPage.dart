@@ -33,6 +33,10 @@ var drawerlist = [
     'page': 'البوم الصور',
     'icon': Icon(Icons.picture_in_picture),
   },
+   {
+    'page': 'تسجيل الخروج ',
+    'icon': Icon(Icons.exit_to_app),
+  },
 ];
 
 class teacher_page extends StatefulWidget {
