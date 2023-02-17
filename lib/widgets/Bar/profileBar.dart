@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:badges/src/badge.dart' as badge;
 import 'package:flutter/material.dart';
 
 double opacity = 1;
@@ -29,28 +30,26 @@ class _profileBarState extends State<profileBar> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Badge(
+            badge.Badge(
               badgeContent: Icon(Icons.edit),
               badgeStyle: BadgeStyle(badgeColor: Colors.white),
               position: BadgePosition.bottomStart(),
               onTap: () {
                 setState(() {});
               },
-              child: Container(
-                child: InkWell(
-                  child: ClipOval(
-                      child: Image.asset(
-                    "${widget.image}",
-                    color: Colors.white.withOpacity(opacity),
-                    colorBlendMode: BlendMode.modulate,
-                    height: 80.0,
-                    width: 80.0,
-                    fit: BoxFit.fill,
-                  )),
-                  onTap: () {
-                    opacity = 0.7;
-                  },
-                ),
+              child: InkWell(
+                child: ClipOval(
+                    child: Image.asset(
+                  "${widget.image}",
+                  color: Colors.white.withOpacity(opacity),
+                  colorBlendMode: BlendMode.modulate,
+                  height: 80.0,
+                  width: 80.0,
+                  fit: BoxFit.fill,
+                )),
+                onTap: () {
+                  opacity = 0.7;
+                },
               ),
             ),
             SizedBox(

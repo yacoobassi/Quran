@@ -1,3 +1,4 @@
+import 'package:Quran/widgets/posts/comment.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Bar/appBar.dart';
 import '../widgets/Bar/notification.dart';
@@ -6,6 +7,7 @@ import '../widgets/posts/posts_body.dart';
 String comment = "التعليق على المنشور";
 
 bool visible, infinity;
+int post_message;
 
 class posts extends StatefulWidget {
   @override
@@ -18,12 +20,20 @@ class _postsState extends State<posts> {
     // TODO: implement initState
     super.initState();
     visible = false;
+    post_message = 0;
   }
 
   show() {
     visible = !visible;
-
     setState(() {});
+  }
+
+  likes() {
+    post_message = 1;
+  }
+
+  comments() {
+    post_message = 2;
   }
 
   Widget build(BuildContext context) {
@@ -38,8 +48,11 @@ class _postsState extends State<posts> {
         appBar: appbar(
           title: "صفحة المنشورات",
           show: show,
+          likes: likes,
+          comments: comments,
+          width: false,
         ),
-        body: Stack(alignment: Alignment.topLeft, children: [
+        body: Stack(children: [
           GestureDetector(
             onTap: () {
               setState(() {
@@ -52,7 +65,15 @@ class _postsState extends State<posts> {
                 color: Colors.black12,
                 child: Container(width: 700, child: posts_body())),
           ),
-          notification(show: visible, infinty: infinity)
+          Align(
+            alignment: Alignment.topLeft,
+            child: notification(
+                show: visible,
+                infinty: infinity,
+                message_post: post_message,
+                margin: false),
+          ),
+          Visibility(visible: true, child: comments_container(width: screen))
         ]));
   }
 }
