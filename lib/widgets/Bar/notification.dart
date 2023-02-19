@@ -30,12 +30,8 @@ var notifications = [
 ];
 
 class notification extends StatefulWidget {
-  bool show, infinty, margin;
-  int message_post;
-
-  notification(
-      {Key myKey, this.show, this.infinty, this.message_post, this.margin})
-      : super(key: myKey);
+  double width;
+  notification({Key myKey, this.width}) : super(key: myKey);
 
   @override
   State<notification> createState() => _notification_State();
@@ -44,19 +40,11 @@ class notification extends StatefulWidget {
 class _notification_State extends State<notification> {
   @override
   Widget build(BuildContext context) {
-    double circular = widget.infinty ? 0 : 15;
-    double margin = widget.infinty ? 0 : 10;
-    double width = widget.infinty ? double.infinity : 300;
-    String message_post =
-        widget.message_post == 1 ? "بارسال رسالة" : "باضافة منشور";
-    double marginTop = widget.margin ? 80 : 0;
-
-    return Visibility(
-      visible: widget.show,
+    return Drawer(
+      width: widget.width < 600 ? double.infinity : 300,
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          margin: EdgeInsets.only(top: marginTop, left: margin, bottom: margin),
-          width: width,
+          margin: EdgeInsets.only(top: 0, left: 10, bottom: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -70,8 +58,8 @@ class _notification_State extends State<notification> {
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(15),
                 bottomRight: Radius.circular(15),
-                topLeft: Radius.circular(circular),
-                topRight: Radius.circular(circular)),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)),
           ),
           child: ListView.builder(
             itemCount: notifications.length + 1,
@@ -101,7 +89,7 @@ class _notification_State extends State<notification> {
                             Column(
                               children: [
                                 Text(
-                                  "قام ${notifications[index - 1]['name']} $message_post",
+                                  "قام ${notifications[index - 1]['name']} باضافة",
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(

@@ -1,6 +1,7 @@
 import 'package:Quran/pages/posts.dart';
 import 'package:Quran/widgets/student_page/grid.dart';
 import 'package:Quran/widgets/student_page/profile_container.dart';
+import '../widgets/Bar/drawer.dart';
 import '../widgets/Bar/appBar.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Bar/notification.dart';
@@ -64,52 +65,21 @@ class _student_page extends State<student_page> {
     infinity = screen < 600;
     String name = "محمود مسعود";
     return Scaffold(
-      drawer: Drawer(
-          width: drawer_width,
-          child: Column(
-            children: [
-              UserAccountsDrawerHeader(
-                  onDetailsPressed: () {},
-                  currentAccountPicture: ClipOval(
-                    child: Image.asset("images/face.jpg"),
-                  ),
-                  accountName: Text("Mohammad"),
-                  accountEmail: Text("Mohammad@hotmail.com")),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: drawerlist.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return new ListTile(
-                      title: new Text(
-                        "${drawerlist[i]['page']}",
-                      ),
-                      trailing: drawerlist[i]['icon'],
-                      onTap: () {
-                        if (i == 4)
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return posts();
-                          }));
-                      },
-                    );
-                  }),
-            ],
-          )),
-      body: Stack(alignment: Alignment.topLeft, children: [
-        Stack(alignment: Alignment.topCenter, children: [
-          grid(width: width),
-          Container(
-              height: 200, child: appbar(title: "", show: show, width: true)),
-          profile_container(
-            name: "محمد مسعود",
-            width: width,
-          )
-        ]),
-        notification(
-          show: visible,
-          infinty: infinity,
-          margin: true,
-        ),
+      drawer: drawer(
+          student: true,
+          email: "Yacoobassi8@gmai.com",
+          name: "Yacoob assi",
+          image: "images/face.jpg",
+          drawer_width: drawer_width),
+      endDrawer: notification(),
+      body: Stack(alignment: Alignment.topCenter, children: [
+        grid(width: width),
+        Container(
+            height: 200, child: appbar(title: "", show: show, width: true)),
+        profile_container(
+          name: "محمد مسعود",
+          width: width,
+        )
       ]),
     );
   }

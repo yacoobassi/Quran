@@ -15,6 +15,8 @@ class posts extends StatefulWidget {
 }
 
 class _postsState extends State<posts> {
+  GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -24,8 +26,7 @@ class _postsState extends State<posts> {
   }
 
   show() {
-    visible = !visible;
-    setState(() {});
+    globalkey.currentState.openEndDrawer();
   }
 
   likes() {
@@ -45,6 +46,7 @@ class _postsState extends State<posts> {
       infinity = false;
 
     return Scaffold(
+        key: globalkey,
         appBar: appbar(
           title: "صفحة المنشورات",
           show: show,
@@ -52,28 +54,17 @@ class _postsState extends State<posts> {
           comments: comments,
           width: false,
         ),
-        body: Stack(children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                visible = false;
-              });
-            },
-            child: Container(
+        endDrawer: notification(width: screen),
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
                 width: double.infinity,
                 alignment: Alignment.center,
                 color: Colors.black12,
                 child: Container(width: 700, child: posts_body())),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: notification(
-                show: visible,
-                infinty: infinity,
-                message_post: post_message,
-                margin: false),
-          ),
-          Visibility(visible: true, child: comments_container(width: screen))
-        ]));
+            Visibility(visible: true, child: comments_container(width: screen))
+          ],
+        ));
   }
 }

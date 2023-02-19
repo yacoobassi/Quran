@@ -26,6 +26,6 @@ class Myapp extends StatelessWidget {
         supportedLocales: [Locale('ar', 'US')],
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
-        home: Table_student1());
+        home: posts());
   }
 }

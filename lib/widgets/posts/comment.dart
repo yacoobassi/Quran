@@ -1,21 +1,55 @@
 import 'package:Quran/textfiled.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 var comments = [
-  {'name': 'احمد', 'image': "images/face.jpg"},
-  {'name': 'يعقوب', 'image': "images/face.jpg"},
-  {'name': 'محمد', 'image': "images/face.jpg"},
-  {'name': 'رائد', 'image': "images/face.jpg"},
-  {'name': 'احمد', 'image': "images/face.jpg"},
-  {'name': 'يعقوب', 'image': "images/face.jpg"},
+  {
+    'name': 'احمد',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
+  {
+    'name': 'يعقوب',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
+  {
+    'name': 'محمد',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
+  {
+    'name': 'رائد',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
+  {
+    'name': 'احمد',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
+  {
+    'name': 'يعقوب',
+    'image': "images/face.jpg",
+    'comment': "التعليق على هذا المنشور"
+  },
 ];
 
-class comments_container extends StatelessWidget {
+class comments_container extends StatefulWidget {
   final width;
   comments_container({Key myKey, this.width}) : super(key: myKey);
+
+  @override
+  State<comments_container> createState() => _comments_containerState();
+}
+
+class _comments_containerState extends State<comments_container> {
   @override
   Widget build(BuildContext context) {
-    final screenwidth = width < 600 ? double.infinity : width - 200;
+    final screenwidth =
+        widget.width < 600 ? double.infinity : widget.width - 200;
+    final TextEditingController _comment = new TextEditingController();
+
     return Center(
       child: Container(
         width: 600,
@@ -41,13 +75,14 @@ class comments_container extends StatelessWidget {
                       )),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(5),
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Colors.black12,
+                                color: Color.fromARGB(31, 116, 114, 114),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,20 +93,23 @@ class comments_container extends StatelessWidget {
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Container(
-                                  alignment: Alignment.centerRight,
-                                  padding: EdgeInsets.all(10),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minWidth: 100,
+                                      maxWidth: widget.width - 150),
                                   child: Text(
-                                    "التعل5555555555555555555555555555555555555555555555555555555555يق على هذا المنشور",
+                                    comments[index]['comment'],
                                     style: TextStyle(
                                         fontSize: 12, color: Colors.black),
+                                    overflow: TextOverflow.clip,
                                   ),
                                 )
                               ],
                             ),
                           ),
                           Container(
-                              margin: EdgeInsets.only(right: 15),
+                              margin:
+                                  EdgeInsets.only(right: 15, top: 5, bottom: 5),
                               child: Text(
                                 "5 س",
                                 textDirection: TextDirection.rtl,
@@ -86,6 +124,7 @@ class comments_container extends StatelessWidget {
               ),
             ),
             Container(
+                height: 50,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border(
@@ -95,10 +134,10 @@ class comments_container extends StatelessWidget {
                       width: 1.0,
                     ))),
                 padding: EdgeInsets.all(5),
-                height: 50,
                 width: double.infinity,
                 child: TextFormField(
-                  textAlignVertical: TextAlignVertical.bottom,
+                  controller: _comment,
+                  textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: const BorderRadius.all(
@@ -106,9 +145,19 @@ class comments_container extends StatelessWidget {
                           ),
                           borderSide: BorderSide.none),
                       filled: true,
-                      fillColor: Colors.black12,
+                      fillColor: Color.fromARGB(31, 116, 114, 114),
                       hintText: "أكتب تعليق",
-                      hintStyle: TextStyle(color: Colors.black54)),
+                      hintStyle: TextStyle(color: Colors.black38)),
+                  onFieldSubmitted: (val) {
+                    setState(() {
+                      comments.add({
+                        'name': "يعقوب",
+                        'image': "images/face.jpg",
+                        'comment': "$val",
+                      });
+                    });
+                    _comment.clear();
+                  },
                 ))
           ],
         ),
