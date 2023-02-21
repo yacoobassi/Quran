@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:Quran/newChating/constants.dart';
-import 'package:Quran/newChating/screens/chat/component/body.dart';
+import 'package:Quran/newChating/components/constants.dart';
+import 'package:Quran/newChating/Screen_Chats/body.dart';
 
 class ChatsScreen extends StatefulWidget {
   @override

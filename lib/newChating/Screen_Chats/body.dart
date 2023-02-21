@@ -1,7 +1,7 @@
 import 'package:Quran/newChating/components/filled_outline_button.dart';
-import 'package:Quran/newChating/constants.dart';
-import 'package:Quran/newChating/models/Chat.dart';
-import 'package:Quran/newChating/screens/masseges/message_screen.dart';
+import 'package:Quran/newChating/components/constants.dart';
+import 'package:Quran/newChating/Screen_Chats/Chat.dart';
+import 'package:Quran/newChating/Screen_message/message_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'chat_card.dart';

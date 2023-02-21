@@ -1,7 +1,7 @@
-import 'package:Quran/newChating/constants.dart';
+import 'package:Quran/newChating/components/constants.dart';
 import 'package:flutter/material.dart';
 
-import 'package:Quran/newChating/screens/masseges/component/body.dart';
+import 'package:Quran/newChating/Screen_message/component/body.dart';
 
 class MessagesScreen extends StatelessWidget {
   @override

@@ -1,7 +1,7 @@
-import 'package:Quran/newChating/models/Chat.dart';
+import 'package:Quran/newChating/Screen_Chats/Chat.dart';
 import 'package:flutter/material.dart';
 
-import 'package:Quran/newChating/constants.dart';
+import 'package:Quran/newChating/components/constants.dart';
 
 class ChatCard extends StatelessWidget {
   const ChatCard({

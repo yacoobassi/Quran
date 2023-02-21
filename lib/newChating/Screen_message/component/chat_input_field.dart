@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import 'package:Quran/newChating/components/constants.dart';
 
 class ChatInputField extends StatelessWidget {
   const ChatInputField({

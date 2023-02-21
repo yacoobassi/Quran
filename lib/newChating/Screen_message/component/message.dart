@@ -1,7 +1,7 @@
-import 'package:Quran/newChating/models/ChatMessage.dart';
+import 'package:Quran/newChating/Screen_message/ChatMessage.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import 'package:Quran/newChating/components/constants.dart';
 import 'audio_message.dart';
 import 'text_message.dart';
 import 'video_message.dart';
