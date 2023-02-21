@@ -9,6 +9,8 @@ import 'package:Quran/pages/teacherPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'newChating/screens/chat/chat_screen.dart';
+
 main() {
   runApp(Myapp());
 }
@@ -26,6 +28,6 @@ class Myapp extends StatelessWidget {
         supportedLocales: [Locale('ar', 'US')],
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
-        home: teacher_page());
+        home: ChatsScreen());
   }
 }
