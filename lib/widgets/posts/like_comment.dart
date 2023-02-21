@@ -4,9 +4,10 @@ Icon love;
 bool like;
 
 class like_comment extends StatefulWidget {
-  Function refresh, inclikes;
+  Function refresh, inclikes, showComments;
 
-  like_comment({Key myKey, this.refresh, this.inclikes}) : super(key: myKey);
+  like_comment({Key myKey, this.refresh, this.inclikes, this.showComments})
+      : super(key: myKey);
 
   State<like_comment> createState() => _like_commentState();
 }
@@ -60,7 +61,9 @@ class _like_commentState extends State<like_comment> {
                 style: TextStyle(fontSize: 20),
               ),
             ]),
-            onTap: () {},
+            onTap: () {
+              widget.showComments();
+            },
           ),
         ],
       ),

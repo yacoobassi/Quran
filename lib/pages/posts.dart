@@ -4,10 +4,10 @@ import '../widgets/Bar/appBar.dart';
 import '../widgets/Bar/notification.dart';
 import '../widgets/posts/posts_body.dart';
 
-String comment = "التعليق على المنشور";
+String comment = "التعليق على المنشور", likeORcomment;
 
-bool visible, infinity;
 int post_message;
+double opacity;
 
 class posts extends StatefulWidget {
   @override
@@ -16,17 +16,24 @@ class posts extends StatefulWidget {
 
 class _postsState extends State<posts> {
   GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
-
+  bool visible, infinity, commentsVisible;
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    visible = false;
-    post_message = 0;
+  showComments() {
+    commentsVisible = true;
+    opacity = 0.4;
+    setState(() {});
   }
 
-  show() {
+  closeComments() {
+    commentsVisible = false;
+    opacity = 1;
+    setState(() {});
+  }
+
+  show(String text) {
     globalkey.currentState.openEndDrawer();
+    likeORcomment = text;
+    setState(() {});
   }
 
   likes() {
@@ -35,6 +42,15 @@ class _postsState extends State<posts> {
 
   comments() {
     post_message = 2;
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    visible = false;
+    post_message = 0;
+    opacity = 1;
+    commentsVisible = false;
   }
 
   Widget build(BuildContext context) {
@@ -53,18 +69,34 @@ class _postsState extends State<posts> {
           likes: likes,
           comments: comments,
           width: false,
+          opacity: opacity,
         ),
-        endDrawer: notification(width: screen),
-        body: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                color: Colors.black12,
-                child: Container(width: 700, child: posts_body())),
-            Visibility(visible: true, child: comments_container(width: screen))
-          ],
+        endDrawer: notification(width: screen, text: likeORcomment),
+        body: GestureDetector(
+          onTap: () {
+            setState(() {
+              commentsVisible = false;
+              opacity = 1;
+            });
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: Colors.black12,
+                  child: Container(
+                      width: 700,
+                      child: posts_body(
+                        showComments: showComments,
+                      ))),
+              Visibility(
+                  visible: commentsVisible,
+                  child: comments_container(
+                      width: screen, closeComments: closeComments))
+            ],
+          ),
         ));
   }
 }

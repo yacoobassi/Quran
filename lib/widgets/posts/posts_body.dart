@@ -13,6 +13,11 @@ var images = [
 int likes, comments;
 
 class posts_body extends StatefulWidget {
+  Function showComments;
+  posts_body({
+    Key myKey,
+    this.showComments,
+  }) : super(key: myKey);
   @override
   State<posts_body> createState() => _posts_bodyState();
 }
@@ -83,7 +88,11 @@ class _posts_bodyState extends State<posts_body> {
             SizedBox(
               height: 20,
             ),
-            like_comment(refresh: refresh, inclikes: incLikes)
+            like_comment(
+              refresh: refresh,
+              inclikes: incLikes,
+              showComments: widget.showComments,
+            )
           ]),
         );
       },

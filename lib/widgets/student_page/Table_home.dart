@@ -1,9 +1,7 @@
 import 'package:Quran/widgets/Bar/appBar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
-import '../../pages/posts.dart';
-import '../posts/posts_body.dart';
+import '../../pages/Student_table.dart';
 
 List titles = [
   "اليوم",

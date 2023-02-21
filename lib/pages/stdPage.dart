@@ -44,9 +44,10 @@ class student_page extends StatefulWidget {
 
 class _student_page extends State<student_page> {
   @override
-  show() {
-    visible = !visible;
-
+  GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
+  show(String text) {
+    globalkey.currentState.openEndDrawer();
+    likeORcomment = text;
     setState(() {});
   }
 
@@ -65,19 +66,30 @@ class _student_page extends State<student_page> {
     infinity = screen < 600;
     String name = "محمود مسعود";
     return Scaffold(
+      key: globalkey,
       drawer: drawer(
           student: true,
           email: "Yacoobassi8@gmai.com",
           name: "Yacoob assi",
           image: "images/face.jpg",
           drawer_width: drawer_width),
-      endDrawer: notification(),
+      endDrawer: notification(
+        width: screen,
+        text: likeORcomment,
+      ),
       body: Stack(alignment: Alignment.topCenter, children: [
         grid(width: width),
         Container(
-            height: 200, child: appbar(title: "", show: show, width: true)),
+          height: 200,
+          child: appbar(
+            title: "صفحة الطالب",
+            show: show,
+            width: true,
+            opacity: 1,
+          ),
+        ),
         profile_container(
-          name: "محمد مسعود",
+          name: "$name",
           width: width,
         )
       ]),

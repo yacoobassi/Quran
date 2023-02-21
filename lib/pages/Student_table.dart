@@ -59,8 +59,10 @@ class Table_student1 extends StatefulWidget {
 }
 
 class _Table_student1State extends State<Table_student1> {
-  show() {
-    visible = !visible;
+  GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
+  show(String text) {
+    globalkey.currentState.openEndDrawer();
+    likeORcomment = text;
     setState(() {});
   }
 
@@ -73,7 +75,7 @@ class _Table_student1State extends State<Table_student1> {
 
   @override
   Widget build(BuildContext context) {
-    final screen = MediaQuery.of(context).size.width;
+    double screen = MediaQuery.of(context).size.width;
     double drawer_width = screen < 600 ? double.infinity : 300;
     bool infinity;
     if (screen < 600)
@@ -81,55 +83,54 @@ class _Table_student1State extends State<Table_student1> {
     else
       infinity = false;
     return Scaffold(
+      key: globalkey,
       appBar: appbar(
         title: "جداول الحفظ",
         show: show,
         width: false,
+        opacity: 1,
       ),
-      endDrawer: notification(),
-      body: Stack(children: [
-        Center(
+      endDrawer: notification(
+        width: screen,
+        text: likeORcomment,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(top: 15),
+          scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(top: 15),
-            scrollDirection: Axis.horizontal,
-            child: SingleChildScrollView(
-              child: Column(children: [
-                Container(
-                  width: 800,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "الجزء: جزء تبارك",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        "العام: 2023",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        "المجموعة :الاولى",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
+            child: Column(children: [
+              Container(
+                width: 800,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "الجزء: جزء تبارك",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "العام: 2023",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "المجموعة :الاولى",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                DataTable(
-                  columns: getcolumns(columns),
-                  rows: getrows(rows),
-                ),
-              ]),
-            ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              DataTable(
+                columns: getcolumns(columns),
+                rows: getrows(rows),
+              ),
+            ]),
           ),
         ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: notification(),
-        ),
-      ]),
+      ),
     );
   }
 }
