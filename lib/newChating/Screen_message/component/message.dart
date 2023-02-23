@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Quran/newChating/Screen_message/ChatMessage.dart';
 import 'package:flutter/material.dart';
 
@@ -7,24 +9,21 @@ import 'text_message.dart';
 import 'video_message.dart';
 
 class Message extends StatelessWidget {
-  const Message({
-    Key key,
-    @required this.message,
-  }) : super(key: key);
+  Message({Key key, @required this.message, this.image}) : super(key: key);
 
+  File image;
   final ChatMessage message;
 
   @override
   Widget build(BuildContext context) {
-  
     Object messageContaint(ChatMessage message) {
       switch (message.messageType) {
         case ChatMessageType.text:
-          return TextMessage(message:message);
+          return TextMessage(message: message);
         case ChatMessageType.audio:
           return AudioMessage(message: message);
         case ChatMessageType.video:
-          return VideoMessage();
+          return VideoMessage(message: message);
         default:
           return SizedBox();
       }

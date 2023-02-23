@@ -9,7 +9,7 @@ import 'package:Quran/pages/teacherPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'newChating/screens/chat/chat_screen.dart';
+import 'newChating/Screen_Chats/chat_screen.dart';
 
 main() {
   runApp(Myapp());
