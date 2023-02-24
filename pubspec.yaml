@@ -9,7 +9,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -26,10 +26,21 @@ dependencies:
   lottie: ^1.2.1
   flutter_native_splash: ^2.2.16
   badges: ^3.0.2
-  emoji_picker_flutter: ^1.0.7
-  image_picker: ^0.8.6+2
+  emoji_picker_flutter: ^1.5.2
+  camera: ^0.9.4+5
+  image_picker: ^0.8.4+4
   image_cropper: ^3.0.1
-  path_provider: ^2.0.12
+  path_provider: ^2.0.13
+  path:
+  shared_preferences: ^2.0.15
+  video_player: ^1.0.1
+  socket_io_client: ^0.9.12
+  flutter_keyboard_visibility: ^5.4.0
+  cloud_firestore: ^4.4.3
+  firebase_core: ^2.7.0
+
+  
+
 
 dev_dependencies:
   flutter_test:

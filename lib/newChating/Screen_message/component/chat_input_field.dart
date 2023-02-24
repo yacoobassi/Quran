@@ -1,5 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
+import 'package:Quran/pages/stdPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Quran/newChating/components/constants.dart';
@@ -7,11 +10,13 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import '../../../image.dart';
+import '../../camera/cameraPage.dart';
 import '../ChatMessage.dart';
 
 class ChatInputField extends StatefulWidget {
   Function refresh, scroll, showEmoji, closeEmoji;
   TextEditingController textController;
+  bool Icons_visible;
   ChatInputField({
     Key key,
     this.refresh,
@@ -19,6 +24,7 @@ class ChatInputField extends StatefulWidget {
     this.showEmoji,
     this.closeEmoji,
     this.textController,
+    this.Icons_visible,
   }) : super(key: key);
 
   @override
@@ -30,6 +36,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
   Icon send;
 
   final image = ImageHelper();
+
+  @override
+  void dispose() {
+    focus.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -113,9 +125,11 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         widget.showEmoji();
                       },
                     ),
-                    SizedBox(width: kDefaultPadding / 4),
+                    SizedBox(width: kDefaultPadding / 2),
                     Expanded(
                       child: TextField(
+                        minLines: 1,
+                        maxLines: 3,
                         focusNode: focus,
                         controller: widget.textController,
                         onEditingComplete: () {
@@ -137,46 +151,53 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.attach_file,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .color
-                          .withOpacity(0.64),
+                    Visibility(
+                        visible: widget.Icons_visible,
+                        child: InkWell(
+                            child:
+                                Icon(Icons.attach_file, color: kPrimaryColor))),
+                    SizedBox(width: kDefaultPadding / 2),
+                    Visibility(
+                      visible: widget.Icons_visible,
+                      child: InkWell(
+                        onTap: () async {
+                          final files = await image.pickImage();
+                          if (files.isNotEmpty) {
+                            demeChatMessages.add(ChatMessage(
+                              text: files.first.path,
+                              messageType: ChatMessageType.video,
+                              messageStatus: MessageStatus.viewed,
+                              isSender: false,
+                            ));
+
+                            widget.refresh();
+                            widget.scroll();
+                          }
+                          // if (files.isNotEmpty) {
+                          //   final cropfiles = await image.crop(
+                          //       file: files.first, cropStyle: CropStyle.circle);
+                          //   if (cropfiles != null) {
+                          //     setState(() => _image = File(
+                          //           cropfiles.path,
+                          //         ));
+                          //   }
+                          // }
+                        },
+                        child: Icon(Icons.image, color: kPrimaryColor),
+                      ),
                     ),
-                    SizedBox(width: kDefaultPadding / 4),
-                    InkWell(
-                      onTap: () async {
-                        final files = await image.pickImage();
-
-                        demeChatMessages.add(ChatMessage(
-                          text: files.first.path,
-                          messageType: ChatMessageType.video,
-                          messageStatus: MessageStatus.viewed,
-                          isSender: false,
-                        ));
-
-                        widget.refresh();
-                        widget.scroll();
-
-                        // if (files.isNotEmpty) {
-                        //   final cropfiles = await image.crop(
-                        //       file: files.first, cropStyle: CropStyle.circle);
-                        //   if (cropfiles != null) {
-                        //     setState(() => _image = File(
-                        //           cropfiles.path,
-                        //         ));
-                        //   }
-                        // }
-                      },
-                      child: Icon(
-                        Icons.camera_alt_outlined,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .color
-                            .withOpacity(0.64),
+                    SizedBox(width: kDefaultPadding / 2),
+                    Visibility(
+                      visible: widget.Icons_visible,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return CameraPage(
+                                scroll: widget.scroll, refresh: widget.refresh);
+                          }));
+                        },
+                        child: Icon(Icons.camera_alt, color: kPrimaryColor),
                       ),
                     ),
                   ],

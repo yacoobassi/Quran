@@ -1,10 +1,10 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:Quran/newChating/components/constants.dart';
 import 'package:Quran/newChating/Screen_message/ChatMessage.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 
 import 'chat_input_field.dart';
@@ -37,8 +37,10 @@ class _BodyState extends State<Body> {
   }
 
   Widget build(BuildContext context) {
+    final bool show_icons =
+        !KeyboardVisibilityProvider.isKeyboardVisible(context);
     Future _scrollDown() async {
-      await Future.delayed(Duration(milliseconds: 100), () {
+      await Future.delayed(Duration(milliseconds: 300), () {
         _controller.animateTo(
           _controller.position.maxScrollExtent,
           duration: Duration(seconds: 1),
@@ -68,8 +70,8 @@ class _BodyState extends State<Body> {
         } else {
           _message.clear();
           Navigator.pop(context);
-          return Future.value(false);
         }
+        return Future.value(false);
       },
       child: Column(
         children: [
@@ -92,6 +94,7 @@ class _BodyState extends State<Body> {
                 showEmoji: showEmojiOnTap,
                 closeEmoji: closeEmoji,
                 textController: _message,
+                Icons_visible: show_icons,
               ),
               showemoji
                   ? SizedBox(
