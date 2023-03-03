@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:Quran/newChating/firebase/services/shared.dart';
 
 import 'package:Quran/newChating/components/constants.dart';
 import 'package:Quran/newChating/Screen_message/ChatMessage.dart';
@@ -7,15 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 
+import '../../firebase/constants.dart';
+import '../../firebase/services/database.dart';
 import 'chat_input_field.dart';
 import 'message.dart';
 
 class Body extends StatefulWidget {
   @override
   State<Body> createState() => _BodyState();
+  String id;
+  Stream chats;
+  Body(this.id, this.chats) {}
 }
 
 final TextEditingController _message = new TextEditingController();
+DataBase dataBase = new DataBase();
 
 class _BodyState extends State<Body> {
   ScrollController _controller;
@@ -28,6 +35,27 @@ class _BodyState extends State<Body> {
 
     _controller = ScrollController();
     showemoji = false;
+  }
+
+  Widget chatList() {
+    return StreamBuilder(
+      stream: widget.chats,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                return MessageTile(
+                  message: snapshot.data.docs[index]["message"],
+                  sendByMe:
+                      Constant.myName == snapshot.data.docs[index]["sendBy"],
+                );
+              });
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
   refresh() {
@@ -77,14 +105,16 @@ class _BodyState extends State<Body> {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: ListView.builder(
-                controller: _controller,
-                itemCount: demeChatMessages.length,
-                itemBuilder: (context, index) =>
-                    Message(message: demeChatMessages[index]),
-              ),
-            ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: chatList()
+                // child: ListView.builder(
+                //   controller: _controller,
+                //   itemCount: demeChatMessages.length,
+                //   itemBuilder: (context, index) =>
+                //       Message(message: demeChatMessages[index]),
+                // ),
+                ),
           ),
           Column(
             children: [
@@ -95,6 +125,7 @@ class _BodyState extends State<Body> {
                 closeEmoji: closeEmoji,
                 textController: _message,
                 Icons_visible: show_icons,
+                chatRoomId: widget.id,
               ),
               showemoji
                   ? SizedBox(
@@ -138,4 +169,49 @@ Widget showEmoji() {
         buttonMode: ButtonMode.MATERIAL,
         checkPlatformCompatibility: true,
       ));
+}
+
+class MessageTile extends StatelessWidget {
+  final String message;
+  final bool sendByMe;
+
+  MessageTile({@required this.message, @required this.sendByMe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+          top: 8, bottom: 8, left: sendByMe ? 0 : 24, right: sendByMe ? 24 : 0),
+      alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin:
+            sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
+        padding: EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
+        decoration: BoxDecoration(
+            borderRadius: sendByMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomLeft: Radius.circular(23))
+                : BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomRight: Radius.circular(23)),
+            gradient: LinearGradient(
+                colors: sendByMe
+                    ? [const Color(0xff007EF4), const Color(0xff2A75BC)]
+                    : [
+                        Color.fromARGB(255, 0, 244, 53),
+                        Color.fromARGB(255, 0, 244, 53),
+                      ])),
+        child: Text(message,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'OverpassRegular',
+                fontWeight: FontWeight.w300)),
+      ),
+    );
+  }
 }

@@ -1,4 +1,6 @@
 import 'package:Quran/pages/posts.dart';
+import 'package:Quran/pages/sign_in.dart';
+import 'package:Quran/newChating/firebase/services/auth.dart';
 import 'package:flutter/material.dart';
 
 var Studentlist = [
@@ -65,6 +67,7 @@ class drawer extends StatefulWidget {
 }
 
 class _drawerState extends State<drawer> {
+  Auth auth = new Auth();
   @override
   Widget build(BuildContext context) {
     var drawerlist = widget.student ? Studentlist : teacherlist;
@@ -92,6 +95,14 @@ class _drawerState extends State<drawer> {
                       trailing: drawerlist[i]['icon'],
                       onTap: () {
                         Navigator.pop(context);
+
+                        if (i == drawerlist.length - 1) {
+                          auth.signout();
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return Signin();
+                          }));
+                        }
 
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {

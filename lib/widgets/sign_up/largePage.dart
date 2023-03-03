@@ -5,6 +5,8 @@ import '../../pages/signup.dart';
 import '../../title.dart';
 
 class big extends StatelessWidget {
+  Function load;
+  big({Key myKey, this.load}) : super(key: myKey);
   @override
   Widget build(BuildContext context) {
     x = 250;
@@ -32,7 +34,7 @@ class big extends StatelessWidget {
                     SizedBox(
                       height: 60,
                     ),
-                    enter(),
+                    enter(load: load),
                     SizedBox(
                       height: 60,
                     ),

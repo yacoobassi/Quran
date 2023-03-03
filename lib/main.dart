@@ -1,4 +1,5 @@
 import 'package:Quran/firebase_options.dart';
+import 'package:Quran/newChating/firebase/services/shared.dart';
 import 'package:Quran/pages/Student_table.dart';
 import 'package:Quran/pages/new_pass.dart';
 import 'package:Quran/pages/posts.dart';
@@ -26,22 +27,46 @@ Future<void> main() async {
   runApp(Myapp());
 }
 
-class Myapp extends StatelessWidget {
+class Myapp extends StatefulWidget {
+  @override
+  State<Myapp> createState() => _MyappState();
+}
+
+class _MyappState extends State<Myapp> {
+  bool userIsLoggedIn;
+
+  @override
+  void initState() {
+    getLoggedInState();
+    super.initState();
+  }
+
+  getLoggedInState() async {
+    await helper.getUserLoggedIn().then((value) {
+      setState(() {
+        userIsLoggedIn = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityProvider(
       child: MaterialApp(
-        title: "Quran",
-        localizationsDelegates: [
-          GlobalCupertinoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
-        ],
-        supportedLocales: [Locale('ar', 'US')],
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
-        home: Table_student1(),
-      ),
+          title: "Quran",
+          localizationsDelegates: [
+            GlobalCupertinoLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          supportedLocales: [Locale('ar', 'US')],
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
+          home: userIsLoggedIn != null
+              ? userIsLoggedIn
+                  ? ChatsScreen()
+                  : Signin()
+              : Signin()),
     );
   }
 }

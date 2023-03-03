@@ -5,6 +5,8 @@ import '../../pages/signup.dart';
 import '../../title.dart';
 
 class small extends StatelessWidget {
+  Function load;
+  small({Key myKey, this.load}) : super(key: myKey);
   @override
   Widget build(BuildContext context) {
     x = 120;
@@ -15,7 +17,7 @@ class small extends StatelessWidget {
       children: [
         title("إنشاء حساب طالب جديد", "images/man.png", "", "", fontSize),
         icon(),
-        enter(),
+        enter(load: load),
         SizedBox(
           height: 30,
         ),

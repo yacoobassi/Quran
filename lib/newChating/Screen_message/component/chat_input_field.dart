@@ -6,26 +6,29 @@ import 'package:Quran/pages/stdPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Quran/newChating/components/constants.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
+
 import '../../../image.dart';
 import '../../camera/cameraPage.dart';
+import '../../firebase/constants.dart';
+import '../../firebase/services/database.dart';
 import '../ChatMessage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatInputField extends StatefulWidget {
   Function refresh, scroll, showEmoji, closeEmoji;
   TextEditingController textController;
+  String chatRoomId;
   bool Icons_visible;
-  ChatInputField({
-    Key key,
-    this.refresh,
-    this.scroll,
-    this.showEmoji,
-    this.closeEmoji,
-    this.textController,
-    this.Icons_visible,
-  }) : super(key: key);
+  ChatInputField(
+      {Key key,
+      this.refresh,
+      this.scroll,
+      this.showEmoji,
+      this.closeEmoji,
+      this.textController,
+      this.Icons_visible,
+      this.chatRoomId})
+      : super(key: key);
 
   @override
   State<ChatInputField> createState() => _ChatInputFieldState();
@@ -34,6 +37,8 @@ class ChatInputField extends StatefulWidget {
 class _ChatInputFieldState extends State<ChatInputField> {
   FocusNode focus;
   Icon send;
+  TextEditingController messageController = new TextEditingController();
+  DataBase dataBase = new DataBase();
 
   final image = ImageHelper();
 
@@ -56,6 +61,17 @@ class _ChatInputFieldState extends State<ChatInputField> {
       widget.refresh();
     });
     send = Icon(Icons.mic, color: kPrimaryColor);
+  }
+
+  sendMessage() {
+    if (widget.textController.text.isNotEmpty) {
+      Map<String, String> message = {
+        'message': widget.textController.text,
+        'sendBy': Constant.myName,
+      };
+      print(widget.chatRoomId);
+      dataBase.addChatMessages(widget.chatRoomId, message);
+    }
   }
 
   Widget build(BuildContext context) {
@@ -81,17 +97,22 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 ? Icon(Icons.mic, color: kPrimaryColor)
                 : InkWell(
                     onTap: () {
-                      setState(() {
-                        demeChatMessages.add(ChatMessage(
-                          text: widget.textController.text,
-                          messageType: ChatMessageType.text,
-                          messageStatus: MessageStatus.viewed,
-                          isSender: false,
-                        ));
-                        widget.textController.clear();
-                      });
-                      widget.refresh();
-                      widget.scroll();
+                      // setState(() {
+                      //   sendMessage();
+                      //   demeChatMessages.add(ChatMessage(
+                      //     text: widget.textController.text,
+                      //     messageType: ChatMessageType.text,
+                      //     messageStatus: MessageStatus.viewed,
+                      //     isSender: false,
+                      //   ));
+                      //
+                      // });
+
+                      sendMessage();
+                      widget.textController.clear();
+                      // widget.refresh();
+
+                      //    widget.scroll();
                     },
                     child: Icon(
                       Icons.send,
@@ -163,25 +184,22 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         onTap: () async {
                           final files = await image.pickImage();
                           if (files.isNotEmpty) {
-                            demeChatMessages.add(ChatMessage(
-                              text: files.first.path,
-                              messageType: ChatMessageType.video,
-                              messageStatus: MessageStatus.viewed,
-                              isSender: false,
-                            ));
-
+                            // demeChatMessages.add(ChatMessage(
+                            //   text: files.first.path,
+                            //   messageType: ChatMessageType.video,
+                            //   messageStatus: MessageStatus.viewed,
+                            //   isSender: false,
+                            // ));
+                            String image_name = DateTime.now()
+                                .microsecondsSinceEpoch
+                                .toString();
+                            Reference refRoot = FirebaseStorage.instance.ref();
+                            Reference refDirImage = refRoot.child('images');
+                            Reference imageToUpload =
+                                refDirImage.child(image_name);
                             widget.refresh();
                             widget.scroll();
                           }
-                          // if (files.isNotEmpty) {
-                          //   final cropfiles = await image.crop(
-                          //       file: files.first, cropStyle: CropStyle.circle);
-                          //   if (cropfiles != null) {
-                          //     setState(() => _image = File(
-                          //           cropfiles.path,
-                          //         ));
-                          //   }
-                          // }
                         },
                         child: Icon(Icons.image, color: kPrimaryColor),
                       ),

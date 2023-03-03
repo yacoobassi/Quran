@@ -1,4 +1,4 @@
-
+import 'package:Quran/newChating/search.dart';
 import 'package:flutter/material.dart';
 import 'package:Quran/newChating/components/constants.dart';
 import 'package:Quran/newChating/Screen_Chats/body.dart';
@@ -10,11 +10,12 @@ class ChatsScreen extends StatefulWidget {
 
 class _ChatsScreenState extends State<ChatsScreen> {
   int _selectedIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Body(),
+      body: Body(""),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: kPrimaryColor,
@@ -58,7 +59,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
       actions: [
         IconButton(
           icon: Icon(Icons.search),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Search()));
+          },
         ),
       ],
     );

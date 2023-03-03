@@ -4,8 +4,9 @@ import '../widgets/sign_up/largePage.dart';
 import '../widgets/sign_up/smallPage.dart';
 
 Icon eye = Icon(Icons.remove_red_eye_outlined);
-bool presed = false;
-bool saveUser = false;
+bool presed;
+bool saveUser, isloading;
+
 double x, y, fontSize;
 
 class Signup extends StatefulWidget {
@@ -14,6 +15,20 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    presed = false;
+    saveUser = false;
+    isloading = false;
+  }
+
+  load() {
+    isloading = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
@@ -24,7 +39,12 @@ class _SignupState extends State<Signup> {
         color: Colors.white,
         alignment: Alignment.center,
         padding: EdgeInsets.only(top: 30, right: 15, left: 15),
-        child: SingleChildScrollView(child: screen < 750 ? small() : big()),
+        child: !isloading
+            ? SingleChildScrollView(
+                child: screen < 750 ? small(load: load) : big(load: load))
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
       ),
     );
   }
