@@ -1,5 +1,7 @@
 import 'package:Quran/pages/posts.dart';
+import 'package:Quran/widgets/Bar/profileBar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/Bar/drawer.dart';
 import '../widgets/Bar/appBar.dart';
 import '../widgets/Bar/notification.dart';

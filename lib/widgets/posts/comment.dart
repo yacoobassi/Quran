@@ -72,7 +72,6 @@ class _comments_containerState extends State<comments_container> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _controller = ScrollController();
   }
 

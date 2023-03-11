@@ -1,37 +1,14 @@
-import 'dart:async';
-
 import 'package:Quran/newChating/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Quran/newChating/Screen_message/component/body.dart';
 
-class MessagesScreen extends StatefulWidget {
-  String id;
-
-  MessagesScreen(this.id);
-
-  @override
-  State<MessagesScreen> createState() => _MessagesScreenState();
-}
-
-class _MessagesScreenState extends State<MessagesScreen> {
-  Stream chats;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    dataBase.getChats(widget.id).then((value) {
-      setState(() {
-        chats = value;
-      });
-    });
-  }
-
+class MessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Body(widget.id, chats),
+      body: Body(),
     );
   }
 

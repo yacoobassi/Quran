@@ -1,4 +1,5 @@
 import 'package:Quran/widgets/Bar/appBar.dart';
+import 'package:Quran/widgets/Bar/drawer.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Bar/notification.dart';
 import 'posts.dart';
@@ -83,6 +84,12 @@ class _Table_student1State extends State<Table_student1> {
     else
       infinity = false;
     return Scaffold(
+       drawer: drawer(
+          student: true,
+          email: "Yacoobassi8@gmai.com",
+          name: "Yacoob assi",
+          image: "images/face.jpg",
+          drawer_width: drawer().drawer_width),
       key: globalkey,
       appBar: appbar(
         title: "جداول الحفظ",
@@ -151,5 +158,6 @@ List<DataRow> getrows(List<data> rows) => rows.map((data cell) {
       ];
       return DataRow(cells: getcells(cells));
     }).toList();
+    
 List<DataCell> getcells(List<String> cells) =>
     cells.map((data) => DataCell(Text('$data'))).toList();

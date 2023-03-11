@@ -9,33 +9,7 @@ import '../widgets/Bar/notification.dart';
 int messagesNum = 5, selected = 2;
 double opacity = 1;
 bool visible, infinity;
-var drawerlist = [
-  {
-    'page': 'الصفحة الرئيسية',
-    'icon': Icon(Icons.home),
-  },
-  {'page': 'الامتحانات', 'icon': Icon(Icons.pending_actions_outlined)},
-  {
-    'page': 'العلامات',
-    'icon': Icon(Icons.date_range),
-  },
-  {
-    'page': 'جدول الحفظ',
-    'icon': Icon(Icons.table_chart_outlined),
-  },
-  {
-    'page': 'المنشورات',
-    'icon': Icon(Icons.post_add),
-  },
-  {
-    'page': 'البوم الصور',
-    'icon': Icon(Icons.picture_in_picture),
-  },
-  {
-    'page': 'تسجيل الخروج ',
-    'icon': Icon(Icons.exit_to_app),
-  }
-];
+
 
 class student_page extends StatefulWidget {
   @override

@@ -48,7 +48,7 @@ class _notification_State extends State<notification> {
         padding: EdgeInsets.only(
           right: 10,
         ),
-        margin: EdgeInsets.only(bottom: widget.width < 600 ? 0 : 30, left: 10),
+        margin: EdgeInsets.only(bottom: 30, left: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -60,8 +60,8 @@ class _notification_State extends State<notification> {
             ),
           ],
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(widget.width < 600 ? 0 : 15),
-              bottomRight: Radius.circular(widget.width < 600 ? 0 : 15),
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10)),
         ),

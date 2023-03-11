@@ -14,8 +14,8 @@ class TextMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: MediaQuery.of(context).platformBrightness == Brightness.dark
-      //     ? Colors.white
+     // color: MediaQuery.of(context).platformBrightness == Brightness.dark
+     //     ? Colors.white
       //    : Colors.black,
       padding: EdgeInsets.symmetric(
         horizontal: kDefaultPadding * 0.75,
@@ -25,15 +25,12 @@ class TextMessage extends StatelessWidget {
         color: kPrimaryColor.withOpacity(message?.isSender ? 1 : 0.1),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: SizedBox(
-        width: 100,
-        child: Text(
-          message?.text,
-          style: TextStyle(
-            color: message.isSender
-                ? Colors.white
-                : Theme.of(context).textTheme.bodyText1.color,
-          ),
+      child: Text(
+        message?.text,
+        style: TextStyle(
+          color: message.isSender
+              ? Colors.white
+              : Theme.of(context).textTheme.bodyText1.color,
         ),
       ),
     );

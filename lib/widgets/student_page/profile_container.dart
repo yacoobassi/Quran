@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-
-import '../../image.dart';
 
 class profile_container extends StatefulWidget {
   double width;
@@ -16,14 +11,6 @@ class profile_container extends StatefulWidget {
 }
 
 class _profile_containerState extends State<profile_container> {
-  File _image;
-  final image = ImageHelper();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,25 +32,21 @@ class _profile_containerState extends State<profile_container> {
             badgeContent: Icon(Icons.edit),
             badgeStyle: BadgeStyle(badgeColor: Colors.white),
             position: BadgePosition.bottomStart(),
-            onTap: () async {
-              final files = await image.pickImage();
-
-              if (files.isNotEmpty) {
-                final cropfiles = await image.crop(
-                    file: files.first, cropStyle: CropStyle.circle);
-                if (cropfiles != null) {
-                  setState(() => _image = File(
-                        cropfiles.path,
-                      ));
-                }
-              }
+            onTap: () {
+              setState(() {});
             },
-            child: InkWell(
-              onTap: () {},
-              child: CircleAvatar(
-                radius: 35,
-                foregroundImage: _image != null ? FileImage(_image) : null,
-                child: Text(""),
+            child: Container(
+              child: InkWell(
+                child: ClipOval(
+                    child: Image.asset(
+                  "images/face.jpg",
+                  color: Colors.white.withOpacity(1),
+                  colorBlendMode: BlendMode.modulate,
+                  height: 70.0,
+                  width: 70.0,
+                  fit: BoxFit.fill,
+                )),
+                onTap: () {},
               ),
             ),
           ),
