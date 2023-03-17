@@ -1,5 +1,6 @@
-import 'package:Quran/widgets/Teacher_page/Exams/table.dart';
 import 'package:flutter/material.dart';
+
+import '../../../PagesWidgets/Teacher_page/Exams/table.dart';
 
 class tablesave extends StatelessWidget {
   tablesave();

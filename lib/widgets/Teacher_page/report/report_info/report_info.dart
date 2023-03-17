@@ -1,8 +1,8 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/navigator_buttom.dart';
-import 'package:Quran/widgets/Teacher_page/report/report_info/Reportbottom.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
+import '../../../../PagesWidgets/Teacher_page/report/lecture/navigator_buttom.dart';
+import '../../../../PagesWidgets/Teacher_page/report/report_info/Reportbottom.dart';
 import '../../../../pages/posts.dart';
 import '../../../Bar/drawer.dart';
 import '../../../Bar/notification.dart';
@@ -22,25 +22,23 @@ class _reportState extends State<report> {
   DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
-   final screen = MediaQuery.of(context).size.width;
+    final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      
-       drawer: drawer(
-          student: false,
-          email: "Yacoobassi8@gmai.com",
-          name: "Yacoob assi",
-          image: "images/face.jpg",
-          drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      
-      appBar: AppBar(
-        title: Text(
-          "التقرير الشهري ",
+        drawer: drawer(
+            student: false,
+            email: "Yacoobassi8@gmai.com",
+            name: "Yacoob assi",
+            image: "images/face.jpg",
+            drawer_width: drawer().drawer_width),
+        endDrawer: notification(
+          width: screen,
+          text: likeORcomment,
         ),
-      ),
+        appBar: AppBar(
+          title: Text(
+            "التقرير الشهري ",
+          ),
+        ),
         body: Center(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,

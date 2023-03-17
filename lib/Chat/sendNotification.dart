@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart';
-import 'package:test_ro_run/Chat/models/user_model.dart';
 
 class sendNot {
   static Future<void> sendPushNotification(

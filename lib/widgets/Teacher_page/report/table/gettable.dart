@@ -1,6 +1,6 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/Lecture.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
 
 List Appreciation = [
   " ",
@@ -45,6 +45,7 @@ class _gettableState extends State<gettable> {
     }
     return darow;
   }
+
   @override
   Widget build(BuildContext context) {
     return DataTable(

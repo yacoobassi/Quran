@@ -1,5 +1,5 @@
-import 'package:Quran/widgets/posts/post_publisher.dart';
 import 'package:flutter/material.dart';
+import '../../PagesWidgets/posts/post_publisher.dart';
 import 'like_comment.dart';
 import 'like_comment_num.dart';
 

@@ -1,7 +1,8 @@
-import 'package:Quran/widgets/Teacher_page/Exams/full_info.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/fulltable.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/grade.dart';
 import 'package:flutter/material.dart';
+
+import '../../../PagesWidgets/Teacher_page/Exams/full_info.dart';
+import '../../../PagesWidgets/Teacher_page/Exams/fulltable.dart';
+import '../../../PagesWidgets/Teacher_page/Exams/grade.dart';
 
 class bottom_Nav_exam extends StatefulWidget {
   bottom_Nav_exam();

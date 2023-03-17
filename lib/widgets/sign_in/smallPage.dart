@@ -1,7 +1,7 @@
-import 'package:Quran/title.dart';
-import 'package:Quran/widgets/sign_in/enter.dart';
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/title.dart';
 
+import '../../PagesWidgets/sign_in/enter.dart';
 import '../../pages/sign_in.dart';
 
 class small extends StatelessWidget {

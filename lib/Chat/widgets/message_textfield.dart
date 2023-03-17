@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:test_ro_run/Chat/camera/camera_scareen.dart';
 import 'package:test_ro_run/Chat/sendNotification.dart';
 import 'package:uuid/uuid.dart';
-import 'package:test_ro_run/Data.dart';
 
 import '../../image.dart';
 import '../models/user_model.dart';

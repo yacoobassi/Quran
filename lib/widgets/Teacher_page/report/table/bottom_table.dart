@@ -1,7 +1,7 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/Lecture.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
-import 'package:Quran/widgets/Teacher_page/report/table/gettable.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
+import '../../../../PagesWidgets/Teacher_page/report/table/gettable.dart';
 
 class bottomInfo extends StatefulWidget {
   bottomInfo();

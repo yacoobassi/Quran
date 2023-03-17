@@ -1,10 +1,9 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/Lecture.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/navigator_buttom.dart';
-import 'package:Quran/widgets/Teacher_page/report/table/bottom_table.dart';
-import 'package:Quran/widgets/Teacher_page/report/table/gettable.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
+import '../../../../PagesWidgets/Teacher_page/report/lecture/navigator_buttom.dart';
+import '../../../../PagesWidgets/Teacher_page/report/table/bottom_table.dart';
+import '../../../../PagesWidgets/Teacher_page/report/table/gettable.dart';
 import '../../../../pages/posts.dart';
 import '../../../Bar/drawer.dart';
 import '../../../Bar/notification.dart';
@@ -39,24 +38,22 @@ class _gradesState extends State<grades> {
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      
-       drawer: drawer(
-          student: false,
-          email: "Yacoobassi8@gmai.com",
-          name: "Yacoob assi",
-          image: "images/face.jpg",
-          drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      
-      appBar: AppBar(
-        title: Text(
-          "التقرير الشهري ",
+        drawer: drawer(
+            student: false,
+            email: "Yacoobassi8@gmai.com",
+            name: "Yacoob assi",
+            image: "images/face.jpg",
+            drawer_width: drawer().drawer_width),
+        endDrawer: notification(
+          width: screen,
+          text: likeORcomment,
         ),
-      ),
-         bottomNavigationBar: nav_bottom(),
+        appBar: AppBar(
+          title: Text(
+            "التقرير الشهري ",
+          ),
+        ),
+        bottomNavigationBar: nav_bottom(),
         body: ListView(scrollDirection: Axis.vertical, children: [
           Column(children: [
             SizedBox(

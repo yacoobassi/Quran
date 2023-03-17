@@ -1,12 +1,12 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
-import 'package:Quran/widgets/student_page/schedule/review.dart';
-import 'package:Quran/widgets/student_page/schedule/save.dart';
 import 'package:flutter/material.dart';
 
+import '../../../PagesWidgets/student_page/schedule/review.dart';
+import '../../../PagesWidgets/student_page/schedule/save.dart';
 import '../../../pages/posts.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
 import '../../Teacher_page/Exams/table.dart';
+import '../../Teacher_page/report/lecture/dropdown.dart';
 
 class schedule extends StatefulWidget {
   const schedule();
@@ -21,7 +21,7 @@ class _scheduleState extends State<schedule> {
   bool checkpress = false;
   bool checkpress1 = false;
   List Part = ["عم", "تبارك", "المجادلة", "الذاريات", "الأحقاف", "الشورى"];
- 
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
@@ -29,7 +29,7 @@ class _scheduleState extends State<schedule> {
       appBar: AppBar(
         title: Text("الدفتر"),
       ),
-       drawer: drawer(
+      drawer: drawer(
           student: true,
           email: "Yacoobassi8@gmai.com",
           name: "Yacoob assi",

@@ -1,7 +1,7 @@
-import 'package:Quran/title.dart';
-import 'package:Quran/widgets/new_pass/enter.dart';
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/title.dart';
 
+import '../../PagesWidgets/new_pass/enter.dart';
 import '../../pages/new_pass.dart';
 
 class small extends StatelessWidget {

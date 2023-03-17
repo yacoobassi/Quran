@@ -1,13 +1,10 @@
-import 'package:Quran/pages/Student_table.dart';
-import 'package:Quran/pages/stdPage.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/navigator_buttom.dart';
-import 'package:Quran/widgets/Teacher_page/report/table/grades.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
+import '../../../../PagesWidgets/Teacher_page/report/lecture/navigator_buttom.dart';
+import '../../../../PagesWidgets/Teacher_page/report/table/grades.dart';
 import '../../../../pages/posts.dart';
-import '../../../../widgets/Bar/appBar.dart';
 import '../../../Bar/drawer.dart';
 import '../../../Bar/notification.dart';
 
@@ -43,23 +40,21 @@ class _lectureState extends State<lecture> {
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      
-       drawer: drawer(
-          student: false,
-          email: "Yacoobassi8@gmai.com",
-          name: "Yacoob assi",
-          image: "images/face.jpg",
-          drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      
-      appBar: AppBar(
-        title: Text(
-          "التقرير الشهري ",
+        drawer: drawer(
+            student: false,
+            email: "Yacoobassi8@gmai.com",
+            name: "Yacoob assi",
+            image: "images/face.jpg",
+            drawer_width: drawer().drawer_width),
+        endDrawer: notification(
+          width: screen,
+          text: likeORcomment,
         ),
-      ),
+        appBar: AppBar(
+          title: Text(
+            "التقرير الشهري ",
+          ),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Column(children: [

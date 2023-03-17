@@ -1,7 +1,8 @@
-import 'package:Quran/widgets/Teacher_page/report/lecture/Lecture.dart';
-import 'package:Quran/widgets/Teacher_page/report/report_info/report_info.dart';
-import 'package:Quran/widgets/Teacher_page/report/table/grades.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../PagesWidgets/Teacher_page/report/lecture/Lecture.dart';
+import '../../../../PagesWidgets/Teacher_page/report/report_info/report_info.dart';
+import '../../../../PagesWidgets/Teacher_page/report/table/grades.dart';
 
 int currentstate = 0;
 
@@ -53,7 +54,6 @@ class _nav_bottomState extends State<nav_bottom> {
             return grades();
           }));
         } else if (index == 2) {
-
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return report();
           }));

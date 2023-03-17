@@ -1,6 +1,6 @@
-import 'package:Quran/widgets/sign_up/enter.dart';
 import 'package:flutter/material.dart';
 
+import '../../PagesWidgets/sign_up/enter.dart';
 import '../../pages/signup.dart';
 import '../../title.dart';
 

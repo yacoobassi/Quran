@@ -1,13 +1,13 @@
-import 'package:Quran/pages/posts.dart';
-import 'package:Quran/pages/stdPage.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/full_info.dart';
-import 'package:Quran/widgets/student_page/PersonalStudent.dart';
-import 'package:Quran/widgets/student_page/exam.dart';
-import 'package:Quran/widgets/student_page/schedule/schedule.dart';
 import 'package:flutter/material.dart';
 
+import '../../PagesWidgets/Teacher_page/Exams/full_info.dart';
+import '../../PagesWidgets/student_page/PersonalStudent.dart';
+import '../../PagesWidgets/student_page/exam.dart';
+import '../../PagesWidgets/student_page/schedule/schedule.dart';
 import '../../pages/Signup.dart';
 import '../../pages/Student_table.dart';
+import '../../pages/posts.dart';
+import '../../pages/stdPage.dart';
 import '../../pages/teacherPage.dart';
 import '../Teacher_page/PersonalInfo/personal_information.dart';
 import '../Teacher_page/Student/student_informatin.dart';
@@ -32,7 +32,7 @@ var Studentlist = [
     'icon': Icon(Icons.picture_in_picture),
     'go': posts()
   },
-   {
+  {
     'page': 'البيانات الشخصية',
     'icon': Icon(Icons.picture_in_picture),
     'go': Personal_student()
@@ -42,7 +42,6 @@ var Studentlist = [
     'icon': Icon(Icons.picture_in_picture),
     'go': teacher_page()
   },
-  
   {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': posts()}
 ];
 
@@ -71,7 +70,7 @@ var teacherlist = [
     'icon': Icon(Icons.picture_in_picture),
     'go': ful_info()
   },
-   {
+  {
     'page': 'البيانات الشخصية',
     'icon': Icon(Icons.picture_in_picture),
     'go': Personal_info()
@@ -81,8 +80,7 @@ var teacherlist = [
     'icon': Icon(Icons.picture_in_picture),
     'go': student_page()
   },
-  
-   {
+  {
     'page': 'بيانات الطلاب',
     'icon': Icon(Icons.picture_in_picture),
     'go': student_Data()
@@ -97,9 +95,6 @@ var teacherlist = [
     'icon': Icon(Icons.picture_in_picture),
     'go': Signup()
   },
-  
-  
-
   {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': posts()}
 ];
 

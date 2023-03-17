@@ -1,9 +1,8 @@
-import 'package:Quran/tableTitle.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/examNavBottom.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/table.dart';
 import 'package:flutter/material.dart';
 
+import '../../../PagesWidgets/Teacher_page/Exams/examNavBottom.dart';
 import '../../../pages/posts.dart';
+import '../../../tableTitle.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
 
@@ -73,8 +72,7 @@ class ful_info extends StatelessWidget {
 
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      
-       drawer: drawer(
+      drawer: drawer(
           student: false,
           email: "Yacoobassi8@gmai.com",
           name: "Yacoob assi",
@@ -84,15 +82,12 @@ class ful_info extends StatelessWidget {
         width: screen,
         text: likeORcomment,
       ),
-      
       appBar: AppBar(
         title: Text(
           "الامتحانات ",
         ),
       ),
-
-bottomNavigationBar: bottom_Nav_exam(),
-      
+      bottomNavigationBar: bottom_Nav_exam(),
       body: SingleChildScrollView(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

@@ -1,4 +1,3 @@
-import 'package:Quran/pages/posts.dart';
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
 import 'package:flutter/material.dart';

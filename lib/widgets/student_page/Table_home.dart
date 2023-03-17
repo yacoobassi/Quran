@@ -1,6 +1,6 @@
-import 'package:Quran/widgets/Bar/appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
+import '../../PagesWidgets/Bar/appBar.dart';
 import '../../pages/Student_table.dart';
 
 List titles = [

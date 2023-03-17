@@ -534,6 +534,10 @@ yaml
 2.12
 file:///C:/Users/Maqboul%20Computer/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.1/
 file:///C:/Users/Maqboul%20Computer/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.1/lib/
+test_ro_run
+2.1
+file:///C:/Users/Maqboul%20Computer/Documents/GitHub/Quran/
+file:///C:/Users/Maqboul%20Computer/Documents/GitHub/Quran/lib/
 sky_engine
 2.12
 file:///C:/flutter/bin/cache/pkg/sky_engine/
@@ -554,8 +558,4 @@ flutter_web_plugins
 2.17
 file:///C:/flutter/packages/flutter_web_plugins/
 file:///C:/flutter/packages/flutter_web_plugins/lib/
-test_ro_run
-2.1
-file:///C:/flutterPro/test_ro_run/
-file:///C:/flutterPro/test_ro_run/lib/
 2

@@ -1,6 +1,6 @@
-import 'package:Quran/widgets/sign_in/save.dart';
 import 'package:flutter/material.dart';
 
+import '../../PagesWidgets/sign_in/save.dart';
 import '../../textfiled.dart';
 
 class enter extends StatefulWidget {

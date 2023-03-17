@@ -1,9 +1,7 @@
-import 'package:Quran/tableTitle.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:Quran/tableTitle.dart';
-
+import '../../PagesWidgets/Teacher_page/report/lecture/dropdown.dart';
 import '../../pages/posts.dart';
+import '../../tableTitle.dart';
 import '../Bar/drawer.dart';
 import '../Bar/notification.dart';
 
@@ -183,11 +181,12 @@ class _Personal_studentState extends State<Personal_student> {
     int numcol1 = 2;
     int numcel1 = 2;
 
-     final screen = MediaQuery.of(context).size.width;
+    final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: Text("البيانات الشخصية"),),
-
-       drawer: drawer(
+      appBar: AppBar(
+        title: Text("البيانات الشخصية"),
+      ),
+      drawer: drawer(
           student: true,
           email: "Yacoobassi8@gmai.com",
           name: "Yacoob assi",

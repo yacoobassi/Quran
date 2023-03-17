@@ -1,9 +1,8 @@
-import 'package:Quran/widgets/Teacher_page/Exams/examNavBottom.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/table.dart';
-import 'package:Quran/widgets/Teacher_page/Exams/title.dart';
-import 'package:Quran/widgets/Teacher_page/report/lecture/dropdown.dart';
 import 'package:flutter/material.dart';
 
+import '../../../PagesWidgets/Teacher_page/Exams/examNavBottom.dart';
+import '../../../PagesWidgets/Teacher_page/Exams/table.dart';
+import '../../../PagesWidgets/Teacher_page/Exams/title.dart';
 import '../../../pages/posts.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
@@ -23,7 +22,6 @@ int rowexa = 30;
 int numcol = 7;
 int numcel = 7;
 
-
 class fullTable extends StatefulWidget {
   fullTable();
 
@@ -34,26 +32,23 @@ class fullTable extends StatefulWidget {
 class _fullTableState extends State<fullTable> {
   @override
   Widget build(BuildContext context) {
-  final screen = MediaQuery.of(context).size.width;
+    final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      
-       drawer: drawer(
-          student: false,
-          email: "Yacoobassi8@gmai.com",
-          name: "Yacoob assi",
-          image: "images/face.jpg",
-          drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      
-      appBar: AppBar(
-        title: Text(
-          "الامتحانات ",
+        drawer: drawer(
+            student: false,
+            email: "Yacoobassi8@gmai.com",
+            name: "Yacoob assi",
+            image: "images/face.jpg",
+            drawer_width: drawer().drawer_width),
+        endDrawer: notification(
+          width: screen,
+          text: likeORcomment,
         ),
-      ),
-        
+        appBar: AppBar(
+          title: Text(
+            "الامتحانات ",
+          ),
+        ),
         bottomNavigationBar: bottom_Nav_exam(),
         body: Center(
             child: SingleChildScrollView(
@@ -75,7 +70,6 @@ class _fullTableState extends State<fullTable> {
                       rowexa,
                       numcol,
                       numcel,
-                     
                     )
                   ],
                 )))));
