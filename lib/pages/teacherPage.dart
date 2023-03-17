@@ -1,12 +1,13 @@
-import 'package:Quran/pages/posts.dart';
-import 'package:Quran/widgets/Bar/profileBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../widgets/Bar/drawer.dart';
-import '../widgets/Bar/appBar.dart';
-import '../widgets/Bar/notification.dart';
-import '../widgets/student_page/grid.dart';
-import '../widgets/student_page/profile_container.dart';
+import 'package:test_ro_run/PagesWidgets/student_page/grid.dart';
+import 'package:test_ro_run/pages/posts.dart';
+import '../PagesWidgets/Bar/appBar.dart';
+import '../PagesWidgets/Bar/drawer.dart';
+import '../PagesWidgets/Bar/notification.dart';
+import '../PagesWidgets/student_page/profile_container.dart';
 
 int messagesNum = 5, selected = 2;
 double opacity = 1;
@@ -28,9 +29,45 @@ class _teacher_pageState extends State<teacher_page> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     visible = false;
+    notificationInit();
+    getToken();
+  }
+
+  notificationInit() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      sound: true,
+      provisional: false,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("user granted permission");
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print("user granted provisional permission");
+    } else {
+      print("declind");
+    }
+  }
+
+  getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      saveToken(token);
+    });
+  }
+
+  saveToken(String token) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    var collection = await FirebaseFirestore.instance.collection('users');
+
+    await collection.doc(_auth.currentUser.email).update({'token': token});
   }
 
   Widget build(BuildContext context) {
@@ -42,9 +79,6 @@ class _teacher_pageState extends State<teacher_page> {
     return Scaffold(
       key: globalkey,
       drawer: drawer(
-        name: "yacoob assi",
-        email: "yacoobassi9@gmail.com",
-        image: "images/face.jpg",
         student: false,
         drawer_width: drawer_width,
       ),
@@ -63,7 +97,6 @@ class _teacher_pageState extends State<teacher_page> {
               opacity: 1,
             )),
         profile_container(
-          name: "محمد مسعود",
           width: width,
         )
       ]),

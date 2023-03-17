@@ -1,15 +1,18 @@
-import 'package:Quran/pages/posts.dart';
-import 'package:Quran/widgets/student_page/grid.dart';
-import 'package:Quran/widgets/student_page/profile_container.dart';
-import '../widgets/Bar/drawer.dart';
-import '../widgets/Bar/appBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import '../widgets/Bar/notification.dart';
+import 'package:test_ro_run/pages/posts.dart';
+
+import '../PagesWidgets/Bar/appBar.dart';
+import '../PagesWidgets/Bar/drawer.dart';
+import '../PagesWidgets/Bar/notification.dart';
+import '../PagesWidgets/student_page/grid.dart';
+import '../PagesWidgets/student_page/profile_container.dart';
 
 int messagesNum = 5, selected = 2;
 double opacity = 1;
 bool visible, infinity;
-
 
 class student_page extends StatefulWidget {
   @override
@@ -30,6 +33,43 @@ class _student_page extends State<student_page> {
     // TODO: implement initState
     super.initState();
     visible = false;
+    notificationInit();
+    getToken();
+  }
+
+  notificationInit() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      sound: true,
+      provisional: false,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("user granted permission");
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print("user granted provisional permission");
+    } else {
+      print("declind");
+    }
+  }
+
+  getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      saveToken(token);
+    });
+  }
+
+  saveToken(String token) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    var collection = await FirebaseFirestore.instance.collection('users');
+
+    await collection.doc(_auth.currentUser.email).update({'token': token});
   }
 
   Widget build(BuildContext context) {
@@ -38,15 +78,10 @@ class _student_page extends State<student_page> {
     double width = screen < 500 ? screen - 100 : 500;
 
     infinity = screen < 600;
-    String name = "محمود مسعود";
+
     return Scaffold(
       key: globalkey,
-      drawer: drawer(
-          student: true,
-          email: "Yacoobassi8@gmai.com",
-          name: "Yacoob assi",
-          image: "images/face.jpg",
-          drawer_width: drawer_width),
+      drawer: drawer(student: true, drawer_width: drawer_width),
       endDrawer: notification(
         width: screen,
         text: likeORcomment,
@@ -63,7 +98,6 @@ class _student_page extends State<student_page> {
           ),
         ),
         profile_container(
-          name: "$name",
           width: width,
         )
       ]),

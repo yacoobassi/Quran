@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/sign_in/largePage.dart';
-import '../widgets/sign_in/smallPage.dart';
+import '../PagesWidgets/sign_in/largePage.dart';
+import '../PagesWidgets/sign_in/smallPage.dart';
 
-Icon eye = Icon(Icons.remove_red_eye_outlined);
+Icon eye;
 bool presed = false;
-
 double x, y;
 
 class Signin extends StatefulWidget {
@@ -14,6 +13,13 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    eye = Icon(Icons.remove_red_eye_outlined);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;

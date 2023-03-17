@@ -1,10 +1,11 @@
-import 'package:Quran/widgets/posts/comment.dart';
 import 'package:flutter/material.dart';
-import '../widgets/Bar/appBar.dart';
-import '../widgets/Bar/notification.dart';
-import '../widgets/posts/posts_body.dart';
 
-String comment = "التعليق على المنشور", likeORcomment;
+import '../PagesWidgets/Bar/appBar.dart';
+import '../PagesWidgets/Bar/notification.dart';
+import '../PagesWidgets/posts/comment.dart';
+import '../PagesWidgets/posts/posts_body.dart';
+
+String comment = "التعليق على المنشور", likeORcomment = "";
 
 int post_message;
 double opacity;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/sign_up/largePage.dart';
-import '../widgets/sign_up/smallPage.dart';
+import '../PagesWidgets/sign_up/largePage.dart';
+import '../PagesWidgets/sign_up/smallPage.dart';
 
 Icon eye = Icon(Icons.remove_red_eye_outlined);
 bool presed = false;

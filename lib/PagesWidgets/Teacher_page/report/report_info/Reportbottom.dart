@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+
+class ReportBottom extends StatefulWidget {
+  ReportBottom();
+
+  @override
+  State<ReportBottom> createState() => _ReportBottomState();
+}
+
+class _ReportBottomState extends State<ReportBottom> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 5),
+      decoration:
+          BoxDecoration(border: Border.all(width: 7, color: Colors.green)),
+      alignment: Alignment.center,
+      width: 392,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(width: 3, color: Colors.green),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Text(
+              "المعدل النهائي لجميع الطلبة من 10",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                child: Text(
+                  "حفظ",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Container(
+                child: Text(
+                  "مراجعة",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Container(
+                child: Text(
+                  "تجويد",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextF("9.5"),
+             TextF("9.3"),
+             TextF("جيد جدا"),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class TextF extends StatelessWidget {
+  TextF(this.t);
+  String t;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(bottom: 5),
+      height: 40,
+      width: 120,
+      decoration:
+          BoxDecoration(border: Border.all(width: 3, color: Colors.green)),
+      child: Text(
+        t,
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
+    );
+  }
+}

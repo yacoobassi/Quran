@@ -1,6 +1,7 @@
-import 'package:Quran/widgets/new_pass/smallPage.dart';
-import 'package:Quran/widgets/new_pass/largePage.dart';
 import 'package:flutter/material.dart';
+
+import '../PagesWidgets/new_pass/largePage.dart';
+import '../PagesWidgets/new_pass/smallPage.dart';
 
 double x, y;
 Icon eye1 = Icon(Icons.remove_red_eye_outlined), eye2 = eye1;
