@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,8 @@ import 'package:test_ro_run/Chat/camera/camera_scareen.dart';
 import 'package:test_ro_run/Chat/sendNotification.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../Data.dart';
 import '../../image.dart';
-import '../models/user_model.dart';
 
 class MessageTextField extends StatefulWidget {
   final String currentId;
@@ -289,13 +288,10 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 String token = snap['token'];
                 String title = snap2['name'];
 
-                final _auth = await FirebaseAuth.instance;
-                final user = await _auth.currentUser;
-                DocumentSnapshot userData = await FirebaseFirestore.instance
+                await FirebaseFirestore.instance
                     .collection('users')
-                    .doc(user.email)
+                    .doc(Data.user.email)
                     .get();
-                UserModel userModel = await UserModel.fromJson(userData);
                 sendNot.sendPushNotification(
                     token, title, message, widget.currentId);
                 await FirebaseFirestore.instance
@@ -340,13 +336,10 @@ class _MessageTextFieldState extends State<MessageTextField> {
 
   Future<void> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
-    final _auth = await FirebaseAuth.instance;
+
     await fMessaging.getToken().then((t) {
       if (t != null) {
-        firestore
-            .collection('users')
-            .doc(_auth.currentUser.email)
-            .update({'token': t});
+        firestore.collection('users').doc(Data.user.email).update({'token': t});
 
         log('Push Token: $t');
       }

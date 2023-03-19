@@ -1,7 +1,10 @@
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/sharedPref.dart';
+
+import '../../Data.dart';
 
 double opacity = 1;
 
@@ -40,12 +43,15 @@ class _profileBarState extends State<profileBar> {
               },
               child: InkWell(
                 child: FutureBuilder(
-                  future: Pref.getProfileImage(),
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(Data.user.email)
+                      .get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return CircleAvatar(
                         radius: 30.0,
-                        backgroundImage: NetworkImage(snapshot.data),
+                        backgroundImage: NetworkImage(snapshot.data['image']),
                         backgroundColor: Colors.transparent,
                       );
                     } else {

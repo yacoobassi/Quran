@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:test_ro_run/Chat/screens/search_screen.dart';
+import 'package:test_ro_run/Chat/screens/showImage.dart';
 import 'package:test_ro_run/image.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+import '../../Data.dart';
 import '../models/user_model.dart';
-import 'package:test_ro_run/sharedPref.dart';
 
 import 'chat_screen.dart';
 
@@ -24,71 +24,49 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File _image;
   final image = ImageHelper();
-
+  var me;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // title:
-          // centerTitle: true,
-          backgroundColor: Colors.teal,
-          actions: [
-            Center(
-              child: Text(
-                'الدردشات',
-                style: TextStyle(fontSize: 30),
-              ),
+      appBar: AppBar(backgroundColor: Colors.teal, actions: [
+        Center(
+          child: Text(
+            'الدردشات',
+            style: TextStyle(fontSize: 30),
+          ),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10),
+          child: InkWell(
+            child: FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(widget.user.email)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  me = snapshot.data;
+                  return CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: NetworkImage(me['image']),
+                    backgroundColor: Colors.transparent,
+                  );
+                } else {
+                  return Text("");
+                }
+              },
             ),
-            SizedBox(
-              width: 20,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: InkWell(
-                onTap: () async {
-                  final files = await image.pickImage();
-
-                  if (files.isNotEmpty) {
-                    final cropfiles = await image.crop(
-                        file: files.first, cropStyle: CropStyle.circle);
-                    if (cropfiles != null) {
-                      setState(() => _image = File(
-                            cropfiles.path,
-                          ));
-                    }
-
-                    UpdateUserImage(
-                      cropfiles.path,
-                    );
-                  }
-                },
-                child: _image != null
-                    ? CircleAvatar(
-                        radius: 25,
-                        foregroundImage: FileImage(_image),
-                        child: Text(""),
-                      )
-                    : FutureBuilder(
-                        future: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(widget.user.email)
-                            .get(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            var me = snapshot.data;
-                            return CircleAvatar(
-                              radius: 30.0,
-                              backgroundImage: NetworkImage(me['image']),
-                              backgroundColor: Colors.transparent,
-                            );
-                          } else {
-                            return Text("");
-                          }
-                        },
-                      ),
-              ),
-            ),
-          ]),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return showImage(me['image'], true);
+              }));
+            },
+          ),
+        ),
+      ]),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('users')
@@ -160,26 +138,5 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
-  }
-
-  UpdateUserImage(String path) async {
-    try {
-      final _auth = await FirebaseAuth.instance;
-
-      final user = await _auth.currentUser;
-      final storageReference =
-          FirebaseStorage.instance.ref().child("images/" + widget.user.uid);
-
-      await storageReference.putFile(File(path));
-      String imageUrl = await storageReference.getDownloadURL();
-      Pref.setProfileImage(
-        imageUrl,
-      );
-      var collection = await FirebaseFirestore.instance.collection('users');
-
-      await collection.doc(user.email).update({'image': imageUrl});
-    } catch (e) {
-      return;
-    }
   }
 }

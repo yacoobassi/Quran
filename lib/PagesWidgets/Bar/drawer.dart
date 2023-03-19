@@ -1,14 +1,17 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Student/student_informatin.dart';
 import 'package:test_ro_run/pages/teacherPage.dart';
 
 import '../../Chat/Chat.dart';
+import '../../Data.dart';
 import '../../pages/Student_table.dart';
 import '../../pages/posts.dart';
 import '../../pages/signup.dart';
 import '../../pages/stdPage.dart';
-import '../../sharedPref.dart';
 import '../Teacher_page/Exams/full_info.dart';
 import '../Teacher_page/PersonalInfo/personal_information.dart';
 import '../Teacher_page/report/lecture/Lecture.dart';
@@ -115,12 +118,15 @@ class _drawerState extends State<drawer> {
               onDetailsPressed: () {},
               currentAccountPicture: ClipOval(
                 child: FutureBuilder(
-                  future: Pref.getProfileImage(),
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(Data.user.email)
+                      .get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return CircleAvatar(
                         radius: 30.0,
-                        backgroundImage: NetworkImage(snapshot.data),
+                        backgroundImage: NetworkImage(snapshot.data['image']),
                         backgroundColor: Colors.transparent,
                       );
                     } else {
@@ -130,10 +136,13 @@ class _drawerState extends State<drawer> {
                 ),
               ),
               accountName: FutureBuilder(
-                future: Pref.getUser(),
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(Data.user.email)
+                    .get(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data);
+                    return Text(snapshot.data['name']);
                   } else {
                     return Text("");
                   }

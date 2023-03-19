@@ -25,7 +25,6 @@ class _CameraScreenState extends State<CameraScreen> {
   bool isRecoring = false;
   bool flash = false;
   bool iscamerafront = true;
-  bool _isReady = false;
 
   double transform = 0;
 
@@ -47,9 +46,6 @@ class _CameraScreenState extends State<CameraScreen> {
       // do something on error.
     }
     if (!mounted) return;
-    setState(() {
-      _isReady = true;
-    });
   }
 
   @override
@@ -177,7 +173,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   )));
 
       if (file.path.isNotEmpty) {
-        var collection = await FirebaseFirestore.instance.collection('users');
+        await FirebaseFirestore.instance.collection('users');
         const uuid = Uuid();
         var uid = uuid.v4();
         await FirebaseFirestore.instance

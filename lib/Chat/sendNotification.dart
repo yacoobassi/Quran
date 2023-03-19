@@ -12,9 +12,6 @@ class sendNot {
     String senderId,
   ) async {
     try {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
       await post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: {

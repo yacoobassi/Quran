@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_ro_run/PagesWidgets/sign_in/save.dart';
 import 'package:test_ro_run/pages/stdPage.dart';
 import '../../FiledIconButton.dart';
-import 'package:test_ro_run/sharedPref.dart';
 
 class enter extends ConsumerStatefulWidget {
   static const routeName = '/login-screen';
@@ -19,7 +18,6 @@ class _enterState extends ConsumerState<enter> {
 
   final TextEditingController _IdController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
-  // final EmailAndPasswordAuth _emailAndPasswordAuth = EmailAndPasswordAuth();
 
   Icon posticon;
   bool visible = false, isloading = false;
@@ -86,9 +84,6 @@ class _enterState extends ConsumerState<enter> {
                   borderRadius: BorderRadius.circular(15.0),
                 )),
               ),
-              //  onPressed: () {
-              // //   sendUser();
-              //  },
               onPressed: () async {
                 final _auth = await FirebaseAuth.instance;
                 try {
@@ -96,13 +91,11 @@ class _enterState extends ConsumerState<enter> {
                       email: _IdController.text + "@gmail.com",
                       password: "password");
 
-                  Pref.setUser(_IdController.text);
                   DocumentSnapshot snap = await FirebaseFirestore.instance
                       .collection("users")
                       .doc(_IdController.text + "@gmail.com")
                       .get();
-                  Pref.setProfileImage(snap['image']);
-                  Pref.setUserName(snap['name']);
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return student_page();
                   }));

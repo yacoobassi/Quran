@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/Chat/screens/home_screen.dart';
 
+import '../Data.dart';
 import 'models/user_model.dart';
 
 class Chat extends StatelessWidget {
@@ -27,13 +28,11 @@ class Chat extends StatelessWidget {
 }
 
 Future<Widget> userSignedIn() async {
-  final _auth = await FirebaseAuth.instance;
-  final user = await _auth.currentUser;
-  if (user != null) {
-    print(user.uid);
+  if (Data.user != null) {
+    print(Data.user.uid);
     DocumentSnapshot userData = await FirebaseFirestore.instance
         .collection('users')
-        .doc(user.email)
+        .doc(Data.user.email)
         .get();
     UserModel userModel = await UserModel.fromJson(userData);
     return HomeScreen(userModel);

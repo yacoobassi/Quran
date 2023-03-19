@@ -15,7 +15,6 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     eye = Icon(Icons.remove_red_eye_outlined);
   }

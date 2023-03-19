@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/pages/posts.dart';
 
+import '../Data.dart';
 import '../PagesWidgets/Bar/appBar.dart';
 import '../PagesWidgets/Bar/drawer.dart';
 import '../PagesWidgets/Bar/notification.dart';
@@ -66,10 +66,13 @@ class _student_page extends State<student_page> {
   }
 
   saveToken(String token) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
     var collection = await FirebaseFirestore.instance.collection('users');
 
-    await collection.doc(_auth.currentUser.email).update({'token': token});
+    await collection.doc(Data.user.email).update({'token': token});
+  }
+
+  refresh() {
+    setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -97,9 +100,7 @@ class _student_page extends State<student_page> {
             opacity: 1,
           ),
         ),
-        profile_container(
-          width: width,
-        )
+        profile_container(width: width)
       ]),
     );
   }

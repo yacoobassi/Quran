@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  Data.user = await Pref.getUser();
-
+  FirebaseAuth auth = FirebaseAuth.instance;
+  Data.user = auth.currentUser;
 // Initialize the plugin
 
   await FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Hacen"),
         title: 'Flutter Demo',
-        home: Data.user == null ? Signin() : Signin());
+        home: Data.user == null ? Signin() : student_page());
   }
 }
 

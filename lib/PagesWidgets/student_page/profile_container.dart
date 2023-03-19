@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 
-import '../../sharedPref.dart';
+import 'package:test_ro_run/Data.dart';
+import '../../image.dart';
 
 class profile_container extends StatefulWidget {
   double width;
@@ -13,6 +19,9 @@ class profile_container extends StatefulWidget {
 }
 
 class _profile_containerState extends State<profile_container> {
+  File _image;
+  final image = ImageHelper();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,18 +43,19 @@ class _profile_containerState extends State<profile_container> {
             badgeContent: Icon(Icons.edit),
             badgeStyle: BadgeStyle(badgeColor: Colors.white),
             position: BadgePosition.bottomStart(),
-            onTap: () {
-              setState(() {});
-            },
+            onTap: () {},
             child: Container(
               child: InkWell(
                 child: FutureBuilder(
-                  future: Pref.getProfileImage(),
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(Data.user.email)
+                      .get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: NetworkImage(snapshot.data),
+                        radius: 35.0,
+                        backgroundImage: NetworkImage(snapshot.data['image']),
                         backgroundColor: Colors.transparent,
                       );
                     } else {
@@ -53,7 +63,24 @@ class _profile_containerState extends State<profile_container> {
                     }
                   },
                 ),
-                onTap: () {},
+                onTap: () async {
+                  final files = await image.pickImage();
+
+                  if (files.isNotEmpty) {
+                    final cropfiles = await image.crop(
+                        file: files.first, cropStyle: CropStyle.circle);
+                    if (cropfiles != null) {
+                      setState(() => _image = File(
+                            cropfiles.path,
+                          ));
+                    }
+
+                    await UpdateUserImage(
+                      cropfiles.path,
+                    );
+                  }
+                  setState(() {});
+                },
               ),
             ),
           ),
@@ -61,11 +88,14 @@ class _profile_containerState extends State<profile_container> {
             height: 5,
           ),
           FutureBuilder(
-            future: Pref.getUserName(),
+            future: FirebaseFirestore.instance
+                .collection('users')
+                .doc(Data.user.email)
+                .get(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(
-                  snapshot.data,
+                  snapshot.data['name'],
                   style: TextStyle(fontSize: 20),
                 );
               } else {
@@ -87,5 +117,21 @@ class _profile_containerState extends State<profile_container> {
             ],
           ),
         ]));
+  }
+}
+
+UpdateUserImage(String path) async {
+  try {
+    final storageReference =
+        FirebaseStorage.instance.ref().child("images/" + Data.user.email);
+
+    await storageReference.putFile(File(path));
+    String imageUrl = await storageReference.getDownloadURL();
+
+    var collection = await FirebaseFirestore.instance.collection('users');
+
+    await collection.doc(Data.user.email).update({'image': imageUrl});
+  } catch (e) {
+    return;
   }
 }

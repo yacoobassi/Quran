@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
 import 'package:flutter/material.dart';
@@ -35,10 +33,6 @@ class _appBarState extends State<appbar> {
   bool clicked1 = false, clicked2 = false, showBage = false;
   int badgenum = 0, count1 = 0, count2 = 0;
   double circular;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Widget build(BuildContext context) {
     circular = widget.width ? 30 : 0;

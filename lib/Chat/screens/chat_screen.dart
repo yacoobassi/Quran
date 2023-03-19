@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/Chat/screens/showImage.dart';
 
 import '../models/user_model.dart';
 import '../widgets/message_textfield.dart';
@@ -73,13 +74,21 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(80),
-                child: CircleAvatar(
-                  radius: 22.0,
-                  backgroundImage: NetworkImage(widget.friendImage),
-                  backgroundColor: Colors.transparent,
+              InkWell(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(80),
+                  child: CircleAvatar(
+                    radius: 22.0,
+                    backgroundImage: NetworkImage(widget.friendImage),
+                    backgroundColor: Colors.transparent,
+                  ),
                 ),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return showImage(widget.friendImage, true);
+                  }));
+                },
               ),
               SizedBox(
                 width: 15,
