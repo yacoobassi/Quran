@@ -7,6 +7,7 @@ import 'package:test_ro_run/PagesWidgets/Teacher_page/Student/student_informatin
 import 'package:test_ro_run/pages/teacherPage.dart';
 
 import '../../Chat/Chat.dart';
+import '../../Chat/screens/showImage.dart';
 import '../../Data.dart';
 import '../../pages/Student_table.dart';
 import '../../pages/posts.dart';
@@ -124,10 +125,18 @@ class _drawerState extends State<drawer> {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: NetworkImage(snapshot.data['image']),
-                        backgroundColor: Colors.transparent,
+                      return InkWell(
+                        child: CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage(snapshot.data['image']),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onTap: () {
+                          return Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return showImage(snapshot.data['image'], true);
+                          }));
+                        },
                       );
                     } else {
                       return CircularProgressIndicator();
