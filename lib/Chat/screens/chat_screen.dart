@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/Chat/screens/showImage.dart';
+import 'package:test_ro_run/showImage.dart';
 
 import '../models/user_model.dart';
 import '../widgets/message_textfield.dart';
@@ -24,13 +24,19 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-bool emojiShow, reach;
+bool emojiShow, reach, showPictures;
 
 class _ChatScreenState extends State<ChatScreen> {
   ShowEmoji() {
     setState(() {
       emojiShow = !emojiShow;
       print("object");
+    });
+  }
+
+  closeEmoji() {
+    setState(() {
+      emojiShow = false;
     });
   }
 
@@ -41,8 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
     reach = false;
     Data.enterChat = true;
     Data.sender = "55";
-    print(Data.enterChat);
-    print(Data.sender);
+    showPictures = true;
   }
 
   setEnter() async {}
@@ -59,13 +64,25 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  closeKeyboard() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+      setState(() {
+        showPictures = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
+        closeKeyboard();
+        if (emojiShow) {
+          setState(() {
+            emojiShow = false;
+          });
         }
       },
       child: Scaffold(
@@ -146,15 +163,20 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Center(child: CircularProgressIndicator());
                   }),
             )),
-            Column(
-              children: [
-                MessageTextField(widget.currentUser.uid, widget.friendId,
-                    ShowEmoji, ifReach),
-                emojiShow
-                    ? SizedBox(
-                        width: double.infinity, height: 250, child: showEmoji())
-                    : SizedBox()
-              ],
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: 340, minHeight: 82),
+              child: Column(
+                children: [
+                  MessageTextField(widget.currentUser.uid, widget.friendId,
+                      ShowEmoji, ifReach, closeKeyboard, closeEmoji),
+                  emojiShow
+                      ? SizedBox(
+                          width: double.infinity,
+                          height: 250,
+                          child: showEmoji())
+                      : SizedBox()
+                ],
+              ),
             )
           ],
         ),

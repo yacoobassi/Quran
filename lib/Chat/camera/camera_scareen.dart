@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:test_ro_run/Chat/sendNotification.dart';
 
 import 'cameraView.dart';
 
@@ -199,7 +201,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
           String token = snap['token'];
           String title = snap['name'];
-          //sendNot.sendPushNotification(token, "📸 صورة", title);
+          sendNot.sendPushNotification(
+              token, "📸 صورة", title, widget.currentId);
           await FirebaseFirestore.instance
               .collection('users')
               .doc(widget.currentId)
@@ -208,6 +211,9 @@ class _CameraScreenState extends State<CameraScreen> {
               .collection('chats')
               .doc(uid)
               .update({"reach": true});
+
+          AudioPlayer audioPlayer = AudioPlayer();
+          await audioPlayer.play(AssetSource('sent.mp3'));
           FirebaseFirestore.instance
               .collection('users')
               .doc(widget.currentId)

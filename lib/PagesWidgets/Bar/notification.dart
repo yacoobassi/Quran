@@ -138,7 +138,7 @@ class _notification_State extends State<notification> {
                                     String useremail = userModel['email'];
                                     String userimage = userModel['image'];
                                     String userid = userModel['uid'];
-
+                                    Navigator.pop(context);
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
                                       UserModel usermodel = new UserModel(

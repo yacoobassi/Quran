@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/showImage.dart';
+import '../../showImage.dart';
 
 class SingleMessage extends StatelessWidget {
   final String message, type, path;
@@ -46,13 +46,13 @@ class SingleMessage extends StatelessWidget {
             margin: EdgeInsets.only(top: 16, bottom: 16, right: 5),
             constraints: BoxConstraints(maxWidth: 200),
             decoration: BoxDecoration(
-                color: isMe ? Colors.black : Colors.orange,
+                color: isMe ? Colors.green : Colors.grey[300],
                 borderRadius: BorderRadius.all(Radius.circular(12))),
             child: type == "text"
                 ? Text(
                     message,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: isMe ? Colors.white : Colors.black,
                     ),
                   )
                 : InkWell(

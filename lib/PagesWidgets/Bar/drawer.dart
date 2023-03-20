@@ -7,7 +7,7 @@ import 'package:test_ro_run/PagesWidgets/Teacher_page/Student/student_informatin
 import 'package:test_ro_run/pages/teacherPage.dart';
 
 import '../../Chat/Chat.dart';
-import '../../Chat/screens/showImage.dart';
+import '../../showImage.dart';
 import '../../Data.dart';
 import '../../pages/Student_table.dart';
 import '../../pages/posts.dart';

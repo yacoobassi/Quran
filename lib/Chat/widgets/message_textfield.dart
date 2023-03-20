@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,9 +18,10 @@ import '../../image.dart';
 class MessageTextField extends StatefulWidget {
   final String currentId;
   final String friendId;
-  Function ShowEmoji, ifReach;
+  Function ShowEmoji, ifReach, closeKeyboard, closeEmoji;
 
-  MessageTextField(this.currentId, this.friendId, this.ShowEmoji, this.ifReach);
+  MessageTextField(this.currentId, this.friendId, this.ShowEmoji, this.ifReach,
+      this.closeKeyboard, this.closeEmoji);
 
   @override
   _MessageTextFieldState createState() => _MessageTextFieldState();
@@ -34,6 +36,19 @@ class _MessageTextFieldState extends State<MessageTextField> {
   String mytoken = "";
   final image = ImageHelper();
   var uuid = Uuid();
+  FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myFocusNode = FocusNode();
+    myFocusNode.addListener(() {
+      print("object");
+      myFocusNode.hasFocus ? showPictures = false : showPictures = true;
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +135,33 @@ class _MessageTextFieldState extends State<MessageTextField> {
                                   .collection('chats')
                                   .doc(uid)
                                   .update({"reach": true});
+                              AudioPlayer audioPlayer = AudioPlayer();
+                              await audioPlayer.play(AssetSource('sent.mp3'));
+                              DocumentSnapshot snap = await FirebaseFirestore
+                                  .instance
+                                  .collection("users")
+                                  .doc(widget.friendId)
+                                  .get();
+
+                              DocumentSnapshot snap2 = await FirebaseFirestore
+                                  .instance
+                                  .collection("users")
+                                  .doc(widget.currentId)
+                                  .get();
+
+                              String token = snap['token'];
+                              String title = snap2['name'];
+
+                              sendNot.sendPushNotification(
+                                  token, "📸 صورة", title, widget.currentId);
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(widget.currentId)
+                                  .collection('messages')
+                                  .doc(widget.friendId)
+                                  .collection('chats')
+                                  .doc(uid)
+                                  .update({"reach": true, "message": imageUrl});
 
                               FirebaseFirestore.instance
                                   .collection('users')
@@ -143,31 +185,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
                               "date": DateTime.now(),
                               "reach": true
                             }).then((value) async {
-                              DocumentSnapshot snap = await FirebaseFirestore
-                                  .instance
-                                  .collection("users")
-                                  .doc(widget.friendId)
-                                  .get();
-
-                              DocumentSnapshot snap2 = await FirebaseFirestore
-                                  .instance
-                                  .collection("users")
-                                  .doc(widget.currentId)
-                                  .get();
-
-                              String token = snap['token'];
-                              String title = snap2['name'];
-
-                              // sendNot.sendPushNotification(
-                              //     token, "📸 صورة", title);
-                              await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(widget.currentId)
-                                  .collection('messages')
-                                  .doc(widget.friendId)
-                                  .collection('chats')
-                                  .doc(uid)
-                                  .update({"reach": true, "message": imageUrl});
                               FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(widget.friendId)
@@ -178,10 +195,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
                           } catch (e) {
                             return;
                           }
-                          // Navigator.of(context)
-                          //     .push(MaterialPageRoute(builder: (context) {
-                          //   return showImage(file.first.path);
-                          // }));
                         }
                       },
                     ),
@@ -209,6 +222,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 )),
             InkWell(
                 onTap: () {
+                  widget.closeKeyboard();
                   widget.ShowEmoji();
                 },
                 child: SizedBox(
@@ -222,18 +236,22 @@ class _MessageTextFieldState extends State<MessageTextField> {
               width: 20,
             ),
             Expanded(
-                child: GestureDetector(
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                    hintText: "ادخل نص",
-                    fillColor: Colors.grey[100],
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(width: 0),
-                        gapPadding: 10,
-                        borderRadius: BorderRadius.circular(25))),
-              ),
+                child: TextField(
+              onTap: () {
+                widget.closeEmoji();
+              },
+              minLines: 1,
+              maxLines: 3,
+              focusNode: myFocusNode,
+              controller: _controller,
+              decoration: InputDecoration(
+                  hintText: "ادخل نص",
+                  fillColor: Colors.grey[100],
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(width: 0),
+                      gapPadding: 10,
+                      borderRadius: BorderRadius.circular(25))),
             )),
             SizedBox(
               width: 20,
@@ -258,6 +276,8 @@ class _MessageTextFieldState extends State<MessageTextField> {
                   "date": DateTime.now(),
                   "reach": false
                 }).then((value) async {
+                  AudioPlayer audioPlayer = AudioPlayer();
+                  await audioPlayer.play(AssetSource('sent.mp3'));
                   await FirebaseFirestore.instance
                       .collection('users')
                       .doc(widget.currentId)
@@ -344,16 +364,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
         log('Push Token: $t');
       }
     });
-
-    // for handling foreground messages
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   log('Got a message whilst in the foreground!');
-    //   log('Message data: ${message.data}');
-
-    //   if (message.notification != null) {
-    //     log('Message also contained a notification: ${message.notification}');
-    //   }
-    // });
   }
 }
 

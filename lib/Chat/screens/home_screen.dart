@@ -1,15 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
 import 'package:test_ro_run/Chat/screens/search_screen.dart';
-import 'package:test_ro_run/Chat/screens/showImage.dart';
+import 'package:test_ro_run/showImage.dart';
 import 'package:test_ro_run/image.dart';
-import 'package:image_cropper/image_cropper.dart';
 
-import '../../Data.dart';
 import '../models/user_model.dart';
 
 import 'chat_screen.dart';
@@ -137,6 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context) => SearchScreen(widget.user)));
         },
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.startFloat, // Move FAB to the right side
     );
   }
 }
