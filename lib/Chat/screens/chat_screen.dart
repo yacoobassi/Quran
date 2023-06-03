@@ -5,7 +5,7 @@ import 'package:test_ro_run/showImage.dart';
 import '../models/user_model.dart';
 import '../widgets/message_textfield.dart';
 import '../widgets/single_message.dart';
-import 'package:test_ro_run/Data.dart';
+import 'package:test_ro_run/User/Data.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel currentUser;
@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.green,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -163,20 +163,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Center(child: CircularProgressIndicator());
                   }),
             )),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 340, minHeight: 82),
-              child: Column(
-                children: [
-                  MessageTextField(widget.currentUser.uid, widget.friendId,
-                      ShowEmoji, ifReach, closeKeyboard, closeEmoji),
-                  emojiShow
-                      ? SizedBox(
-                          width: double.infinity,
-                          height: 250,
-                          child: showEmoji())
-                      : SizedBox()
-                ],
-              ),
+            Column(
+              children: [
+                MessageTextField(widget.currentUser.uid, widget.friendId,
+                    ShowEmoji, ifReach, closeKeyboard, closeEmoji),
+                emojiShow
+                    ? SizedBox(
+                        width: double.infinity, height: 250, child: showEmoji())
+                    : SizedBox()
+              ],
             )
           ],
         ),

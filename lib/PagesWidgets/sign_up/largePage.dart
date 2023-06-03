@@ -5,6 +5,9 @@ import '../../title.dart';
 import 'package:test_ro_run/PagesWidgets/sign_up/enter.dart';
 
 class big extends StatelessWidget {
+  Function Loading;
+  bool teacher;
+  big(this.Loading, this.teacher);
   @override
   Widget build(BuildContext context) {
     x = 250;
@@ -32,7 +35,7 @@ class big extends StatelessWidget {
                     SizedBox(
                       height: 60,
                     ),
-                    enter(),
+                    enter(Loading, teacher),
                     SizedBox(
                       height: 60,
                     ),

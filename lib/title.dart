@@ -6,14 +6,16 @@ Widget title(
     children: [
       Row(
         children: [
-          Container(
-              width: 40,
-              height: 40,
-              padding: EdgeInsets.only(left: 10),
-              child: Image.asset(
-                image,
-                fit: BoxFit.fill,
-              )),
+          image == ""
+              ? Text("")
+              : Container(
+                  width: 40,
+                  height: 40,
+                  padding: EdgeInsets.only(left: 10),
+                  child: Image.asset(
+                    image,
+                    fit: BoxFit.fill,
+                  )),
           Text(
             title,
             style: TextStyle(
@@ -30,16 +32,7 @@ Widget title(
             text,
             style: TextStyle(color: Colors.black54),
           ),
-          image2 == ""
-              ? Text("")
-              : Container(
-                  height: 15,
-                  width: 15,
-                  margin: EdgeInsets.only(right: 5),
-                  child: Image.asset(
-                    image2,
-                    fit: BoxFit.fill,
-                  )),
+          image2 == "" ? Text("") : Text("")
         ],
       )
     ],

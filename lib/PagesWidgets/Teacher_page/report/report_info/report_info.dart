@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/request.dart';
 
+import '../../../../Links.dart';
+import '../../../../User/Data.dart';
 import '../../../../pages/posts.dart';
 import '../../../Bar/drawer.dart';
 import '../../../Bar/notification.dart';
+import '../Controller.dart';
 import '../lecture/dropdown.dart';
 import '../lecture/navigator_buttom.dart';
 import 'Reportbottom.dart';
 
-List days = [" ", "{أحد,ثلاثاء,خميس} ", "{سبت,اثنين,أربعاء}"];
+List days = [" ", "{أحد,ثلاثاء,خميس}", "{سبت,اثنين,أربعاء}"];
 List quranCheck = [" ", "لم يحضروها ", "أحضروها"];
 bool checks = false;
+String selectedDays = "{أحد,ثلاثاء,خميس}";
+String Quran = " ";
 
 class report extends StatefulWidget {
   const report();
@@ -20,6 +26,81 @@ class report extends StatefulWidget {
 
 class _reportState extends State<report> {
   DateTime date = DateTime.now();
+  Requst request = new Requst();
+
+  String tajoeed, study, review;
+
+  setAvg(String t, String s, String r) {
+    tajoeed = t;
+    study = s;
+    review = r;
+  }
+
+  changeDays(String days) {
+    selectedDays = days;
+  }
+
+  changeQuranCheck(String val) {
+    Quran = val;
+  }
+
+  getStudentsNumber() async {
+    var response = await request
+        .postRequest(linkGetAllStudents, {"institute": "1", "regiment": "19"});
+
+    return response;
+  }
+
+  getInsName() async {
+    var response = await request
+        .postRequest(linkInsName, {"instituteNum": "18", "reginmentNum": "19"});
+
+    return response;
+  }
+
+  getTeacherName() async {
+    var response = await request.postRequest(
+        linkTeacherName, {"instituteNum": "18", "reginmentNum": "19"});
+
+    return response;
+  }
+
+  newReport() async {
+    // widget.Loading();
+
+    //widget.Loading();
+    int nextmonth = DateTime.now().month + 1 % 12;
+    var response = await request.postRequest(linkNewReport, {
+      "instituteNum": "1",
+      "regimentNum": "19",
+      "reportDate":
+          "${nextmonth == 0 ? nextmonth + 1 : nextmonth}/${DateTime.now().year}",
+      "studenstNum": "30",
+      "daysNum": Controller.daysNum.text,
+      "studyDays": selectedDays,
+      "startHour": Controller.startHour.text,
+      "quranCheck": Quran,
+      "studentsCheck": checks ? "1" : "0",
+      "activity": Controller.activites.text,
+      "rememberMark": study,
+      "reviewMark": review,
+      "tajoeed": tajoeed,
+      "notes": Controller.notes.text,
+    });
+
+    if (response['status'] == "success") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("تمت حفظ البيانات")));
+
+      Controller.startHour.text = "";
+      Controller.notes.text = "";
+      Controller.activites.text = "";
+      Controller.daysNum.text = "";
+    } else
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("لم يتم الحفظ")));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
@@ -31,7 +112,7 @@ class _reportState extends State<report> {
         ),
         appBar: AppBar(
           title: Text(
-            "التقرير الشهري ",
+            "التقرير الشهري",
           ),
         ),
         body: Center(
@@ -71,21 +152,49 @@ class _reportState extends State<report> {
                                 color: Colors.green, style: BorderStyle.solid),
                           ),
                           columns: [
-                            DataColumn(label: Text("  المركز")),
-                            DataColumn(label: Text("بلاطة البلد")),
+                            DataColumn(label: Text("المركز")),
+                            DataColumn(
+                                label: FutureBuilder(
+                                    future: getInsName(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                            snapshot.data['data'][0]['name']);
+                                      } else
+                                        return Text("");
+                                    })),
                           ],
                           rows: [
                             DataRow(cells: [
-                              DataCell(Text(" الفوج")),
-                              DataCell(Text("(19)")),
+                              DataCell(Text("الفوج")),
+                              DataCell(Text(Data.user.regiment)),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text(" عدد الطلاب: رسميون ")),
-                              DataCell(Text("(32)")),
+                              DataCell(Text("عدد الطلاب: رسميون")),
+                              DataCell(FutureBuilder(
+                                  future: getStudentsNumber(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                          snapshot.data['count'].toString());
+                                    } else
+                                      return Text("");
+                                  })),
                             ]),
                             DataRow(cells: [
                               DataCell(Text("الأستاذ")),
-                              DataCell(Text("يعقوب عاصي")),
+                              DataCell(FutureBuilder(
+                                future: getTeacherName(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(snapshot.data['data'].length > 0
+                                        ? snapshot.data['data'][0]['name']
+                                        : "");
+                                  } else {
+                                    return Text("");
+                                  }
+                                },
+                              )),
                             ]),
                             DataRow(cells: [
                               DataCell(Text(" الأستاذ المساعد")),
@@ -96,27 +205,31 @@ class _reportState extends State<report> {
                               DataCell(Text("${date.month}/${date.year}")),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text("  عدد أيام دوام الدورة الفعلي")),
+                              DataCell(Text("عدد أيام دوام الدورة الفعلي")),
                               DataCell(TextField(
+                                controller: Controller.daysNum,
                                 keyboardType: TextInputType.number,
                                 decoration:
                                     InputDecoration(hintText: "..........."),
                               )),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text("أيام دوام الشهر القادم ")),
-                              DataCell(droplist(days, " ")),
+                              DataCell(Text("أيام دوام الشهر القادم")),
+                              DataCell(
+                                  droplist(days, selectedDays, changeDays)),
                             ]),
                             DataRow(cells: [
                               DataCell(Text("ساعة دوام الشهر القادم")),
                               DataCell(TextField(
+                                controller: Controller.startHour,
                                 decoration:
                                     InputDecoration(hintText: "..........."),
                               )),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text("  تفقد المصاحف")),
-                              DataCell(droplist(quranCheck, " ")),
+                              DataCell(Text("تفقد المصاحف")),
+                              DataCell(droplist(
+                                  quranCheck, Quran, changeQuranCheck)),
                             ]),
                             DataRow(cells: [
                               DataCell(Text("متابعة الطلاب بالصلاة")),
@@ -131,8 +244,9 @@ class _reportState extends State<report> {
                               )),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text(" ملحوظات المدرس")),
+                              DataCell(Text("ملحوظات المدرس")),
                               DataCell(TextField(
+                                controller: Controller.notes,
                                 decoration:
                                     InputDecoration(hintText: "..........."),
                               )),
@@ -140,17 +254,18 @@ class _reportState extends State<report> {
                             DataRow(cells: [
                               DataCell(Text("نشاطات خلال الشهر")),
                               DataCell(TextField(
+                                controller: Controller.activites,
                                 decoration:
                                     InputDecoration(hintText: "..........."),
                               )),
                             ]),
                           ]),
                     ),
-                    ReportBottom(),
+                    ReportBottom(setAvg),
                   ]),
             ),
           ),
         ),
-        bottomNavigationBar: nav_bottom());
+        bottomNavigationBar: nav_bottom(newReport, true));
   }
 }

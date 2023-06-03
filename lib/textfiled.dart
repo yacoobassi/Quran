@@ -12,11 +12,9 @@ class textFiled extends StatefulWidget {
 }
 
 class _textFiledState extends State<textFiled> {
-  @override
   bool presed;
   Icon preicon, posticon;
   void initState() {
-    // TODO: implement initState
     super.initState();
     presed = false;
     preicon = widget.icon;

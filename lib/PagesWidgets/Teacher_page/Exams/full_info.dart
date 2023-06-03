@@ -1,116 +1,259 @@
 import 'package:flutter/material.dart';
 
+import '../../../Links.dart';
 import '../../../pages/posts.dart';
-import '../../../tableTitle.dart';
+import '../../../request.dart';
+import '../../../tables/tableTitle.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
+import '../report/lecture/dropdown.dart';
+import 'Date.dart';
 import 'examNavBottom.dart';
 
-class ful_info extends StatelessWidget {
+class ful_info extends StatefulWidget {
   ful_info();
 
   @override
+  State<ful_info> createState() => _ful_infoState();
+}
+
+class _ful_infoState extends State<ful_info> {
+  Requst request = new Requst();
+
+  String reginment = "",
+      institute = "",
+      day = "",
+      date = "",
+      mark = "",
+      tajoeedMark = "",
+      sum = "",
+      avarege = "",
+      estimte = "",
+      parts = "",
+      students = "",
+      commitee = "",
+      prizes = "";
+
+  AsyncSnapshot<dynamic> marksData;
+
+  List dates = [];
+  DateTime count;
+
+  @override
+  void initState() {
+    super.initState();
+    getDates();
+
+    count = DateTime.now();
+  }
+
+  Future<void> getDates() async {
+    final response = await request
+        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    setState(() {
+      marksData = AsyncSnapshot.withData(ConnectionState.done, response);
+      if (marksData.hasData && marksData.data['data'].length > 0) {
+        if (Date.date == null) Date.date = marksData.data['data'][0]['date'];
+        for (int i = 0; i < marksData.data['data'].length; i++) {
+          dates.add(marksData.data['data'][i]['date']);
+        }
+      }
+    });
+  }
+
+  getExam() async {
+    var response = await request.postRequest(linkgetExam,
+        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
+
+    return response;
+  }
+
+  initial(AsyncSnapshot<dynamic> snapshot) {
+    if (snapshot.data['data'].length == 0) return;
+    reginment = snapshot.data['data'][0]['instituteNum'].toString();
+    institute = snapshot.data['data'][0]['regimentNum'].toString();
+    day = snapshot.data['data'][0]['day'];
+    date = snapshot.data['data'][0]['date'].toString();
+    mark = snapshot.data['data'][0]['passMark'];
+    tajoeedMark = snapshot.data['data'][0]['tajoeedMark'];
+    sum = snapshot.data['data'][0]['sum'];
+    avarege = snapshot.data['data'][0]['avarege'];
+    estimte = snapshot.data['data'][0]['estimate'];
+    parts = snapshot.data['data'][0]['parts'];
+    students = snapshot.data['data'][0]['students'].toString();
+    commitee = snapshot.data['data'][0]['commitee'];
+    prizes = snapshot.data['data'][0]['prizes'];
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<String> co = ["الامتحان : ", "المؤمنون والفرقان  والمجادلة"];
-    List title = [
-      tableTitle().titles('الفوج'),
-      tableTitle().titles('المركز'),
-      tableTitle().titles(
-        'اليوم',
-      ),
-      tableTitle().titles('التاريخ'),
-      tableTitle().titles('علامة النجاح'),
-      tableTitle().titles('علامة التجويد'),
-      tableTitle().titles('مجموع العلامات'),
-      tableTitle().titles('معدل المركز'),
-      tableTitle().titles('التقدير'),
-      tableTitle().titles('الأجزاء الممتحن بها'),
-      tableTitle().titles('عدد الطلاب بعد الامتحان'),
-      tableTitle().titles('لجنة الامتحان'),
-      tableTitle().titles('الجوائز'),
-      tableTitle().titles('ملاحظات'),
-    ];
-
-    List contain = [
-      Text('18'),
-      Text('بلاطة البلد'),
-      Text('الثلاثاء'),
-      Text('6/12/2022'),
-      Text('70%'),
-      Text('6%'),
-      Text('2321.5'),
-      Text('96.7%'),
-      Text("ممتاز"),
-      Text(
-        'المجادلة والفرقان والشعراء',
-        overflow: TextOverflow.fade,
-      ),
-      Text('رسميون(25)'),
-      Text(
-        " اللجنة , نضال عباس ,رمزي دويكات ,محمد ابو غضيب, قاسم القدح",
-        overflow: TextOverflow.fade,
-      ),
-      Text(
-        " عطر ,  بلوزة , مج ,  شامبو,  بشقير",
-        overflow: TextOverflow.fade,
-      ),
-      Text(
-        "  ",
-        overflow: TextOverflow.fade,
-      )
-    ];
-
-    var celles = [];
-    for (int i = 0; i < title.length; i++) {
-      celles.add(title[i]);
-      celles.add(contain[i]);
-    }
-
     int numrowexa1 = 13;
     int numcol1 = 2;
     int numcel1 = 2;
 
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: drawer(student: false, drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      appBar: AppBar(
-        title: Text(
-          "الامتحانات ",
-        ),
-      ),
-      bottomNavigationBar: bottom_Nav_exam(),
-      body: SingleChildScrollView(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                  padding: EdgeInsets.all(5),
-                  width: 600,
-                  alignment: Alignment.center,
-                  child: DataTable(
-                      dataRowHeight: 70,
-                      dataTextStyle: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                      border: TableBorder(
-                        bottom: BorderSide(color: Colors.green),
-                        top: BorderSide(color: Colors.green),
-                        horizontalInside: BorderSide(
-                            color: Colors.green, style: BorderStyle.solid),
-                      ),
-                      columns: tableTitle().col(numcol1, co),
-                      rows: tableTitle().rowexam(numrowexa1, numcel1, celles))),
-            ],
+        drawer: drawer(student: false, drawer_width: drawer().drawer_width),
+        appBar: AppBar(
+          title: Text(
+            "الامتحانات",
+            style: TextStyle(
+              fontFamily: 'Cairo',
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
+          centerTitle: true,
+          backgroundColor: Colors.green,
+          elevation: 0,
         ),
-      ),
-    );
+        bottomNavigationBar: bottom_Nav_exam(),
+        body: FutureBuilder(
+            future: getExam(),
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                initial(snapshot);
+
+                List<String> co = ["الامتحان", "المؤمنون"];
+                List title = [
+                  tableTitle().titles('الفوج'),
+                  tableTitle().titles('المركز'),
+                  tableTitle().titles(
+                    'اليوم',
+                  ),
+                  tableTitle().titles('التاريخ'),
+                  tableTitle().titles('علامة النجاح'),
+                  tableTitle().titles('علامة التجويد'),
+                  tableTitle().titles('مجموع العلامات'),
+                  tableTitle().titles('معدل المركز'),
+                  tableTitle().titles('التقدير'),
+                  tableTitle().titles('الأجزاء الممتحن بها'),
+                  tableTitle().titles('عدد الطلاب بعد الامتحان'),
+                  tableTitle().titles('لجنة الامتحان'),
+                  tableTitle().titles('الجوائز'),
+                  tableTitle().titles('ملاحظات'),
+                ];
+                List contain = [
+                  Text(reginment,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(institute,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(day,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(date,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(mark,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(tajoeedMark,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(sum,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(avarege,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(estimte,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  SingleChildScrollView(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 120,
+                      ),
+                      child: Text(
+                        parts,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
+                  Text(students,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  SingleChildScrollView(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 120,
+                      ),
+                      child: Text(commitee,
+                          maxLines: 5,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 120,
+                      ),
+                      child: Text(prizes,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  Text(
+                    "  ",
+                    overflow: TextOverflow.fade,
+                  )
+                ];
+                var celles = [];
+                for (int i = 0; i < title.length; i++) {
+                  celles.add(title[i]);
+                  celles.add(contain[i]);
+                }
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("تاريخ الامتحان  "),
+                              droplist(dates, Date.date, (val) {
+                                setState(() {
+                                  Date.date = val;
+                                });
+                                // call fetchMarks() with the new selected date
+                              }),
+                            ]),
+                        Card(
+                          elevation: 8,
+                          child: DataTable(
+                            dataRowHeight: 70,
+                            dataTextStyle: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontFamily: 'Cairo',
+                            ),
+                            headingRowColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.green.withOpacity(0.2),
+                            ),
+                            columns: tableTitle().col(numcol1, co),
+                            rows: tableTitle()
+                                .rowexam(numrowexa1, numcel1, celles),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else
+                return Center(
+                  child:
+                      DateTime.now().difference(count) <= Duration(seconds: 1)
+                          ? CircularProgressIndicator()
+                          : Text("لا يوجد امتحانات بعد"),
+                );
+            })));
   }
 }

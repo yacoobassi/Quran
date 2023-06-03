@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/Links.dart';
+import 'package:test_ro_run/request.dart';
 
-var data = [
+import '../../User/Data.dart';
+
+var dataS = [
   {
     'icon': Icon(
       Icons.mosque,
@@ -8,7 +12,7 @@ var data = [
       color: Colors.green,
     ),
     'title': "المركز",
-    'answer': "المركز2"
+    "value": "institute_name"
   },
   {
     'icon': Icon(
@@ -17,7 +21,7 @@ var data = [
       color: Colors.green,
     ),
     'title': "عدد الأجزاء المنجزة ",
-    'answer': "5 أجزاء"
+    "value": "finishedParts"
   },
   {
     'icon': Icon(
@@ -26,7 +30,7 @@ var data = [
       color: Colors.green,
     ),
     'title': "الجزء الحالي",
-    'answer': "جزء 20"
+    "value": "currentPart"
   },
   {
     'icon': Icon(
@@ -35,7 +39,7 @@ var data = [
       color: Colors.green,
     ),
     'title': "المعدل التراكمي",
-    'answer': "100/95"
+    "value": "mark"
   },
   {
     'icon': Icon(
@@ -44,7 +48,7 @@ var data = [
       color: Colors.green,
     ),
     'title': "علامة الامتحان السابق",
-    'answer': "10/9"
+    "value": "lastMark"
   },
   {
     'icon': Icon(
@@ -53,16 +57,94 @@ var data = [
       color: Colors.green,
     ),
     'title': "موعد الامتحان القادم",
-    'answer': "15/3/2023"
+    "value": "nextExam"
+  }
+];
+
+var dataT = [
+  {
+    'icon': Icon(
+      Icons.other_houses,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "المركز",
+    "value": "institute_name"
+  },
+  {
+    'icon': Icon(
+      Icons.location_on_outlined,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "المدينة",
+    "value": "country"
+  },
+  {
+    'icon': Icon(
+      Icons.work_history_rounded,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "العمل",
+    "value": "lastJob"
+  },
+  {
+    'icon': Icon(
+      Icons.bookmark,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "التخصص",
+    "value": "study"
+  },
+  {
+    'icon': Icon(
+      Icons.mosque,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "المسجد",
+    "value": "mosque"
+  },
+  {
+    'icon': Icon(
+      Icons.phone,
+      size: 40,
+      color: Colors.green,
+    ),
+    'title': "رقم الهاتف",
+    "value": "Yourphone"
   }
 ];
 
 class grid extends StatelessWidget {
   double width;
-  grid({
-    Key myKey,
-    this.width,
-  }) : super(key: myKey);
+  bool teacher;
+  grid({Key myKey, this.width, this.teacher}) : super(key: myKey);
+
+  Requst request = new Requst();
+
+  getInfo() async {
+    var response = await request.postRequest(linkGETStData, {
+      "num": Data.user != null
+          ? Data.user.email.replaceFirst('@gmail.com', '')
+          : "",
+      "instituteNum": Data.user.institute,
+      "regimentNum": Data.user.regiment
+    });
+
+    return response;
+  }
+
+  getTeacherInfo() async {
+    var response = await request.postRequest(linkgetTeacherInfo, {
+      "num": Data.user.email.replaceFirst('@gmail.com', ''),
+    });
+
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,12 +169,31 @@ class grid extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  data[index]['icon'],
-                  Text(data[index]['title']),
-                  Text(
-                    data[index]['answer'],
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )
+                  !teacher ? dataS[index]['icon'] : dataT[index]['icon'],
+                  !teacher
+                      ? Text(dataS[index]['title'])
+                      : Text(dataT[index]['title']),
+                  FutureBuilder(
+                      future: teacher ? getTeacherInfo() : getInfo(),
+                      builder: ((context, snapshot) {
+                        if (snapshot.hasData) {
+                          return teacher
+                              ? Text(
+                                  "${snapshot.data['data'][0][dataT[index]['value']]}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  "${snapshot.data['data'][0][dataS[index]['value']]}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                );
+                        } else {
+                          return Text("");
+                        }
+                      }))
                 ],
               ));
         },

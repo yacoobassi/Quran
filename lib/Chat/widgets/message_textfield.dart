@@ -12,7 +12,7 @@ import 'package:test_ro_run/Chat/camera/camera_scareen.dart';
 import 'package:test_ro_run/Chat/sendNotification.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../Data.dart';
+import '../../User/Data.dart';
 import '../../image.dart';
 
 class MessageTextField extends StatefulWidget {
@@ -40,7 +40,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myFocusNode = FocusNode();
     myFocusNode.addListener(() {

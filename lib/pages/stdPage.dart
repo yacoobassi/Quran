@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/pages/posts.dart';
 
-import '../Data.dart';
+import '../User/Data.dart';
 import '../PagesWidgets/Bar/appBar.dart';
 import '../PagesWidgets/Bar/drawer.dart';
 import '../PagesWidgets/Bar/notification.dart';
@@ -20,7 +20,6 @@ class student_page extends StatefulWidget {
 }
 
 class _student_page extends State<student_page> {
-  @override
   GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
   show(String text) {
     globalkey.currentState.openEndDrawer();
@@ -30,7 +29,6 @@ class _student_page extends State<student_page> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     visible = false;
     notificationInit();
@@ -90,11 +88,14 @@ class _student_page extends State<student_page> {
         text: likeORcomment,
       ),
       body: Stack(alignment: Alignment.topCenter, children: [
-        grid(width: width),
+        grid(
+          width: width,
+          teacher: false,
+        ),
         Container(
           height: 200,
           child: appbar(
-            title: "صفحة الطالب",
+            title: "",
             show: show,
             width: true,
             opacity: 1,

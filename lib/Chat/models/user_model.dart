@@ -7,19 +7,33 @@ class UserModel {
   String date;
   String uid;
   String token;
+  bool student;
+  String institute;
+  String regiment;
+  String password;
 
   UserModel(
-      {this.email, this.name, this.image, this.date, this.uid, this.token});
+      {this.email,
+      this.name,
+      this.image,
+      this.date,
+      this.uid,
+      this.token,
+      this.student,
+      this.institute,
+      this.regiment});
 
   factory UserModel.fromJson(DocumentSnapshot snapshot) {
     return UserModel(
-      email: snapshot['email'],
-      name: snapshot['name'],
-      image: snapshot['image'],
-      date: snapshot['date'].toString(),
-      uid: snapshot['uid'],
-      token: snapshot['token'],
-    );
+        email: snapshot['email'],
+        name: snapshot['name'],
+        image: snapshot['image'],
+        date: snapshot['date'].toString(),
+        uid: snapshot['uid'],
+        token: snapshot['token'],
+        student: snapshot['student'],
+        institute: snapshot['institute'],
+        regiment: snapshot['regiment']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +42,9 @@ class UserModel {
         'image': image,
         "date": date,
         'uid': uid,
-        "token": token
+        "token": token,
+        "student": student,
+        "institute": institute,
+        "regiment": regiment
       };
 }

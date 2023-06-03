@@ -12,8 +12,8 @@ class small extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        title("تسجيل الدخول", "images/handshake.png",
-            "نحن في انتظارك في اقرأ سجل الان", "images/love.png", 35),
+        title(
+            "تسجيل الدخول", "images/handshake.png", "", "images/love.png", 35),
         icon(),
         enter(),
         SizedBox(

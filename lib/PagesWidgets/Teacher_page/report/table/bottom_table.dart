@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../Controller.dart';
 import '../lecture/dropdown.dart';
 import 'gettable.dart';
 
 class bottomInfo extends StatefulWidget {
-  bottomInfo();
+  AsyncSnapshot<dynamic> snapshot;
+  int i;
+
+  bottomInfo(this.snapshot, this.i);
 
   @override
   State<bottomInfo> createState() => _bottomInfoState();
@@ -17,84 +21,112 @@ class _bottomInfoState extends State<bottomInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          textfeildrow(
-            TextField(
-              textAlign: TextAlign.center,
-              enabled: false,
-              decoration: InputDecoration(labelText: "معدل المراجعة"),
-            ),
-            TextField(
-              textAlign: TextAlign.center,
-              enabled: false,
-              decoration: InputDecoration(labelText: "معدل الحفظ"),
-            ),
-          ),
-          textfeildrow(
-              Text(
-                " سلوك الطالب",
-                style: TextStyle(fontSize: 20),
-              ),
-              droplist(Appreciation, "ممتاز")),
-          textfeildrow(
-              Text(" الصلاة في المسجد ", style: TextStyle(fontSize: 20)),
-              droplist(Appreciation, " ")),
-          textfeildrow(
-            Text(" ملحوظات المدرس", style: TextStyle(fontSize: 20)),
-            TextField(),
-          ),
-          textfeildrow(
-            Text("  عدد أيام الغياب", style: TextStyle(fontSize: 20)),
-            TextField(
-              textAlign: TextAlign.center,
-              enabled: false,
-            ),
+          DataTable(
+            columns: [
+              DataColumn(
+                  label: Text("معدل المراجعة",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18))),
+              DataColumn(
+                  label: Text("معدل الحفظ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18))),
+            ],
+            rows: [
+              DataRow(cells: [
+                DataCell(TextField(
+                  decoration: InputDecoration(
+                    hintText: widget
+                        .snapshot.data['data'][widget.i]['reviewAvarege']
+                        .toString(),
+                  ),
+                  textAlign: TextAlign.center,
+                  enabled: false,
+                )),
+                DataCell(TextField(
+                  decoration: InputDecoration(
+                    hintText: widget
+                        .snapshot.data['data'][widget.i]['studyAvarege']
+                        .toString(),
+                  ),
+                  textAlign: TextAlign.center,
+                  enabled: false,
+                )),
+              ]),
+              DataRow(cells: [
+                DataCell(Text("سلوك الطالب", style: TextStyle(fontSize: 20))),
+                DataCell(droplist(
+                    Appreciation, widget.snapshot.data['data'][widget.i]['act'],
+                    (newValue) {
+                  setState(() {
+                    print(widget.snapshot.data['data'][widget.i]['act']);
+                    widget.snapshot.data['data'][widget.i]['act'] = newValue;
+                  });
+                })),
+              ]),
+              DataRow(cells: [
+                DataCell(
+                    Text("الصلاة في المسجد", style: TextStyle(fontSize: 20))),
+                DataCell(droplist(Appreciation,
+                    widget.snapshot.data['data'][widget.i]['sala'], (newValue) {
+                  setState(() {
+                    widget.snapshot.data['data'][widget.i]['sala'] = newValue;
+                  });
+                })),
+              ]),
+              DataRow(cells: [
+                DataCell(
+                    Text("ملحوظات المدرس", style: TextStyle(fontSize: 20))),
+                DataCell(TextField(
+                  decoration: InputDecoration(
+                    hintText: widget.snapshot.data['data'][widget.i]['notes']
+                        .toString(),
+                  ),
+                  onChanged: (val) {
+                    setState(() {
+                      widget.snapshot.data['data'][widget.i]['notes'] = val;
+                    });
+                  },
+                )),
+              ]),
+              DataRow(cells: [
+                DataCell(
+                    Text("عدد أيام الغياب", style: TextStyle(fontSize: 20))),
+                DataCell(TextField(
+                  decoration: InputDecoration(
+                    hintText: widget.snapshot.data['data'][widget.i]['notcome']
+                        .toString(),
+                  ),
+                  textAlign: TextAlign.center,
+                  enabled: false,
+                )),
+              ]),
+            ],
+            dividerThickness: 0,
+            dataRowHeight: 50,
+            headingRowHeight: 60,
+            columnSpacing: 20,
+            horizontalMargin: 20,
+            headingTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontFamily: 'Cairo',
+                color: Colors.blue),
+            dataTextStyle: TextStyle(
+                fontSize: 18, fontFamily: 'Cairo', color: Colors.black),
+            dataRowColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected))
+                return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+              return Colors.white;
+            }),
+            headingRowColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+              return Colors.grey[300];
+            }),
           ),
         ],
       ),
-    );
-  }
-}
-
-class textfeildrow extends StatefulWidget {
-  textfeildrow(this.field, this.title);
-  Widget field;
-  Widget title;
-
-  @override
-  State<textfeildrow> createState() => _textfeildrowState();
-}
-
-class _textfeildrowState extends State<textfeildrow> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(border: Border.all(width: 5)),
-          alignment: Alignment.center,
-          width: 400,
-          child: Row(
-            children: [
-              Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 5),
-                child: widget.field,
-                height: 50,
-                width: 194,
-                decoration: BoxDecoration(border: Border.all()),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(right: 5),
-                child: widget.title,
-                height: 50,
-                width: 196,
-                decoration: BoxDecoration(border: Border.all()),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

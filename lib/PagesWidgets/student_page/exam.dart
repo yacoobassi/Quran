@@ -1,129 +1,129 @@
 import 'package:flutter/material.dart';
 
+import '../../Links.dart';
+import '../../User/Data.dart';
 import '../../pages/posts.dart';
+import '../../request.dart';
 import '../Bar/drawer.dart';
 import '../Bar/notification.dart';
 import '../Teacher_page/Exams/table.dart';
 
 class examstu extends StatelessWidget {
   examstu();
+  Requst request = new Requst();
+  getExam() async {
+    var response = await request.postRequest(getAllStuExams, {
+      "num": Data.user.email.replaceAll("@gmail.com", ""),
+    });
+
+    return response;
+  }
 
   int rowexa = 15, numcol = 3, numcel = 3;
-  List<String> collist = [
-    "             الامتحان            ",
-    "العلامة",
-    "التقدير"
+  final collist = [
+    {"title": "الامتحان", "value": "parts"},
+    {"title": "العلامة", "value": "mark"},
+    {"title": "التقدير", "value": "estimate"},
   ];
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("الامتحانات"),
-      ),
-      drawer: drawer(student: true, drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 5),
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  alignment: Alignment.centerRight,
+        appBar: AppBar(
+          title: Text("الامتحانات"),
+        ),
+        drawer: drawer(student: true, drawer_width: drawer().drawer_width),
+        body: FutureBuilder(
+          future: getExam(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                          padding: EdgeInsets.all(5),
-                          alignment: Alignment.centerRight,
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
+                      SizedBox(height: 10),
+                      Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
                           child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        " علامة آخر امتحان  :  ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "علامة اخر امتحان",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Container(
-                                      child: Text("97.5%"),
+                                  ),
+                                  Text(
+                                    snapshot.data['count'] > 0
+                                        ? "%${snapshot.data['data'][0]['mark'] * 10}"
+                                        : "لا يوجد علامة",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
                                     ),
-                                    SizedBox(
-                                      width: 40,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "المعدل التراكمي",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Container(
-                                      child: Text("المعدل التراكمي    : ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
+                                  ),
+                                  Text(
+                                    "%${(double.parse(snapshot.data['avg_mark']) * 10).toStringAsFixed(1)}",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
                                     ),
-                                    Container(
-                                      child: Text("93.5%"),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      child: Text("الامتحان القادم :  ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
-                                    ),
-                                    Container(
-                                      child: Text("جزء تبارك"),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      child: Text("تاريخ الامتحان القادم  :  ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
-                                    ),
-                                    Container(
-                                      child: Text("7/3/2024"),
-                                    ),
-                                  ],
-                                ),
-                              ])),
-                      SizedBox(
-                        height: 20,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      tableExam(collist, rowexa, numcol, numcel),
+                      SizedBox(height: 20),
+                      Text(
+                        "جدول الامتحانات",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.9, // set the width to 90% of the screen width
+                        child: tableExam(
+                            collist, rowexa, numcol, numcel, snapshot),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ));
   }
 }

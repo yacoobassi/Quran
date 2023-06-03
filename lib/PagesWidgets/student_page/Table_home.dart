@@ -35,31 +35,9 @@ class _Table_student1State extends State<Table_student1> {
         show: show,
       ),
       drawer: Drawer(),
-      body: //Container(
-          /*
-          child: Container(
-        height: 65,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 8,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              //  margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(10),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(border: Border.all()),
-              child: Text(
-                "${titles[index]}",
-                style: TextStyle(fontSize: 30),
-              ),
-            );
-          },
-        ),
-      )
-      */
-          Column(children: [
+      body: Column(children: [
         Container(
-          height: 1000,
+          height: 500,
           width: double.infinity,
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(10),
@@ -220,7 +198,7 @@ class _Table_student1State extends State<Table_student1> {
 
 TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
         children: cells.map((cell) {
-      final style = TextStyle(
+      TextStyle(
           fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
           fontSize: 10);
 

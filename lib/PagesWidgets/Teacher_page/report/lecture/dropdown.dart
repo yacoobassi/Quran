@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class droplist extends StatefulWidget {
- 
-
-  droplist(this.droplist1, this.selected1);
+  droplist(this.droplist1, this.selected1, this.Functon);
+  Function Functon;
   List droplist1;
   String selected1;
 
@@ -25,9 +24,9 @@ class _droplistState extends State<droplist> {
         setState(() {
           widget.selected1 = val;
         });
+        widget.Functon(val);
       },
       value: widget.selected1,
-      
     );
   }
 }

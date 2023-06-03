@@ -1,41 +1,98 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Exams/table.dart';
 
+import '../../../Links.dart';
 import '../../../pages/posts.dart';
+import '../../../request.dart';
 import '../../../title.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
+import '../report/lecture/dropdown.dart';
+import 'Date.dart';
 import 'examNavBottom.dart';
 
-class grade extends StatelessWidget {
+class grade extends StatefulWidget {
   grade();
 
   @override
+  State<grade> createState() => _gradeState();
+}
+
+class _gradeState extends State<grade> {
+  final request = Requst();
+  AsyncSnapshot<dynamic> marksData;
+  List dates = [];
+  DateTime count;
+  @override
+  void initState() {
+    super.initState();
+    count = DateTime.now();
+    getDates();
+  }
+
+  Future<void> getDates() async {
+    final response = await request
+        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    setState(() {
+      marksData = AsyncSnapshot.withData(ConnectionState.done, response);
+      if (marksData.hasData) {
+        //  Date.date = marksData.data['data'][0]['date'];
+        for (int i = 0; i < marksData.data['data'].length; i++) {
+          dates.add(marksData.data['data'][i]['date']);
+        }
+      }
+    });
+  }
+
+  Future<void> getData() async {
+    final response = await request.postRequest(linkgetMarks,
+        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
+
+    return response;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<String> columnTitle = [
-      "الترتيب",
-      "الطالب",
-      "علامة الامتحان",
-      "التقدير"
+    final columnTitle = [
+      {"title": "الترتيب", "value": "order"},
+      {"title": "الطالب", "value": "name"},
+      {"title": "علامة الامتحان", "value": "mark"},
+      {"title": "التقدير", "value": "estimate"}
     ];
-    List cels = [
-      TextField(
-        enabled: false,
+
+    bool init = true;
+
+    final cels = [
+      Container(
+        padding: EdgeInsets.all(8),
+        child: TextField(
+          enabled: false,
+        ),
       ),
-      TextField(
-        enabled: false,
+      Container(
+        padding: EdgeInsets.all(8),
+        child: TextField(
+          enabled: false,
+        ),
       ),
-      TextField(
-        enabled: false,
+      Container(
+        padding: EdgeInsets.all(8),
+        child: TextField(
+          enabled: false,
+        ),
       ),
-      TextField(
-        enabled: false,
+      Container(
+        padding: EdgeInsets.all(8),
+        child: TextField(
+          enabled: false,
+        ),
       )
     ];
-    int rowexa = 30;
-    int numcol = 4;
-    int numcel = 4;
-    List lg = [TextField()];
+    const rowexa = 30;
+    const numcol = 4;
+    const numcel = 4;
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
         drawer: drawer(student: false, drawer_width: drawer().drawer_width),
@@ -44,23 +101,50 @@ class grade extends StatelessWidget {
           text: likeORcomment,
         ),
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "الامتحانات ",
           ),
         ),
         bottomNavigationBar: bottom_Nav_exam(),
-        body: SingleChildScrollView(
-          child: Center(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  title("العلامات", "", "", "", 200),
-                  tableExam(columnTitle, rowexa, numcol, numcel)
-                ],
-              ),
-            ),
-          ),
+        body: FutureBuilder(
+          future: getData(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [title("العلامات", "", "", "", 40)]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("تاريخ الامتحان  "),
+                            droplist(dates, Date.date, (val) {
+                              setState(() {
+                                Date.date = val;
+                              });
+                              // call fetchMarks() with the new selected date
+                            }),
+                          ]),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      tableExam(columnTitle, rowexa, numcol, numcel, snapshot),
+                    ],
+                  ),
+                ),
+              );
+            } else
+              return Center(
+                child: DateTime.now().difference(count) <= Duration(seconds: 1)
+                    ? CircularProgressIndicator()
+                    : Text("لا يوجد امتحانات بعد"),
+              );
+          },
         ));
   }
 }

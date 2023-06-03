@@ -2,9 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/sharedPref.dart';
 
-import '../../Data.dart';
+import '../../User/Data.dart';
 
 double opacity = 1;
 

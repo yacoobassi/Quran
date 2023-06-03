@@ -1,64 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
-var comments = [
-  {
-    'name': 'احمد',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'محمد',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'رائد',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'احمد',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-  {
-    'name': 'يعقوب',
-    'image': "images/face.jpg",
-    'comment': "التعليق على هذا المنشور"
-  },
-];
+import '../../Links.dart';
+import '../../User/Data.dart';
+import '../../request.dart';
+
 double comments_width = 0.0, circular = 0.0, screenwidth = 0.0;
 
 class comments_container extends StatefulWidget {
   Function closeComments;
   final width;
-  comments_container({Key myKey, this.width, this.closeComments})
+  int post;
+  comments_container({Key myKey, this.width, this.closeComments, this.post})
       : super(key: myKey);
 
   @override
@@ -67,167 +20,257 @@ class comments_container extends StatefulWidget {
 
 class _comments_containerState extends State<comments_container> {
   ScrollController _controller;
+  Requst request = new Requst();
+  final TextEditingController _comment = new TextEditingController();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _controller = ScrollController();
   }
 
+  getComment() async {
+    var response = await request.postRequest(getComments, {
+      "post": widget.post.toString(),
+    });
+
+    return response;
+  }
+
+  addcomment() async {
+    var response = await request.postRequest(addComment, {
+      "post": widget.post.toString(),
+      "num": Data.user.email.replaceAll("@gmail.com", ""),
+      "comment": _comment.text,
+      "date": DateTime.now().toString()
+    });
+
+    return response;
+  }
+
   Widget build(BuildContext context) {
-    final TextEditingController _comment = new TextEditingController();
+    bool isDesktop = widget.width >= 900;
+    DateTime dateTime;
+    Timestamp timestamp;
+    double screenwidth = isDesktop ? widget.width - 200 : double.infinity;
+    double comments_width = isDesktop ? 800 : double.infinity;
+    double circular = isDesktop ? 20 : 0;
 
-    if (widget.width < 900) {
-      screenwidth = double.infinity;
-      comments_width = double.infinity;
-      circular = 0;
-    } else {
-      screenwidth = widget.width - 200;
-      comments_width = 800;
-      circular = 20;
-    }
-
-// This is what you're looking for!
-    Future _scrollDown() async {
-      await Future.delayed(Duration(milliseconds: 100), () {
-        _controller.animateTo(
-          _controller.position.maxScrollExtent,
-          duration: Duration(seconds: 1),
-          curve: Curves.fastOutSlowIn,
-        );
-      });
+    // This is what you're looking for!
+    Future<void> _scrollDown() async {
+      await Future.delayed(
+        Duration(milliseconds: 100),
+        () {
+          _controller.animateTo(
+            _controller.position.maxScrollExtent,
+            duration: Duration(seconds: 1),
+            curve: Curves.fastOutSlowIn,
+          );
+        },
+      );
     }
 
     return Center(
-        child: Container(
-            width: comments_width,
-            height: comments_width,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(circular)),
-            child: Stack(alignment: Alignment.bottomCenter, children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ))),
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            widget.closeComments();
-                          },
-                          icon: Icon(Icons.close))
-                    ],
+      child: Container(
+        padding: EdgeInsets.only(top: 20),
+        width: comments_width,
+        height: comments_width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(circular),
+        ),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 50, bottom: 60),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  controller: _controller,
-                  itemCount: comments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Row(
-                      children: [
-                        ClipOval(
-                            child: Image.asset(
-                          "images/face.jpg",
-                          colorBlendMode: BlendMode.modulate,
-                          height: 60.0,
-                          width: 60.0,
-                          fit: BoxFit.fill,
-                        )),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              alignment: Alignment.centerRight,
-                              margin: EdgeInsets.all(5),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Color.fromARGB(31, 116, 114, 114),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    comments[index]['name'],
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                        minWidth: 100,
-                                        maxWidth: widget.width - 150),
-                                    child: Text(
-                                      comments[index]['comment'],
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.black),
-                                      overflow: TextOverflow.clip,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(
-                                    right: 15, top: 5, bottom: 5),
-                                child: Text(
-                                  "5 س",
-                                  textDirection: TextDirection.rtl,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black87),
-                                ))
-                          ],
-                        ),
-                      ],
-                    );
-                  },
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        widget.closeComments();
+                      },
+                      icon: Icon(Icons.close),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          top: BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ))),
-                  padding: EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: _comment,
-                    textInputAction: TextInputAction.go,
-                    decoration: InputDecoration(
-                      hintText: "أكتب تعليق",
-                      filled: true,
-                      fillColor: Color.fromARGB(31, 116, 114, 114),
+            ),
+            FutureBuilder(
+              future: getComment(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData)
+                  return Container(
+                    margin: EdgeInsets.only(top: 50, bottom: 70),
+                    child: ListView.builder(
+                      controller: _controller,
+                      itemCount: snapshot.data['data'].length,
+                      itemBuilder: (BuildContext context, int index) {
+                        dateTime = DateTime.parse(
+                            snapshot.data['data'][index]['date']);
+                        timestamp = Timestamp.fromMillisecondsSinceEpoch(
+                            dateTime.millisecondsSinceEpoch);
+                        return Row(
+                          children: [
+                            ClipOval(
+                              child: Image.asset(
+                                "images/face.jpg",
+                                colorBlendMode: BlendMode.modulate,
+                                height: 60.0,
+                                width: 60.0,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(31, 116, 114, 114),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data['data'][index]['name'],
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minWidth: 100,
+                                          maxWidth: screenwidth - 150,
+                                        ),
+                                        child: Text(
+                                          snapshot.data['data'][index]
+                                              ['comment'],
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                          overflow: TextOverflow.clip,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  formatDateTime(timestamp.toDate()),
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
-                    maxLines: 3,
-                    minLines: 1,
-                    onEditingComplete: () {
-                      setState(() {
-                        comments.add({
-                          'name': "يعقوب",
-                          'image': "images/face.jpg",
-                          'comment': "${_comment.text}",
-                        });
-                      });
-                      _comment.clear();
-                      _scrollDown();
-                    },
-                  ))
-            ])));
+                  );
+                else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: 20, right: 20, top: 5, bottom: 5),
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, top: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(31, 116, 114, 114),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: TextFormField(
+                          controller: _comment,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            hintText: "اضف تعليقا",
+                            border: InputBorder.none,
+                            hintStyle:
+                                TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          style: TextStyle(fontSize: 12, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (_comment.text.isNotEmpty) {
+                          setState(() {
+                            addcomment();
+
+                            _comment.clear();
+                            _scrollDown();
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.send),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
+}
+
+String formatDateTime(DateTime dateTime) {
+  final now = DateTime.now();
+  final diff = now.difference(dateTime);
+
+  if (diff.inSeconds < 60) {
+    return 'الان';
+  } else if (diff.inMinutes < 60) {
+    return 'قبل ${diff.inMinutes} دقيقة';
+  } else if (diff.inHours < 24) {
+    return 'قبل ${diff.inHours} ساعة';
+  } else
+    return "${dateTime.year}/${dateTime.month}/${dateTime.day}";
 }

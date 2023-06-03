@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/Chat/screens/search_screen.dart';
@@ -18,13 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  File _image;
   final image = ImageHelper();
   var me;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.teal, actions: [
+      appBar: AppBar(backgroundColor: Colors.green, actions: [
         Center(
           child: Text(
             'الدردشات',
@@ -127,10 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SearchScreen(widget.user)));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchScreen(true)));
         },
       ),
       floatingActionButtonLocation:

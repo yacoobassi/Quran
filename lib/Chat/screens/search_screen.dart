@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user_model.dart';
+import '../../PagesWidgets/Teacher_page/Student/student_informatin.dart';
+import '../../User/Data.dart';
 import 'chat_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  UserModel user;
-  SearchScreen(this.user);
+  SearchScreen(this.search);
+  bool search;
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -37,8 +38,12 @@ class _SearchScreenState extends State<SearchScreen> {
             });
             return;
           }
+
           value.docs.forEach((user) {
-            if (user.data()['email'] != widget.user.email) {
+            if (user.data()['email'] != Data.user.email &&
+                user.data()['student'] != Data.user.student &&
+                user.data()['regiment'] == Data.user.regiment &&
+                user.data()['institute'] == Data.user.institute) {
               searchResult.add(user.data());
             }
           });
@@ -99,10 +104,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           });
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return ChatScreen(
-                                currentUser: widget.user,
-                                friendName: searchResult[index]['name'],
-                                friendImage: searchResult[index]['image']);
+                            return widget.search
+                                ? ChatScreen(
+                                    currentUser: Data.user,
+                                    friendId: searchResult[index]['uid'],
+                                    friendName: searchResult[index]['name'],
+                                    friendImage: searchResult[index]['image'])
+                                : student_Data(searchResult[index]['uid']
+                                    .replaceAll("@gmail.com", ""));
                           }));
                         },
                         child: ListTile(
@@ -110,7 +119,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: Image.network(searchResult[index]['image']),
                           ),
                           title: Text(searchResult[index]['name']),
-                          trailing: IconButton(icon: Icon(Icons.message)),
+                          trailing: widget.search
+                              ? IconButton(icon: Icon(Icons.message))
+                              : Text(""),
                         ),
                       );
                     }))

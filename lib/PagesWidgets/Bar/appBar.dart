@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:badges/src/badge.dart' as badge;
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/Data.dart';
+import 'package:test_ro_run/User/Data.dart';
 
 class appbar extends StatefulWidget implements PreferredSizeWidget {
   String title;
@@ -45,19 +45,19 @@ class _appBarState extends State<appbar> {
       ),
       centerTitle: true,
       actions: [
-        IconButton(
-          icon: badge.Badge(
-              badgeStyle: BadgeStyle(
-                  badgeColor: Colors.red.withOpacity(widget.opacity)),
-              position: BadgePosition.topStart(),
-              badgeContent: Text("$notification_num"),
-              child: Icon(Icons.add_alert)),
-          onPressed: widget.opacity != 1
-              ? null
-              : () {
-                  widget.show("باضافة منشور");
-                },
-        ),
+        // IconButton(
+        //   icon: badge.Badge(
+        //       badgeStyle: BadgeStyle(
+        //           badgeColor: Colors.red.withOpacity(widget.opacity)),
+        //       position: BadgePosition.topStart(),
+        //       badgeContent: Text("$notification_num"),
+        //       child: Icon(Icons.add_alert)),
+        //   onPressed: widget.opacity != 1
+        //       ? null
+        //       : () {
+        //           widget.show("باضافة منشور");
+        //         },
+        // ),
         IconButton(
             icon: ValueListenableBuilder(
               valueListenable: Data.badgeCount,

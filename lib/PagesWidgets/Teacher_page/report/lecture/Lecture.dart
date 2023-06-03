@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import '../../../../Links.dart';
 import '../../../../pages/posts.dart';
-
+import '../../../../request.dart';
 import '../../../Bar/drawer.dart';
 import '../../../Bar/notification.dart';
+import '../Controller.dart';
 import '../table/grades.dart';
 import 'dropdown.dart';
 import 'navigator_buttom.dart';
 
 DateTime date = DateTime.now();
-var selectedday = "السبت";
+DateTime now = DateTime.now();
+String selectedday = DateFormat('EEEE', 'ar').format(now);
+
 var selectedPart = "عم";
 
 final tabs = [grades(), lecture()];
@@ -21,7 +24,7 @@ List days = [
   "الأحد",
   "الاثنين",
   "الثلاثاء",
-  "الأربعاء}",
+  "الأربعاء",
   "الخميس",
   "الجمعة"
 ];
@@ -37,15 +40,72 @@ class lecture extends StatefulWidget {
 }
 
 class _lectureState extends State<lecture> {
+  Requst request = new Requst();
+
+  bool exist = false;
+  changeDay(String day) {
+    selectedday = day;
+  }
+
+  changePart(String part) {
+    selectedPart = part;
+  }
+
+  updateClass() async {
+    var response = await request.postRequest(updateClassData, {
+      "day": selectedday,
+      "date": "${date.year}/${date.month}/${date.day}",
+      "classNum": Controller.classNum.text,
+      "part": selectedPart,
+      "study": Controller.studyPosition.text,
+      "review": Controller.reviewPosition.text,
+      "tajoeed": Controller.reviewPosition.text,
+      "teacherExist": check ? "1" : "0",
+      "end":
+          "${timeend.hour % 12 == 0 ? timeend.hour % 12 : (timeend.hour % 12) + 1}:${timeend.minute}",
+      "instituteNum": "1",
+      "reginmentNum": "19",
+    });
+
+    if (response['status'] == "success") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("تمت حفظ البيانات")));
+    } else
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("لم يتم الحفظ")));
+  }
+
+  newClass() async {
+    var response = await request.postRequest(linkNewClass, {
+      "day": selectedday,
+      "date": "${date.year}/${date.month}/${date.day}",
+      "classNum": Controller.classNum.text,
+      "part": selectedPart,
+      "study": Controller.studyPosition.text,
+      "review": Controller.reviewPosition.text,
+      "tajoeed": Controller.tajoeedPosition.text,
+      "teacherExist": check ? "1" : "0",
+      "start":
+          "${timest.hour % 12 == 0 ? timest.hour % 12 : (timest.hour % 12) + 1}:${timest.minute}",
+      "end":
+          "${timeend.hour % 12 == 0 ? timeend.hour % 12 : (timeend.hour % 12) + 1}:${timeend.minute}",
+      "instituteNum": "1",
+      "reginmentNum": "19",
+    });
+
+    if (response['status'] == "success") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("تمت حفظ البيانات")));
+    } else
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("لم يتم الحفظ")));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
         drawer: drawer(student: false, drawer_width: drawer().drawer_width),
-        endDrawer: notification(
-          width: screen,
-          text: likeORcomment,
-        ),
         appBar: AppBar(
           title: Text(
             "التقرير الشهري ",
@@ -87,7 +147,7 @@ class _lectureState extends State<lecture> {
                     rows: [
                       DataRow(cells: [
                         DataCell(Text("اليوم")),
-                        DataCell(droplist(days, selectedday)),
+                        DataCell(droplist(days, selectedday, changeDay)),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("التاريخ")),
@@ -97,29 +157,33 @@ class _lectureState extends State<lecture> {
                       DataRow(cells: [
                         DataCell(Text("رقم الحصة")),
                         DataCell(TextFormField(
+                          controller: Controller.classNum,
                           keyboardType: TextInputType.number,
                           maxLength: 6,
                         )),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("الجزء")),
-                        DataCell(droplist(Part, selectedPart)),
+                        DataCell(droplist(Part, selectedPart, changePart)),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("موضع الحفظ")),
                         DataCell(TextField(
+                          controller: Controller.studyPosition,
                           decoration: InputDecoration(hintText: "..........."),
                         )),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("موضع المراجعة")),
                         DataCell(TextField(
+                          controller: Controller.reviewPosition,
                           decoration: InputDecoration(hintText: "..........."),
                         )),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("مادة التجويد")),
                         DataCell(TextField(
+                          controller: Controller.tajoeedPosition,
                           decoration: InputDecoration(hintText: "..........."),
                         )),
                       ]),
@@ -140,28 +204,70 @@ class _lectureState extends State<lecture> {
                         DataCell(ElevatedButton(
                             onPressed: () {
                               setState(() {
+                                date = DateTime.now();
                                 timest = date;
                               });
+                              newClass();
                             },
-                            child:
-                                Text("${timest.hour}:${timest.minute}  إبدأ"))),
+                            child: Text(
+                                "${timest.hour % 12 == 0 ? timest.hour % 12 : (timest.hour % 12) + 1}:${timest.minute}  إبدأ"))),
                       ]),
                       DataRow(cells: [
                         DataCell(Text("موعد نهاية الحصة")),
                         DataCell(ElevatedButton(
                             onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (con) {
+                                    return AlertDialog(
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                date = DateTime.now();
+                                                timeend = date;
+                                                Controller.classNum.text = "";
+                                                Controller.reviewPosition.text =
+                                                    "";
+                                                Controller.studyPosition.text =
+                                                    "";
+                                                Controller
+                                                    .tajoeedPosition.text = "";
+                                              });
+                                              updateClass();
+                                            },
+                                            child: Text("تأكيد")),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("إلغاء")),
+                                      ],
+                                      title: Text(
+                                        "تأكيد الانهاء",
+                                        style: TextStyle(),
+                                      ),
+                                      content: Text(
+                                        "هل أنت متأكد من انهاء الحصة",
+                                        softWrap: true,
+                                      ),
+                                    );
+                                  });
                               setState(() {
+                                date = DateTime.now();
+
                                 timeend = date;
                               });
                             },
                             child: Text(
-                                "${timeend.hour}:${timeend.minute}  انهي"))),
+                                "${timeend.hour % 12 == 0 ? timeend.hour % 12 : (timeend.hour % 12) + 1}:${timeend.minute}  انهي"))),
                       ]),
                     ]),
               ),
             ]),
           ),
         ),
-        bottomNavigationBar: nav_bottom());
+        bottomNavigationBar: nav_bottom(null, false));
   }
 }

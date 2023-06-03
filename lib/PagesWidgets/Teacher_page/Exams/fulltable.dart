@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Exams/table.dart';
 
+import '../../../Links.dart';
 import '../../../pages/posts.dart';
+import '../../../request.dart';
 import '../../../title.dart';
 import '../../Bar/drawer.dart';
 import '../../Bar/notification.dart';
+import '../report/lecture/dropdown.dart';
+import 'Date.dart';
 import 'examNavBottom.dart';
 
 List exam = [" ", "جزء عم", "عم وتبارك ", "عم وتبارك والمجادلة"];
-List<String> columnTitle = [
-  "الترتيب",
-  "الطالب",
-  "علامة الامتحان",
-  "التقدير",
-  "علامة الامتحان السابق",
-  "خصم التجويد",
-  "ملاحظات",
+List columnTitle = [
+  {"title": "الترتيب", "value": "order"},
+  {"title": "الطالب", "value": "name"},
+  {"title": "علامة الامتحان", "value": "mark"},
+  {"title": "التقدير", "value": "estimate"},
+  {"title": "علامة الامتحان السابق", "value": "lastExam"},
+  {"title": "خصم التجويد", "value": "tajoeedMinus"},
+  {"title": "ملاحظات", "value": "notes"},
 ];
 
 int rowexa = 30;
 int numcol = 7;
 int numcel = 7;
+final request = Requst();
 
 class fullTable extends StatefulWidget {
   fullTable();
@@ -30,6 +35,37 @@ class fullTable extends StatefulWidget {
 }
 
 class _fullTableState extends State<fullTable> {
+  DateTime count;
+
+  @override
+  void initState() {
+    super.initState();
+    getDates();
+    count = DateTime.now();
+  }
+
+  AsyncSnapshot<dynamic> marksData;
+  List dates = [];
+  Future<dynamic> getMark() async {
+    final response = await request.postRequest(linkgetMarks,
+        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
+    return response;
+  }
+
+  Future<void> getDates() async {
+    final response = await request
+        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    setState(() {
+      marksData = AsyncSnapshot.withData(ConnectionState.done, response);
+      if (marksData.hasData) {
+        // Date.date = marksData.data['data'][0]['date'];
+        for (int i = 0; i < marksData.data['data'].length; i++) {
+          dates.add(marksData.data['data'][i]['date']);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
@@ -45,29 +81,44 @@ class _fullTableState extends State<fullTable> {
           ),
         ),
         bottomNavigationBar: bottom_Nav_exam(),
-        body: Center(
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SingleChildScrollView(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    title("أسماء المتقدمين للامتحان حسب النتيجة", "", "", "",
-                        400),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    tableExam(
-                      columnTitle,
-                      rowexa,
-                      numcol,
-                      numcel,
-                    )
-                  ],
-                )))));
+        body: FutureBuilder(
+          future: getMark(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Center(
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SingleChildScrollView(
+                          child: Container(
+                        padding: EdgeInsets.all(10),
+                        height: MediaQuery.of(context).size.height - 145,
+                        child: Column(
+                          children: [
+                            title("أسماء المتقدمين للامتحان حسب النتيجة", "",
+                                "", "", 30),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("تاريخ الامتحان  "),
+                                  droplist(dates, Date.date, (val) {
+                                    setState(() {
+                                      Date.date = val;
+                                    });
+                                    // call fetchMarks() with the new selected date
+                                  }),
+                                ]),
+                            tableExam(
+                                columnTitle, rowexa, numcol, numcel, snapshot)
+                          ],
+                        ),
+                      ))));
+            } else
+              return Center(
+                child: DateTime.now().difference(count) <= Duration(seconds: 1)
+                    ? CircularProgressIndicator()
+                    : Text("لا يوجد امتحانات بعد"),
+              );
+          },
+        ));
   }
 }

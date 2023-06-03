@@ -5,6 +5,9 @@ import '../../title.dart';
 import 'package:test_ro_run/PagesWidgets/sign_up/enter.dart';
 
 class small extends StatelessWidget {
+  Function Loading;
+  bool teacher;
+  small(this.Loading, this.teacher);
   @override
   Widget build(BuildContext context) {
     x = 120;
@@ -15,7 +18,7 @@ class small extends StatelessWidget {
       children: [
         title("إنشاء حساب طالب جديد", "images/man.png", "", "", fontSize),
         icon(),
-        enter(),
+        enter(Loading, teacher),
         SizedBox(
           height: 30,
         ),

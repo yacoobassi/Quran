@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class num_likes_comments extends StatefulWidget {
-  @override
   int likes, comments;
-  num_likes_comments({Key myKey, this.likes, this.comments, presslike})
+  num_likes_comments({Key myKey, this.likes, this.comments})
       : super(key: myKey);
 
   @override

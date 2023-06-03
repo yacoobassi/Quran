@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/PagesWidgets/student_page/grid.dart';
 import 'package:test_ro_run/pages/posts.dart';
-import '../Data.dart';
+import '../User/Data.dart';
 import '../PagesWidgets/Bar/appBar.dart';
 import '../PagesWidgets/Bar/drawer.dart';
 import '../PagesWidgets/Bar/notification.dart';
 import '../PagesWidgets/student_page/profile_container.dart';
+import '../PagesWidgets/student_page/grid.dart';
 
 int messagesNum = 5, selected = 2;
 double opacity = 1;
@@ -20,7 +19,6 @@ class teacher_page extends StatefulWidget {
 }
 
 class _teacher_pageState extends State<teacher_page> {
-  @override
   GlobalKey<ScaffoldState> globalkey = new GlobalKey<ScaffoldState>();
   show(String text) {
     globalkey.currentState.openEndDrawer();
@@ -87,7 +85,7 @@ class _teacher_pageState extends State<teacher_page> {
         text: likeORcomment,
       ),
       body: Stack(alignment: Alignment.topCenter, children: [
-        grid(width: width),
+        //    grid(width: width),
         Container(
             height: 200,
             child: appbar(
@@ -98,7 +96,9 @@ class _teacher_pageState extends State<teacher_page> {
             )),
         profile_container(
           width: width,
-        )
+        ),
+
+        grid(width: width, teacher: true),
       ]),
     );
   }

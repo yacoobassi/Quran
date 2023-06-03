@@ -7,7 +7,9 @@ import 'Lecture.dart';
 int currentstate = 0;
 
 class nav_bottom extends StatefulWidget {
-  nav_bottom();
+  Function newReport;
+  bool reportPage;
+  nav_bottom(this.newReport, this.reportPage);
 
   @override
   State<nav_bottom> createState() => _nav_bottomState();
@@ -57,7 +59,35 @@ class _nav_bottomState extends State<nav_bottom> {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return report();
           }));
-        } else if (index == 3) {}
+        } else if (index == 3) {
+          showDialog(
+              context: context,
+              builder: (con) {
+                return AlertDialog(
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          if (widget.reportPage) widget.newReport();
+                        },
+                        child: Text("تأكيد")),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("إلغاء")),
+                  ],
+                  title: Text(
+                    "تأكيد التسليم",
+                    style: TextStyle(),
+                  ),
+                  content: Text(
+                    "هل أنت متأكد من تسليم التقرير",
+                    softWrap: true,
+                  ),
+                );
+              });
+        }
         ;
 
         setState(() {

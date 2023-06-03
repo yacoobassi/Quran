@@ -1,10 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:string_stats/string_stats.dart';
 import 'package:test_ro_run/PagesWidgets/sign_in/save.dart';
 import 'package:test_ro_run/pages/stdPage.dart';
+import 'package:test_ro_run/pages/teacherPage.dart';
 import '../../FiledIconButton.dart';
+import 'package:test_ro_run/User/getUser.dart';
+
+import '../../User/Data.dart';
 
 class enter extends ConsumerStatefulWidget {
   static const routeName = '/login-screen';
@@ -32,7 +36,6 @@ class _enterState extends ConsumerState<enter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     posticon = Icon(Icons.remove_red_eye_outlined);
@@ -50,14 +53,13 @@ class _enterState extends ConsumerState<enter> {
             children: [
               TextFormField(
                 validator: (val) {
-                  RegExp regExp = new RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
-                  if (val.isEmpty) return 'يرجى ادخال رقم الهاتف';
+                  if (val.isEmpty) return 'يرجى ادخال رقم المرور ';
 
-                  if (!regExp.hasMatch(val)) return 'الرقم غير صحيح';
+                  if (!val.isNumeric) return 'الرقم غير صحيح';
                   return null;
                 },
                 controller: _IdController,
-                decoration: filedDecoration("رقم الطالب", Icon(Icons.email)),
+                decoration: filedDecoration("رقم المرور", Icon(Icons.email)),
               ),
               SizedBox(
                 height: 15,
@@ -87,63 +89,67 @@ class _enterState extends ConsumerState<enter> {
               onPressed: () async {
                 final _auth = await FirebaseAuth.instance;
                 try {
-                  await _auth.signInWithEmailAndPassword(
-                      email: _IdController.text + "@gmail.com",
-                      password: "password");
+                  if (this._logInKey.currentState.validate()) {
+                    await _auth.signInWithEmailAndPassword(
+                        email: _IdController.text + "@gmail.com",
+                        password: _pwdController.text);
 
-                  DocumentSnapshot snap = await FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(_IdController.text + "@gmail.com")
-                      .get();
+                    await GetUser.userSignedIn(
+                        _IdController.text + "@gmail.com");
+                    Data.user.password = _pwdController.text;
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return _IdController.text.length != 5
+                          ? student_page()
+                          : teacher_page();
+                    }));
+                    //   print('Validated');
 
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return student_page();
-                  }));
-                  // if (this._logInKey.currentState.validate()) {
-                  //   print('Validated');
+                    //   if (mounted) {
+                    //     setState(() {
+                    //       isloading = true;
+                    //     });
+                    //   }
 
-                  //   if (mounted) {
-                  //     setState(() {
-                  //       isloading = true;
-                  //     });
-                  //   }
+                    //   final EmailSignInResults emailSignInResults =
+                    //       await _emailAndPasswordAuth.signInWithEmailAndPassword(
+                    //           email: this._IdController.text + "@gmail.com",
+                    //           pwd: this._pwdController.text);
 
-                  //   final EmailSignInResults emailSignInResults =
-                  //       await _emailAndPasswordAuth.signInWithEmailAndPassword(
-                  //           email: this._IdController.text + "@gmail.com",
-                  //           pwd: this._pwdController.text);
+                    //   String msg = '';
+                    //   if (emailSignInResults ==
+                    //       EmailSignInResults.SignInCompleted)
+                    //     Navigator.pushAndRemoveUntil(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (_) => ChatAndActivityScreen()),
+                    //         (route) => false);
+                    //   else if (emailSignInResults ==
+                    //       EmailSignInResults.EmailNotVerified) {
+                    //     msg =
+                    //         'الحساب غير موجود تأكد من ادخال الرقم بالشكل الصحيح';
+                    //   } else if (emailSignInResults ==
+                    //       EmailSignInResults.EmailOrPasswordInvalid)
+                    //     msg = 'الرقم وكلمة السر غير خطأ';
+                    //   else
+                    //     msg = 'خطأ في البيانات';
 
-                  //   String msg = '';
-                  //   if (emailSignInResults ==
-                  //       EmailSignInResults.SignInCompleted)
-                  //     Navigator.pushAndRemoveUntil(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (_) => ChatAndActivityScreen()),
-                  //         (route) => false);
-                  //   else if (emailSignInResults ==
-                  //       EmailSignInResults.EmailNotVerified) {
-                  //     msg =
-                  //         'الحساب غير موجود تأكد من ادخال الرقم بالشكل الصحيح';
-                  //   } else if (emailSignInResults ==
-                  //       EmailSignInResults.EmailOrPasswordInvalid)
-                  //     msg = 'الرقم وكلمة السر غير خطأ';
-                  //   else
-                  //     msg = 'خطأ في البيانات';
+                    //   if (msg != '')
+                    //     ScaffoldMessenger.of(context)
+                    //         .showSnackBar(SnackBar(content: Text(msg)));
 
-                  //   if (msg != '')
-                  //     ScaffoldMessenger.of(context)
-                  //         .showSnackBar(SnackBar(content: Text(msg)));
-
-                  //   if (mounted) {
-                  //     setState(() {
-                  //       this.isloading = false;
-                  //     });
-                  //   }
-                  // } else {
-                  //   print('Not Validated');
-                  // }
-                } catch (e) {}
+                    //   if (mounted) {
+                    //     setState(() {
+                    //       this.isloading = false;
+                    //     });
+                    //   }
+                    // } else {
+                    //   print('Not Validated');
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("البيانات المدخلة غير صحيحة  ")));
+                }
               },
               child: Text(
                 "تسجيل الدخول",

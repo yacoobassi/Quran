@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:test_ro_run/Chat/screens/chat_screen.dart';
 
 import '../../Chat/models/user_model.dart';
-import '../../Data.dart';
+import '../../User/Data.dart';
 
 class notification extends StatefulWidget {
   double width;

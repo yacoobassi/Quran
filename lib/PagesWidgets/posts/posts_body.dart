@@ -1,101 +1,164 @@
-import 'package:flutter/material.dart';
-import 'package:test_ro_run/PagesWidgets/posts/post_publisher.dart';
-import 'like_comment.dart';
-import 'like_comment_num.dart';
+import 'dart:io';
 
-var images = [
-  "images/image1.jpg",
-  "images/image2.jpg",
-  "images/image3.jpg",
-  "images/image4.jpg",
-  "images/image5.jpg"
-];
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:test_ro_run/Links.dart';
+import 'package:test_ro_run/PagesWidgets/posts/post_publisher.dart';
+import '../../User/Data.dart';
+import '../../request.dart';
+import '../../showImage.dart';
+import 'addPost.dart';
+import 'like_comment.dart';
+
 int likes = 0, comments = 0;
 
 class posts_body extends StatefulWidget {
-  Function showComments;
-  posts_body({
-    Key myKey,
-    this.showComments,
-  }) : super(key: myKey);
+  final Function showComments;
+  posts_body({Key key, this.showComments}) : super(key: key);
+
   @override
-  State<posts_body> createState() => _posts_bodyState();
+  _PostsBodyState createState() => _PostsBodyState();
 }
 
-class _posts_bodyState extends State<posts_body> {
-  incLikes() {
-    likes++;
+class _PostsBodyState extends State<posts_body>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  File _image;
+  Requst request = Requst();
+
+  Map<String, dynamic> _postData;
+
+  void _setImage(File newImage) {
+    setState(() {
+      _image = newImage;
+    });
   }
 
-  incComments() {
-    comments++;
+  Future<Map<String, dynamic>> _getPosts() async {
+    final response = await request.postRequest(getPost, {
+      "reginmentNum": "19",
+      "instituteNum": "1",
+      "num": Data.user.email.replaceAll("@gmail.com", ""),
+    });
+
+    return response;
   }
 
-  bool like(bool value) {
-    return !value;
-  }
-
-  refresh() {
-    setState(() {});
-  }
+  List<int> isLikedList = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    likes = 0;
-    comments = 0;
+    _getPosts().then((data) {
+      setState(() {
+        _postData = data;
+      });
+
+      for (var i = 0; i < _postData['count']; i++) {
+        isLikedList.add(_postData['data'][i]['isLiked']);
+      }
+    });
   }
 
+  Future<void> _refreshPosts() async {
+    final data = await _getPosts();
+    setState(() {
+      _postData = data;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: images.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 10,
-                ),
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-          margin: EdgeInsets.symmetric(vertical: 30),
-          child: Column(children: [
-            post_publisher(),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.all(10),
-                child: Text("التعليق على المنشور")),
-            Container(
-              width: double.infinity,
-              child: Image.asset(
-                images[index],
-                fit: BoxFit.fill,
+    if (_postData == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final data = _postData['data'];
+    final count = _postData['count'];
+    final plus = Data.user.student ? 0 : 1;
+
+    return RefreshIndicator(
+      onRefresh: _refreshPosts,
+      child: ListView.separated(
+        itemCount: count + plus,
+        itemBuilder: (BuildContext context, int index) {
+          if (index == 0 && !Data.user.student)
+            return Container(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: AddPostScreen(
+                _setImage,
+                _refreshPosts,
+                _image,
               ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            num_likes_comments(
-              likes: likes,
-              comments: comments,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            like_comment(
-              refresh: refresh,
-              inclikes: incLikes,
-              showComments: widget.showComments,
-            )
-          ]),
-        );
-      },
+              color: Colors.white,
+            );
+          else {
+            final post = data[index - plus];
+
+            return Container(
+              decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 10,
+                  ),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              margin: const EdgeInsets.symmetric(vertical: 30),
+              child: Column(
+                children: [
+                  post_publisher(post['name'], post['date']),
+                  const SizedBox(height: 20),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.all(10),
+                    child: Text(post['comment']),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return showImage(
+                              "http://192.168.1.101:8080/Quran/images/post/${post['image']}",
+                              true);
+                        }));
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "http://192.168.1.101:8080/Quran/images/post/${post['image']}",
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
+                  like_comment(
+                      post['likesNum'],
+                      post['commentsNum'],
+                      post['count'],
+                      _refreshPosts,
+                      widget.showComments,
+                      post["isLiked"]),
+                ],
+              ),
+            );
+          }
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(height: 10);
+        },
+      ),
     );
   }
 }

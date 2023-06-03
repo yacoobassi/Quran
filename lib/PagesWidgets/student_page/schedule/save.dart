@@ -5,10 +5,10 @@ import '../../Teacher_page/Exams/table.dart';
 class tablesave extends StatelessWidget {
   tablesave();
 
-  List<String> columnTitle = [
-    "رقم الحصة",
-    "موضع الحفظ",
-    "موضع المراجعة",
+  List columnTitle = [
+    {"title": "رقم الحصة", "value": "num"},
+    {"title": "موضع الحفظ", "value": "num"},
+    {"title": "موضع المراجعة", "value": "num"}
   ];
   List cels = [];
   void fillcels() {
@@ -22,6 +22,6 @@ class tablesave extends StatelessWidget {
   int numcel = 3;
   @override
   Widget build(BuildContext context) {
-    return Center(child: tableExam(columnTitle, rowexa, numcol, numcel));
+    return Center(child: tableExam(columnTitle, rowexa, numcol, numcel, null));
   }
 }

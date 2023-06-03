@@ -1,18 +1,18 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Student/student_informatin.dart';
+import 'package:test_ro_run/pages/sign_in.dart';
 import 'package:test_ro_run/pages/teacherPage.dart';
 
-import '../../Chat/Chat.dart';
+import '../../Chat/screens/home_screen.dart';
 import '../../showImage.dart';
-import '../../Data.dart';
+import '../../User/Data.dart';
 import '../../pages/Student_table.dart';
 import '../../pages/posts.dart';
 import '../../pages/signup.dart';
 import '../../pages/stdPage.dart';
+import '../Teacher_page/Exams/Date.dart';
 import '../Teacher_page/Exams/full_info.dart';
 import '../Teacher_page/PersonalInfo/personal_information.dart';
 import '../Teacher_page/report/lecture/Lecture.dart';
@@ -35,18 +35,16 @@ var Studentlist = [
   },
   {'page': 'المنشورات', 'icon': Icon(Icons.post_add), 'go': posts()},
   {
-    'page': 'البوم الصور',
-    'icon': Icon(Icons.import_contacts_sharp),
-    'go': posts()
-  },
-  {
     'page': 'البيانات الشخصية',
     'icon': Icon(Icons.insert_drive_file_rounded),
     'go': Personal_student()
   },
-  {'page': 'التواصل مع المدرس', 'icon': Icon(Icons.chat), 'go': Chat()},
-  {'page': 'صفحة المدرس', 'icon': Icon(Icons.person), 'go': teacher_page()},
-  {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': posts()}
+  {
+    'page': 'التواصل مع المدرس',
+    'icon': Icon(Icons.chat),
+    'go': HomeScreen(Data.user)
+  },
+  {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': Signin()}
 ];
 
 var teacherlist = [
@@ -58,12 +56,11 @@ var teacherlist = [
     'go': schedule()
   },
   {'page': 'المنشورات', 'icon': Icon(Icons.post_add), 'go': posts()},
-  {'page': 'الطلاب', 'icon': Icon(Icons.people), 'go': student_Data()},
-  {'page': 'التواصل مع الأهل', 'icon': Icon(Icons.chat), 'go': Chat()},
+  {'page': 'الطلاب', 'icon': Icon(Icons.people), 'go': student_Data(null)},
   {
-    'page': 'البوم الصور',
-    'icon': Icon(Icons.picture_in_picture),
-    'go': posts()
+    'page': 'التواصل مع الأهل',
+    'icon': Icon(Icons.chat),
+    'go': HomeScreen(Data.user)
   },
   {
     'page': 'الامتحانات',
@@ -75,26 +72,22 @@ var teacherlist = [
     'icon': Icon(Icons.insert_drive_file_rounded),
     'go': Personal_info()
   },
-  {
-    'page': 'صفحة الطالب',
-    'icon': Icon(Icons.picture_in_picture),
-    'go': student_page()
-  },
-  {
-    'page': 'بيانات الطلاب',
-    'icon': Icon(Icons.table_view_sharp),
-    'go': student_Data()
-  },
+  // {
+  //   'page': 'بيانات الطلاب',
+  //   'icon': Icon(Icons.table_view_sharp),
+  //   'go': student_Data(null)
+  // },
   {
     'page': 'إضافة الطلاب',
     'icon': Icon(Icons.people_alt_rounded),
-    'go': Signup()
+    'go': Signup(false)
   },
-  {
-    'page': 'إضافة أستاذ مساعد',
-    'icon': Icon(Icons.person_add_alt_1),
-    'go': Signup()
-  },
+  // {
+  //   'page': 'إضافة أستاذ مساعد',
+  //   'icon': Icon(Icons.person_add_alt_1),
+  //   'go': Signup(true)
+  // },
+  {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': Signin()}
 ];
 
 class drawer extends StatefulWidget {
@@ -172,9 +165,10 @@ class _drawerState extends State<drawer> {
                       trailing: drawerlist[i]['icon'],
                       onTap: () async {
                         Navigator.pop(context);
+                        Date.date = null;
                         if (i == drawerlist.length - 1) {
-                          // await GoogleSignIn().signOut();
                           await FirebaseAuth.instance.signOut();
+                          Data.user = null;
 
                           Navigator.pushReplacement(
                             context,

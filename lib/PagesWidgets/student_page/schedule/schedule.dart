@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/PagesWidgets/student_page/schedule/review.dart';
-import 'package:test_ro_run/PagesWidgets/student_page/schedule/save.dart';
 
-import '../../../pages/posts.dart';
 import '../../Bar/drawer.dart';
-import '../../Bar/notification.dart';
 import '../../Teacher_page/report/lecture/dropdown.dart';
+import 'navbottom.dart';
 
 class schedule extends StatefulWidget {
   const schedule();
@@ -15,24 +12,17 @@ class schedule extends StatefulWidget {
 }
 
 class _scheduleState extends State<schedule> {
-  var tablechoose;
-  var tablechoose1;
-  bool checkpress = false;
-  bool checkpress1 = false;
-  List Part = ["عم", "تبارك", "المجادلة", "الذاريات", "الأحقاف", "الشورى"];
+  List Part = ["القصص", "تبارك", "المجادلة", "الذاريات", "الأحقاف", "الشورى"];
 
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
+      bottomNavigationBar: nav_bottomsave(),
       appBar: AppBar(
-        title: Text("الدفتر"),
+        title: Text("جداول الحفظ "),
       ),
       drawer: drawer(student: true, drawer_width: drawer().drawer_width),
-      endDrawer: notification(
-        width: screen,
-        text: likeORcomment,
-      ),
       body: SingleChildScrollView(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -43,83 +33,37 @@ class _scheduleState extends State<schedule> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Container(
-                        child: Text(
-                          "الجزء :",
-                          style: TextStyle(fontSize: 20),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20),
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            "الجزء :",
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      Container(
-                        child: droplist(Part, "عم"),
-                      ),
-                    ],
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Container(
+                          child: droplist(Part, "القصص", null),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      MaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            if (checkpress1 == true) {
-                              checkpress1 = false;
-                              tablechoose1 = null;
-                            }
-                            checkpress = !checkpress;
-                            if (checkpress == true)
-                              tablechoose = tablesave();
-                            else {
-                              tablechoose = null;
-                            }
-                          });
-                        },
-                        child: Text(
-                          "جدول الحفظ",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                        color: Colors.green,
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            if (checkpress == true) {
-                              checkpress = false;
-                              tablechoose = null;
-                            }
-                            checkpress1 = !checkpress1;
-                            if (checkpress1 == true)
-                              tablechoose1 = review();
-                            else {
-                              tablechoose1 = null;
-                            }
-                          });
-                        },
-                        child: Text(
-                          "جدول مراجعة الامتحان",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                        color: Colors.green,
-                      )
-                    ],
+                  width: 400,
+                  height: 600,
+                  child: Image.asset(
+                    "images/save2.gif",
+                    width: 400,
+                    height: 600,
                   ),
                 ),
-                tablechoose != null
-                    ? tablesave()
-                    : tablechoose1 != null
-                        ? review()
-                        : Container()
               ],
             ),
           ),
