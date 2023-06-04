@@ -24,7 +24,7 @@ class _dateTableState extends State<dateTable> {
       dataRowHeight: 50,
       headingRowHeight: 60,
       columnSpacing: 20,
-      horizontalMargin: 20,
+      horizontalMargin: 0,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,

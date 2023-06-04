@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/PagesWidgets/Teacher_page/Student/PersonalStudent.dart';
+import 'package:test_ro_run/PagesWidgets/student_page/PersonalStudent.dart';
+
 
 import '../../PagesWidgets/Teacher_page/Student/student_informatin.dart';
 import '../../User/Data.dart';
@@ -110,7 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     friendId: searchResult[index]['uid'],
                                     friendName: searchResult[index]['name'],
                                     friendImage: searchResult[index]['image'])
-                                : student_Data(searchResult[index]['uid']
+                                : PersonalOne1_student(searchResult[index]['uid']
                                     .replaceAll("@gmail.com", ""));
                           }));
                         },

@@ -65,7 +65,7 @@ class examstu extends StatelessWidget {
                                   ),
                                   Text(
                                     snapshot.data['count'] > 0
-                                        ? "%${snapshot.data['data'][0]['mark'] * 10}"
+                                        ? "%${snapshot.data['data'][0]['mark']}"
                                         : "لا يوجد علامة",
                                     style: TextStyle(
                                       fontSize: 22,
@@ -88,7 +88,7 @@ class examstu extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "%${(double.parse(snapshot.data['avg_mark']) * 10).toStringAsFixed(1)}",
+                                    "%${(double.parse(snapshot.data['avg_mark'] )).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
@@ -103,7 +103,7 @@ class examstu extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        "جدول الامتحانات",
+                        "علامات الامتحانات",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

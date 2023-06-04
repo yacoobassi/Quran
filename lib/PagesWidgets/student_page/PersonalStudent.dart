@@ -10,8 +10,8 @@ import '../Bar/notification.dart';
 import '../Teacher_page/report/lecture/dropdown.dart';
 
 class Personal_student extends StatefulWidget {
-  Personal_student();
-
+  Personal_student(this.student);
+  String student;
   @override
   State<Personal_student> createState() => _Personal_studentState();
 }
@@ -79,6 +79,8 @@ class _Personal_studentState extends State<Personal_student> {
 
     return response;
   }
+
+
 
   void _showDatePikcer() {
     showDatePicker(

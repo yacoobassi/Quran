@@ -6,9 +6,10 @@ $num = filter('num');
 
 // Select marks and estimate, sorted by date in descending order
 $stmt = $con->prepare("SELECT *, 
-    CASE WHEN mark >= 9 THEN 'ممتاز' 
-         WHEN mark = 8 THEN 'جيد' 
-         WHEN mark = 7 THEN 'مقبول' 
+    CASE WHEN mark >= 93 THEN 'ممتاز' 
+         WHEN mark >= 86 && mark < 93  THEN 'جيد جدا' 
+         WHEN mark >= 80 && mark < 86 THEN   'مقبول' 
+         WHEN mark >= 70 && mark < 80 THEN  'مقبول' 
          ELSE 'ضعيف' 
     END AS estimate 
     FROM marks 

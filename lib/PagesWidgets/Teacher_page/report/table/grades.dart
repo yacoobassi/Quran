@@ -111,10 +111,6 @@ class _gradesState extends State<grades> {
 
     return Scaffold(
         drawer: drawer(student: false, drawer_width: drawer().drawer_width),
-        endDrawer: notification(
-          width: screen,
-          text: likeORcomment,
-        ),
         appBar: AppBar(
           title: Text(
             "التقرير الشهري",
@@ -169,7 +165,7 @@ class _gradesState extends State<grades> {
                         if (snapshot.hasData) {
                           return Column(children: [
                             Container(
-                              width: 830,
+                              width: 402,
                               child: ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
@@ -177,9 +173,9 @@ class _gradesState extends State<grades> {
                                 itemBuilder: (context, i) {
                                   return Container(
                                     margin: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
+                                        vertical: 10, horizontal: 5),
                                     padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
+                                        vertical: 10, horizontal: 3),
                                     decoration: BoxDecoration(
                                       border: Border.all(width: 1),
                                       borderRadius: BorderRadius.circular(10),
@@ -188,12 +184,19 @@ class _gradesState extends State<grades> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          snapshot.data['data'][i]['name'],
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(width: 20),
+                                            Text(
+                                              snapshot.data['data'][i]['name'],
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 30),
@@ -202,12 +205,19 @@ class _gradesState extends State<grades> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               dateTable(snapshot),
-                                              SizedBox(width: 20),
                                               gettable(snapshot, i),
-                                              SizedBox(width: 20),
-                                              bottomInfo(snapshot, i),
                                             ],
                                           ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            bottomInfo(snapshot, i),
+                                          ],
                                         ),
                                       ],
                                     ),

@@ -106,10 +106,6 @@ class _reportState extends State<report> {
     final screen = MediaQuery.of(context).size.width;
     return Scaffold(
         drawer: drawer(student: false, drawer_width: drawer().drawer_width),
-        endDrawer: notification(
-          width: screen,
-          text: likeORcomment,
-        ),
         appBar: AppBar(
           title: Text(
             "التقرير الشهري",

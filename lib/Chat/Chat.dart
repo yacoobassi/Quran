@@ -9,7 +9,7 @@
 
 // class Chat extends StatelessWidget {
 //   @override
-//   Widget build(BuildContext context) {
+//   Widget build(context) {
 //     return new FutureBuilder(
 //         future: userSignedIn(),
 //         builder: (context, AsyncSnapshot<Widget> snapshot) {

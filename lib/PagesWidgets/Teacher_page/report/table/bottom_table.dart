@@ -18,6 +18,7 @@ class _bottomInfoState extends State<bottomInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
+     
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

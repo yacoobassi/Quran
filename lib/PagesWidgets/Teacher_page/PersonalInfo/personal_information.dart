@@ -290,18 +290,7 @@ class _Personal_infoState extends State<Personal_info> {
                     },
                     controller: certificate,
                   )),
-              Container(
-                  height: 20,
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text.isEmpty) {
-                        return req;
-                      }
-                      return null;
-                    },
-                    controller: tajoeed,
-                  )),
-              Container(
+                   Container(
                 height: 60,
                 child: Expanded(
                   // add Expanded to have your dropdown button fill remaining space
@@ -324,6 +313,18 @@ class _Personal_infoState extends State<Personal_info> {
                   ),
                 ),
               ),
+              Container(
+                  height: 20,
+                  child: TextFormField(
+                    validator: (text) {
+                      if (text.isEmpty) {
+                        return req;
+                      }
+                      return null;
+                    },
+                    controller: tajoeed,
+                  )),
+             
               Container(
                 height: 20,
                 child: TextFormField(

@@ -51,7 +51,6 @@ class _student_DataState extends State<student_Data> {
 
   @override
   Widget build(BuildContext context) {
-    final screen = MediaQuery.of(context).size.width;
     return Scaffold(
       drawer: drawer(student: false, drawer_width: drawer().drawer_width),
       appBar: AppBar(

@@ -127,13 +127,13 @@ class _PostsBodyState extends State<posts_body>
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return showImage(
-                              "http://192.168.1.101:8080/Quran/images/post/${post['image']}",
+                              "http://192.168.1.9:8081/Quran/images/post/${post['image']}",
                               true);
                         }));
                       },
                       child: CachedNetworkImage(
                         imageUrl:
-                            "http://192.168.1.101:8080/Quran/images/post/${post['image']}",
+                            "http://192.168.1.9:8081/Quran/images/post/${post['image']}",
                         fit: BoxFit.fill,
                         placeholder: (context, url) =>
                             Center(child: CircularProgressIndicator()),
@@ -147,9 +147,9 @@ class _PostsBodyState extends State<posts_body>
                       post['likesNum'],
                       post['commentsNum'],
                       post['count'],
-                      _refreshPosts,
-                      widget.showComments,
-                      post["isLiked"]),
+                     _refreshPosts,
+                     widget.showComments,
+                     post["isLiked"]),
                 ],
               ),
             );

@@ -12,6 +12,7 @@ import '../../pages/Student_table.dart';
 import '../../pages/posts.dart';
 import '../../pages/signup.dart';
 import '../../pages/stdPage.dart';
+import '../../tables/schedule.dart';
 import '../Teacher_page/Exams/Date.dart';
 import '../Teacher_page/Exams/full_info.dart';
 import '../Teacher_page/PersonalInfo/personal_information.dart';
@@ -37,7 +38,7 @@ var Studentlist = [
   {
     'page': 'البيانات الشخصية',
     'icon': Icon(Icons.insert_drive_file_rounded),
-    'go': Personal_student()
+    'go': Personal_student(null)
   },
   {
     'page': 'التواصل مع المدرس',
@@ -53,7 +54,7 @@ var teacherlist = [
   {
     'page': 'جداول الحفظ',
     'icon': Icon(Icons.table_chart_outlined),
-    'go': schedule()
+    'go': scheduleteacher()
   },
   {'page': 'المنشورات', 'icon': Icon(Icons.post_add), 'go': posts()},
   {'page': 'الطلاب', 'icon': Icon(Icons.people), 'go': student_Data(null)},
@@ -72,21 +73,13 @@ var teacherlist = [
     'icon': Icon(Icons.insert_drive_file_rounded),
     'go': Personal_info()
   },
-  // {
-  //   'page': 'بيانات الطلاب',
-  //   'icon': Icon(Icons.table_view_sharp),
-  //   'go': student_Data(null)
-  // },
+
   {
     'page': 'إضافة الطلاب',
     'icon': Icon(Icons.people_alt_rounded),
     'go': Signup(false)
   },
-  // {
-  //   'page': 'إضافة أستاذ مساعد',
-  //   'icon': Icon(Icons.person_add_alt_1),
-  //   'go': Signup(true)
-  // },
+
   {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': Signin()}
 ];
 
