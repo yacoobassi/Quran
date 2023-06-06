@@ -30,30 +30,34 @@ class _bottom_Nav_examState extends State<bottom_Nav_exam> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.table_chart),
-          label: " العلامات",
+          label: "العلامات",
           backgroundColor: Colors.green,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.pin),
-          label: " التقرير الكامل",
+          label: "التقرير الكامل",
           backgroundColor: Colors.green,
         ),
       ],
       onTap: (index) {
         if (index == 0) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ful_info();
-          }));
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ful_info()),
+            (route) => route
+                .isFirst, // Remove all previous routes except the first one
+          );
         } else if (index == 1) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return grade();
-          }));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => grade()),
+          );
         } else if (index == 2) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return fullTable();
-          }));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => fullTable()),
+          );
         }
-        ;
 
         setState(() {
           currentstate = index;

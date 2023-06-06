@@ -1,13 +1,12 @@
-<?php 
-
+<?php
 include("connect.php");
 include("secureFunction.php");
 
 $num = filter('num');
 $instituteNum = filter('instituteNum');
-$regimentNum = filter('regimentNum');
+$regimentNum = filter('reginmentNum');
 
-// get the last exam mark for the student with number $num
+// Get the last exam mark for the student with number $num
 $stmt = $con->prepare("
     SELECT mark
     FROM marks
@@ -18,7 +17,7 @@ $stmt = $con->prepare("
 $stmt->execute([$num]);
 $lastMark = $stmt->fetchColumn();
 
-// get the average of the marks for the student with number $num
+// Get the average of the marks for the student with number $num
 $stmt = $con->prepare("
     SELECT ROUND(AVG(mark), 1) as mark
     FROM marks
@@ -36,15 +35,15 @@ if ($avgMark === null || $avgMark === '') {
     $avgMark = 0;
 }
 
-// get the student data
+// Get the student data and join with the "student" table to retrieve the password
 $stmt = $con->prepare("
-    SELECT studentsdata.*, student.name, institutes.name as institute_name, 
-    CASE WHEN studentsdata.nextExam = '' THEN 'لم يحدد' ELSE studentsdata.nextExam END as nextExam,
-    CASE WHEN studentsdata.finishedParts = '' THEN 'لا يوجد' ELSE studentsdata.finishedParts END as finishedParts
-    FROM `studentsdata`
-    JOIN `student` ON studentsdata.num = student.num
+    SELECT sd.*, s.password, s.name, institutes.name as institute_name, 
+    CASE WHEN sd.nextExam = '' THEN 'لم يحدد' ELSE sd.nextExam END as nextExam,
+    CASE WHEN sd.finishedParts = '' THEN 'لا يوجد' ELSE sd.finishedParts END as finishedParts
+    FROM `studentsdata` AS sd
+    JOIN `student` AS s ON sd.num = s.num
     JOIN `institutes` ON institutes.num=? AND institutes.regimentNum=?
-    WHERE studentsdata.num = ?
+    WHERE sd.num = ?
 ");
 
 $stmt->execute([$instituteNum, $regimentNum, $num]);
@@ -53,7 +52,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $rowCount = $stmt->rowCount();
 
 if ($rowCount == 1) {
-    // add lastMark and avgMark to the data array
+    // Add lastMark and avgMark to the data array
     $data[0]['lastMark'] = $lastMark;
     $data[0]['mark'] = $avgMark;
 
@@ -61,3 +60,4 @@ if ($rowCount == 1) {
 } else {
     echo json_encode(array("status" => "failed", "message" => "Unexpected number of rows affected."));
 }
+?>

@@ -17,7 +17,6 @@ $imageName=filter('imageName') ;
 $teacher=filter('teacher') ;
 $likesNum=filter('likesNum') ;
 
-//echo $teacher;
 $stmt = $con->prepare("INSERT INTO `post`(`teacher`, `date`, `comment`, `image`, `reginmentNum`, `instituteNum`, `commentsNum`, `likesNum`) VALUES (?,?,?,?,?,?,?,?)");
  
 $stmt->execute(array($teacher,$date,$comment,$imageName,$reginmentNum,$instituteNum, $commentsNum,$likesNum));

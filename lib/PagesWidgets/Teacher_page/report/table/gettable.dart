@@ -86,44 +86,46 @@ class _gettableState extends State<gettable> {
 
   @override
   Widget build(BuildContext context) {
-    return DataTable(
-      columns: [
-        DataColumn(
-            label: Text("مراجعة",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
-        DataColumn(
-            label: Text("حفظ",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
-        DataColumn(
-            label: Text("تجويد",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
-        DataColumn(
-            label: Text("غياب",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
-      ],
-      rows: rows1(),
-      dividerThickness: 0,
-      dataRowHeight: 50,
-      headingRowHeight: 60,
-      columnSpacing: 20,
-      horizontalMargin: 20,
-      headingTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          fontFamily: 'Cairo',
-          color: Colors.blue),
-      dataTextStyle:
-          TextStyle(fontSize: 18, fontFamily: 'Cairo', color: Colors.black),
-      dataRowColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected))
-          return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-        return Colors.white;
-      }),
-      headingRowColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        return Colors.grey[300];
-      }),
+    return Container(
+      child: DataTable(
+        columns: [
+          DataColumn(
+              label: Text("مراجعة",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+          DataColumn(
+              label: Text("حفظ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+          DataColumn(
+              label: Text("تجويد",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+          DataColumn(
+              label: Text("غياب",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+        ],
+        rows: rows1(),
+        dividerThickness: 0,
+        dataRowHeight: 50,
+        headingRowHeight: 60,
+        columnSpacing: 10,
+        horizontalMargin: 10,
+        headingTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            fontFamily: 'Cairo',
+            color: Colors.blue),
+        dataTextStyle:
+            TextStyle(fontSize: 18, fontFamily: 'Cairo', color: Colors.black),
+        dataRowColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected))
+            return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+          return Colors.white;
+        }),
+        headingRowColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+          return Colors.grey[300];
+        }),
+      ),
     );
   }
 }

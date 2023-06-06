@@ -82,7 +82,11 @@ class _student_page extends State<student_page> {
 
     return Scaffold(
       key: globalkey,
-      drawer: drawer(student: true, drawer_width: drawer_width),
+      drawer: drawer(
+        student: true,
+        drawer_width: drawer_width,
+        mainPage: true,
+      ),
       endDrawer: notification(
         width: screen,
         text: likeORcomment,

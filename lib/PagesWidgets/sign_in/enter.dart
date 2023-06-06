@@ -103,48 +103,6 @@ class _enterState extends ConsumerState<enter> {
                           ? student_page()
                           : teacher_page();
                     }));
-                    //   print('Validated');
-
-                    //   if (mounted) {
-                    //     setState(() {
-                    //       isloading = true;
-                    //     });
-                    //   }
-
-                    //   final EmailSignInResults emailSignInResults =
-                    //       await _emailAndPasswordAuth.signInWithEmailAndPassword(
-                    //           email: this._IdController.text + "@gmail.com",
-                    //           pwd: this._pwdController.text);
-
-                    //   String msg = '';
-                    //   if (emailSignInResults ==
-                    //       EmailSignInResults.SignInCompleted)
-                    //     Navigator.pushAndRemoveUntil(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (_) => ChatAndActivityScreen()),
-                    //         (route) => false);
-                    //   else if (emailSignInResults ==
-                    //       EmailSignInResults.EmailNotVerified) {
-                    //     msg =
-                    //         'الحساب غير موجود تأكد من ادخال الرقم بالشكل الصحيح';
-                    //   } else if (emailSignInResults ==
-                    //       EmailSignInResults.EmailOrPasswordInvalid)
-                    //     msg = 'الرقم وكلمة السر غير خطأ';
-                    //   else
-                    //     msg = 'خطأ في البيانات';
-
-                    //   if (msg != '')
-                    //     ScaffoldMessenger.of(context)
-                    //         .showSnackBar(SnackBar(content: Text(msg)));
-
-                    //   if (mounted) {
-                    //     setState(() {
-                    //       this.isloading = false;
-                    //     });
-                    //   }
-                    // } else {
-                    //   print('Not Validated');
                   }
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(

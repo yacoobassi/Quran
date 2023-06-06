@@ -6,8 +6,6 @@ import 'package:test_ro_run/User/Data.dart';
 import 'package:test_ro_run/request.dart';
 import 'package:test_ro_run/tables/tableTitle.dart';
 
-
-
 class PersonalOne1_student extends StatefulWidget {
   PersonalOne1_student(this.student);
   String student;
@@ -80,12 +78,14 @@ class _PersonalOne1_studentState extends State<PersonalOne1_student> {
   }
 
 // Mohammad add this
-geonetInfo() async {
-    var response = await request.postRequest(linkGETStData,
-        {"num": widget.student, "instituteNum": "1", "regimentNum": "19"});
+  geonetInfo() async {
+    var response = await request.postRequest(linkGETStData, {
+      "num": widget.student,
+      "instituteNum": Data.user.institute.toString(),
+      "reginmentNum": Data.user.regiment.toString(),
+    });
     return response;
   }
-
 
   void _showDatePikcer() {
     showDatePicker(
@@ -150,7 +150,6 @@ geonetInfo() async {
       tableTitle().titles('الفوج'),
       tableTitle().titles('المركز'),
       tableTitle().titles('المدرسة'),
-      
     ];
 
     int numrowexa1 = 11;
@@ -162,7 +161,7 @@ geonetInfo() async {
         appBar: AppBar(
           title: Text("البيانات الشخصية"),
         ),
-        drawer: drawer(student: false , drawer_width: drawer().drawer_width),
+        drawer: drawer(student: false, drawer_width: drawer().drawer_width),
         body: FutureBuilder(
           future: !init ? geonetInfo() : Future.value(true),
           builder: (context, snapshot) {
@@ -243,7 +242,6 @@ geonetInfo() async {
                   },
                 ),
                 TextFormField(
-                
                   decoration: InputDecoration(
                     hintText: Data.user.regiment,
                   ),
@@ -276,7 +274,6 @@ geonetInfo() async {
                     return null;
                   },
                 ),
-                
               ];
 
               var celles = [];

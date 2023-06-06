@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Links.dart';
-import '../../../../pages/posts.dart';
+import '../../../../User/Data.dart';
 import '../../../../request.dart';
 import '../../../Bar/drawer.dart';
-import '../../../Bar/notification.dart';
 import '../Controller.dart';
 import '../table/grades.dart';
 import 'dropdown.dart';
@@ -63,8 +62,8 @@ class _lectureState extends State<lecture> {
       "teacherExist": check ? "1" : "0",
       "end":
           "${timeend.hour % 12 == 0 ? timeend.hour % 12 : (timeend.hour % 12) + 1}:${timeend.minute}",
-      "instituteNum": "1",
-      "reginmentNum": "19",
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
     });
 
     if (response['status'] == "success") {
@@ -89,8 +88,8 @@ class _lectureState extends State<lecture> {
           "${timest.hour % 12 == 0 ? timest.hour % 12 : (timest.hour % 12) + 1}:${timest.minute}",
       "end":
           "${timeend.hour % 12 == 0 ? timeend.hour % 12 : (timeend.hour % 12) + 1}:${timeend.minute}",
-      "instituteNum": "1",
-      "reginmentNum": "19",
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
     });
 
     if (response['status'] == "success") {
@@ -99,6 +98,8 @@ class _lectureState extends State<lecture> {
     } else
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("لم يتم الحفظ")));
+
+    return response;
   }
 
   @override

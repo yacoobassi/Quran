@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Exams/table.dart';
 
 import '../../../Links.dart';
+import '../../../User/Data.dart';
 import '../../../pages/posts.dart';
 import '../../../request.dart';
 import '../../../title.dart';
@@ -33,8 +34,10 @@ class _gradeState extends State<grade> {
   }
 
   Future<void> getDates() async {
-    final response = await request
-        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    final response = await request.postRequest(getMarksDate, {
+      "instituteNum": Data.user.institute.toString(),
+      "reginmentNum": Data.user.regiment.toString()
+    });
     setState(() {
       marksData = AsyncSnapshot.withData(ConnectionState.done, response);
       if (marksData.hasData) {
@@ -47,10 +50,13 @@ class _gradeState extends State<grade> {
   }
 
   Future<void> getData() async {
-    final response = await request.postRequest(linkgetMarks,
-        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
+    final response = await request.postRequest(linkgetMarks, {
+      "instituteNum": Data.user.institute.toString(),
+      "reginmentNum": Data.user.regiment.toString(),
+      "date": Date.date
+    });
 
-    return response;
+    return response == null ? "" : response;
   }
 
   @override
@@ -105,6 +111,8 @@ class _gradeState extends State<grade> {
         body: FutureBuilder(
           future: getData(),
           builder: (context, snapshot) {
+            if (snapshot.data == "")
+              return Center(child: Text("لا يوجد امتحانات"));
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Container(
@@ -129,17 +137,14 @@ class _gradeState extends State<grade> {
                       SizedBox(
                         height: 10,
                       ),
-                      tableExam(columnTitle, rowexa, numcol, numcel, snapshot),
+                      tableExam(columnTitle, rowexa, numcol, numcel, snapshot,
+                          false, null),
                     ],
                   ),
                 ),
               );
             } else
-              return Center(
-                child: DateTime.now().difference(count) <= Duration(seconds: 1)
-                    ? CircularProgressIndicator()
-                    : Text("لا يوجد امتحانات بعد"),
-              );
+              return Center(child: CircularProgressIndicator());
           },
         ));
   }

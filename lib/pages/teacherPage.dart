@@ -79,6 +79,7 @@ class _teacher_pageState extends State<teacher_page> {
       drawer: drawer(
         student: false,
         drawer_width: drawer_width,
+        mainPage: true,
       ),
       endDrawer: notification(
         width: screen,

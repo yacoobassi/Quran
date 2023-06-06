@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../Links.dart';
 import '../../pages/new_pass.dart';
+import '../../request.dart';
 import '../../title.dart';
-import '../sign_in/enter.dart';
+import '../new_pass/enter.dart';
 
 class small extends StatelessWidget {
   @override
@@ -11,8 +13,8 @@ class small extends StatelessWidget {
     y = 136;
     return Column(
       children: [
-        title("تغيير كلمة السر", "images/unlocked.png",
-            " استخدم كلمة سر سهلة ولا يمكن لغيرك ان يعرفها", "", 35),
+        title(" تأكيد هويتك", "images/unlocked.png",
+            "سيتم ارسال رسالة الى رقم هاتفك", "", 35),
         SizedBox(
           height: 20,
         ),

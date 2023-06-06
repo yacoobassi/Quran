@@ -22,6 +22,8 @@ class tablesave extends StatelessWidget {
   int numcel = 3;
   @override
   Widget build(BuildContext context) {
-    return Center(child: tableExam(columnTitle, rowexa, numcol, numcel, null));
+    return Center(
+        child:
+            tableExam(columnTitle, rowexa, numcol, numcel, null, false, null));
   }
 }

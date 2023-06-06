@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_ro_run/PagesWidgets/Teacher_page/Exams/table.dart';
 
 import '../../../Links.dart';
+import '../../../User/Data.dart';
 import '../../../pages/posts.dart';
 import '../../../request.dart';
 import '../../../title.dart';
@@ -47,14 +48,19 @@ class _fullTableState extends State<fullTable> {
   AsyncSnapshot<dynamic> marksData;
   List dates = [];
   Future<dynamic> getMark() async {
-    final response = await request.postRequest(linkgetMarks,
-        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
-    return response;
+    final response = await request.postRequest(linkgetMarks, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
+      "date": Date.date
+    });
+    return response == null ? "" : response;
   }
 
   Future<void> getDates() async {
-    final response = await request
-        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    final response = await request.postRequest(getMarksDate, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment.toString()
+    });
     setState(() {
       marksData = AsyncSnapshot.withData(ConnectionState.done, response);
       if (marksData.hasData) {
@@ -81,6 +87,8 @@ class _fullTableState extends State<fullTable> {
           future: getMark(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data == "")
+                return Center(child: Text("لا يوجد امتحانات"));
               return Center(
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -103,17 +111,13 @@ class _fullTableState extends State<fullTable> {
                                     // call fetchMarks() with the new selected date
                                   }),
                                 ]),
-                            tableExam(
-                                columnTitle, rowexa, numcol, numcel, snapshot)
+                            tableExam(columnTitle, rowexa, numcol, numcel,
+                                snapshot, false, null)
                           ],
                         ),
                       ))));
             } else
-              return Center(
-                child: DateTime.now().difference(count) <= Duration(seconds: 1)
-                    ? CircularProgressIndicator()
-                    : Text("لا يوجد امتحانات بعد"),
-              );
+              return Center(child: CircularProgressIndicator());
           },
         ));
   }

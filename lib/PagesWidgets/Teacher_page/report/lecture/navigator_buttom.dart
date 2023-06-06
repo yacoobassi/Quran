@@ -48,17 +48,26 @@ class _nav_bottomState extends State<nav_bottom> {
       ],
       onTap: (index) {
         if (index == 0) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return lecture();
-          }));
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => lecture()),
+            (route) => route
+                .isFirst, // Remove all previous routes except the first one
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => lecture()),
+          );
         } else if (index == 1) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return grades();
-          }));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => grades()),
+          );
         } else if (index == 2) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return report();
-          }));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => report()),
+          );
         } else if (index == 3) {
           showDialog(
               context: context,

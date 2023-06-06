@@ -3,6 +3,7 @@
 include("connect.php");
 include("secureFunction.php");
 
+$password =filter('password') ;
 $num =filter('num') ;
 $name=filter('name') ;
 $id=filter('id') ;
@@ -25,6 +26,10 @@ $stmt->execute(array($grade,$birth,$fatherPhone,$motherPhone,$school,$id,$num));
 
 $stmt1 = $con->prepare("UPDATE `student` SET `name`= ? WHERE `num`= ?");
 $stmt1->execute(array($name,$num));
+
+
+$stmt2= $con->prepare("UPDATE `student` SET `password`= $password WHERE `num`= $num");
+$stmt2->execute();
 
 $rowCount = $stmt->rowCount();
   if ($rowCount == 1) {

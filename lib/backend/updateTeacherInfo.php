@@ -3,6 +3,7 @@
 include("connect.php");
 include("secureFunction.php");
 
+$password=filter('password') ;
 $name=filter('name') ;
 $id=filter('id') ;
 $country=filter('country') ;
@@ -32,6 +33,8 @@ $lastJob, $study, $university, $certificate, $tajoeedLevel,
  $tajoeedYear, $mosque, $personTeachYou, $region, $Yourphone, $housePhone, $remark, $num));
 
 $rowCount = $stmt->rowCount();
+$stmt1= $con->prepare("UPDATE `teachers` SET `password`=$password WHERE num=$num");
+$stmt1->execute();
   if ($rowCount == 1) {
     echo json_encode(array("status" => "success"));
   } else {

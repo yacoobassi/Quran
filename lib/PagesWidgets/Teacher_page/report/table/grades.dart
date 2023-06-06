@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../../Links.dart';
+import '../../../../User/Data.dart';
 import '../../../../pages/posts.dart';
 import '../../../../request.dart';
 import '../../../Bar/drawer.dart';
@@ -71,8 +72,8 @@ class _gradesState extends State<grades> {
 
   getStudentsNumber() async {
     var response = await request.postRequest(linkClassStudents, {
-      "instituteNum": "1",
-      "reginmentNum": "19",
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
       "group": groupValue,
       "date": "$thisYear-$thisMonth-$thisDay"
     });
@@ -91,8 +92,8 @@ class _gradesState extends State<grades> {
 // convert the updated Map to a JSON string
     String updatedJsonString = json.encode(jsonMap);
     await request.postRequest(linkupdateClass, {
-      "instituteNum": "1",
-      "reginmentNum": "19",
+      "instituteNum": Data.user.institute,
+      "regimentNum": Data.user.regiment,
       "group": groupValue,
       "date": "${thisYear}-${thisMonth}-${date.day}",
       "snapshot": updatedJsonString
@@ -155,98 +156,101 @@ class _gradesState extends State<grades> {
                 SizedBox(
                   height: 20,
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Expanded(
-                    child: FutureBuilder(
-                      future: !init ? getStudentsNumber() : save,
-                      builder: ((context, snapshot) {
-                        save = snapshot;
-                        if (snapshot.hasData) {
-                          return Column(children: [
-                            Container(
-                              width: 402,
-                              child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: snapshot.data['count'],
-                                itemBuilder: (context, i) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 5),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 3),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(width: 20),
-                                            Text(
-                                              snapshot.data['data'][i]['name'],
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                FutureBuilder(
+                  future: !init ? getStudentsNumber() : save,
+                  builder: (context, snapshot) {
+                    save = snapshot;
+                    if (snapshot.hasData) {
+                      if (snapshot.data['count'] == 0)
+                        return Center(
+                          child:
+                              Text("لا يوجد حصص لهذه المجموعة في هذاالتاريخ"),
+                        );
+                      return Column(
+                        children: [
+                          Container(
+                            height: double.parse(
+                                ((snapshot.data['data'][0]['grades'].length +
+                                            5) *
+                                        100)
+                                    .toString()),
+                            child: PageView.builder(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data['count'],
+                              itemBuilder: (context, i) {
+                                return Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(width: 20),
+                                          Text(
+                                            snapshot.data['data'][i]['name'],
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                          ],
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 30),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              dateTable(snapshot),
-                                              gettable(snapshot, i),
-                                            ],
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                        ],
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(top: 30, right: 10),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            bottomInfo(snapshot, i),
+                                            dateTable(snapshot),
+                                            gettable(snapshot, i),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  );
+                                      ),
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          bottomInfo(snapshot, i),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  updateClass(snapshot);
                                 },
+                                child: Text("حفظ البيانات"),
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        updateClass(snapshot);
-                                      },
-                                      child: Text("حفظ البيانات")),
-                                ]),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ]);
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      }),
-                    ),
-                  ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               ],
             ),

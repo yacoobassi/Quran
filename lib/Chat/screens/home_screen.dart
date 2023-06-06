@@ -124,8 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SearchScreen(true)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SearchScreen(true, false)));
         },
       ),
       floatingActionButtonLocation:

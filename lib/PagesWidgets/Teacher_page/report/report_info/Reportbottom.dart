@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../Links.dart';
+import '../../../../User/Data.dart';
 import '../../../../request.dart';
 
 class ReportBottom extends StatefulWidget {
@@ -15,8 +16,10 @@ class _ReportBottomState extends State<ReportBottom> {
   final request = Requst();
 
   getavarege() async {
-    final response = await request.postRequest(
-        getReportAvarege, {"instituteNum": "1", "reginmentNum": "19"});
+    final response = await request.postRequest(getReportAvarege, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment
+    });
 
     return response;
   }

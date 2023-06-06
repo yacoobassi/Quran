@@ -6,7 +6,7 @@ include("secureFunction.php");
 $post = filter('post');
 
 $stmt = $con->prepare("
-    SELECT c.comment, c.date, COALESCE(t.name, s.name) AS name 
+    SELECT c.comment,c.image, c.date, COALESCE(t.name, s.name) AS name 
     FROM comments c
     LEFT JOIN teacherData t ON c.num = t.num
     LEFT JOIN student s ON c.num = s.num

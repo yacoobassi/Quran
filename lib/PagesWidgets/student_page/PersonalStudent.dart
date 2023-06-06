@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:test_ro_run/pages/stdPage.dart';
 
+import '../../Chat/screens/auth_screen.dart';
 import '../../Links.dart';
 import '../../User/Data.dart';
 import '../../pages/posts.dart';
@@ -27,12 +30,15 @@ class _Personal_studentState extends State<Personal_student> {
   TextEditingController school = TextEditingController();
   TextEditingController id = TextEditingController();
   TextEditingController institute = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   String grade;
   String dateS = "";
   bool init = false;
 
   initial(AsyncSnapshot<dynamic> snapshot) {
+    password.text = snapshot.data['data'][0]['password'];
+
     name.text = snapshot.data['data'][0]['name'];
     id.text = snapshot.data['data'][0]['id'];
     fatherPhone.text = snapshot.data['data'][0]['fatherPhone'];
@@ -52,8 +58,21 @@ class _Personal_studentState extends State<Personal_student> {
     init = true;
   }
 
+  updateName() async {
+    try {
+      var collection = await FirebaseFirestore.instance.collection('users');
+
+      await collection.doc(Data.user.email).update({
+        'name': name.text,
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
   update() async {
     var response = await request.postRequest(updateStudentInf, {
+      "password": password.text,
       "name": name.text,
       "id": id.text,
       "grade": grade,
@@ -65,8 +84,9 @@ class _Personal_studentState extends State<Personal_student> {
       "reginmentNum": Data.user.regiment,
       "num": Data.user.email.replaceAll("@gmail.com", "")
     });
-    ScaffoldMessenger.of(context)
+    await ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("تمت حفظ البيانات")));
+    updateName();
     return response;
   }
 
@@ -74,13 +94,11 @@ class _Personal_studentState extends State<Personal_student> {
     var response = await request.postRequest(linkGETStData, {
       "num": Data.user.email.replaceAll("@gmail.com", ""),
       "instituteNum": Data.user.institute,
-      "regimentNum": Data.user.regiment
+      "reginmentNum": Data.user.regiment
     });
 
     return response;
   }
-
-
 
   void _showDatePikcer() {
     showDatePicker(
@@ -98,10 +116,12 @@ class _Personal_studentState extends State<Personal_student> {
     });
   }
 
-  send() {
+  send() async {
     var formdata = formstate.currentState;
     //  if (formdata.validate()) {
-    update();
+    await update();
+
+    await ChangePassword.changeUserPassword(Data.user.email, password.text);
     //   }
   }
 
@@ -133,6 +153,7 @@ class _Personal_studentState extends State<Personal_student> {
     List<String> co = ["  ", " "];
     List title = [
       tableTitle().titles('رقم الطالب '),
+      tableTitle().titles('الرقم السري '),
       tableTitle().titles('الاسم الرباعي'),
       tableTitle().titles('رقم الهوية'),
       tableTitle().titles(
@@ -146,8 +167,12 @@ class _Personal_studentState extends State<Personal_student> {
       tableTitle().titles('المركز'),
       tableTitle().titles('المدرسة'),
       MaterialButton(
-        onPressed: () {
-          send();
+        onPressed: () async {
+          await send();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => student_page()));
         },
         child: Text(
           "تخزين",
@@ -157,7 +182,7 @@ class _Personal_studentState extends State<Personal_student> {
       )
     ];
 
-    int numrowexa1 = 12;
+    int numrowexa1 = 13;
     int numcol1 = 2;
     int numcel1 = 2;
 
@@ -179,6 +204,16 @@ class _Personal_studentState extends State<Personal_student> {
                   ),
                   enabled: false,
                   keyboardType: TextInputType.number,
+                  validator: (text) {
+                    if (text.isEmpty) {
+                      return req;
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.name,
+                  controller: password,
                   validator: (text) {
                     if (text.isEmpty) {
                       return req;

@@ -33,6 +33,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Decode the grades JSON string into an array
 foreach ($data as &$row) {
     $row['grades'] = json_decode('[' . $row['grades'] . ']', true);
+    if (is_numeric($row['reviewAvarege'])) {
+        $row['reviewAvarege'] = number_format($row['reviewAvarege'], 2);
+    }
+    if (is_numeric($row['studyAvarege'])) {
+        $row['studyAvarege'] = number_format($row['studyAvarege'], 2);
+    }
 }
 
 $count = $stmt->rowCount();

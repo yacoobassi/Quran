@@ -88,7 +88,7 @@ class examstu extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "%${(double.parse(snapshot.data['avg_mark'] )).toStringAsFixed(1)}",
+                                    "%${(double.parse(snapshot.data['avg_mark'])).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
@@ -113,8 +113,8 @@ class examstu extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width *
                             0.9, // set the width to 90% of the screen width
-                        child: tableExam(
-                            collist, rowexa, numcol, numcel, snapshot),
+                        child: tableExam(collist, rowexa, numcol, numcel,
+                            snapshot, false, null),
                       ),
                     ],
                   ),

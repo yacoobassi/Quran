@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Links.dart';
-import '../../../pages/posts.dart';
+import '../../../User/Data.dart';
 import '../../../request.dart';
 import '../../../tables/tableTitle.dart';
 import '../../Bar/drawer.dart';
-import '../../Bar/notification.dart';
 import '../report/lecture/dropdown.dart';
 import 'Date.dart';
 import 'examNavBottom.dart';
@@ -37,19 +37,22 @@ class _ful_infoState extends State<ful_info> {
   AsyncSnapshot<dynamic> marksData;
 
   List dates = [];
-  DateTime count;
 
+  DateTime start;
   @override
   void initState() {
     super.initState();
-    getDates();
 
-    count = DateTime.now();
+    getDates();
+    start = DateTime.now();
   }
 
   Future<void> getDates() async {
-    final response = await request
-        .postRequest(getMarksDate, {"instituteNum": "1", "reginmentNum": "19"});
+    final response = await request.postRequest(getMarksDate, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
+    });
+
     setState(() {
       marksData = AsyncSnapshot.withData(ConnectionState.done, response);
       if (marksData.hasData && marksData.data['data'].length > 0) {
@@ -59,13 +62,17 @@ class _ful_infoState extends State<ful_info> {
         }
       }
     });
+
+    return response;
   }
 
   getExam() async {
-    var response = await request.postRequest(linkgetExam,
-        {"instituteNum": "1", "reginmentNum": "19", "date": Date.date});
-
-    return response;
+    var response = await request.postRequest(linkgetExam, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
+      "date": Date.date
+    });
+    return Date.date == null ? "" : response;
   }
 
   initial(AsyncSnapshot<dynamic> snapshot) {
@@ -112,6 +119,8 @@ class _ful_infoState extends State<ful_info> {
             future: getExam(),
             builder: ((context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data == "")
+                  return Center(child: Text("لا يوجد امتحانات"));
                 initial(snapshot);
 
                 List<String> co = ["الامتحان", "المؤمنون"];
@@ -223,7 +232,6 @@ class _ful_infoState extends State<ful_info> {
                                 setState(() {
                                   Date.date = val;
                                 });
-                                // call fetchMarks() with the new selected date
                               }),
                             ]),
                         Card(
@@ -248,12 +256,7 @@ class _ful_infoState extends State<ful_info> {
                   ),
                 );
               } else
-                return Center(
-                  child:
-                      DateTime.now().difference(count) <= Duration(seconds: 1)
-                          ? CircularProgressIndicator()
-                          : Text("لا يوجد امتحانات بعد"),
-                );
+                return Center(child: CircularProgressIndicator());
             })));
   }
 }

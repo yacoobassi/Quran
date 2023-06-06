@@ -45,22 +45,28 @@ class _reportState extends State<report> {
   }
 
   getStudentsNumber() async {
-    var response = await request
-        .postRequest(linkGetAllStudents, {"institute": "1", "regiment": "19"});
+    var response = await request.postRequest(linkGetAllStudents, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment,
+    });
 
     return response;
   }
 
   getInsName() async {
-    var response = await request
-        .postRequest(linkInsName, {"instituteNum": "18", "reginmentNum": "19"});
+    var response = await request.postRequest(linkInsName, {
+      "instituteNum": Data.user.institute,
+      "reginmentNum": Data.user.regiment
+    });
 
     return response;
   }
 
   getTeacherName() async {
-    var response = await request.postRequest(
-        linkTeacherName, {"instituteNum": "18", "reginmentNum": "19"});
+    var response = await request.postRequest(linkTeacherName, {
+      "instituteNum": Data.user.institute.toString(),
+      "reginmentNum": Data.user.regiment.toString(),
+    });
 
     return response;
   }
@@ -71,8 +77,8 @@ class _reportState extends State<report> {
     //widget.Loading();
     int nextmonth = DateTime.now().month + 1 % 12;
     var response = await request.postRequest(linkNewReport, {
-      "instituteNum": "1",
-      "regimentNum": "19",
+      "instituteNum": Data.user.institute,
+      "regimentNum": Data.user.regiment,
       "reportDate":
           "${nextmonth == 0 ? nextmonth + 1 : nextmonth}/${DateTime.now().year}",
       "studenstNum": "30",

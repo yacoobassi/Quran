@@ -43,9 +43,17 @@ class _comments_containerState extends State<comments_container> {
       "post": widget.post.toString(),
       "num": Data.user.email.replaceAll("@gmail.com", ""),
       "comment": _comment.text,
-      "date": DateTime.now().toString()
+      "date": DateTime.now().toString(),
+      "image": Data.user.image
     });
 
+    return response;
+  }
+
+  incComments() async {
+    var response = await request.postRequest(LinkincComments, {
+      "count": widget.post.toString(),
+    });
     return response;
   }
 
@@ -124,14 +132,15 @@ class _comments_containerState extends State<comments_container> {
                             dateTime.millisecondsSinceEpoch);
                         return Row(
                           children: [
-                            ClipOval(
-                              child: Image.asset(
-                                "images/face.jpg",
-                                colorBlendMode: BlendMode.modulate,
-                                height: 60.0,
-                                width: 60.0,
-                                fit: BoxFit.fill,
-                              ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: ClipOval(
+                                  child: CircleAvatar(
+                                radius: 25.0,
+                                backgroundImage: NetworkImage(
+                                    snapshot.data['data'][index]['image']),
+                                backgroundColor: Colors.transparent,
+                              )),
                             ),
                             SizedBox(width: 10),
                             Column(
@@ -240,6 +249,8 @@ class _comments_containerState extends State<comments_container> {
                     IconButton(
                       onPressed: () {
                         if (_comment.text.isNotEmpty) {
+                          incComments();
+
                           setState(() {
                             addcomment();
 

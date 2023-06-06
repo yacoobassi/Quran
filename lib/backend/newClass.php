@@ -40,7 +40,7 @@ if ($rowCount > 0) {
     $rowCount1 = $stmt1->rowCount();
     $rowCount3=0;
     $rowCount4=0;
-    $sql1 = $con->prepare("SELECT num FROM `group` WHERE instituteNum = 1 AND regimentNum = 19");
+    $sql1 = $con->prepare("SELECT num FROM `group` WHERE instituteNum = $instituteNum AND regimentNum = $reginmentNum");
     $sql1->execute();
     
     

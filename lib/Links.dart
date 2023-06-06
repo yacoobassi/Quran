@@ -1,4 +1,4 @@
-String linkServerName = "http://192.168.1.9:8081/Quran/lib/backend";
+String linkServerName = "http://192.168.1.101:8080/Quran/lib/backend";
 final linkStudentSignup = '$linkServerName/studentSignup.php';
 final linkSignin = '$linkServerName/studentSignup.php';
 final linkStData = '$linkServerName/setStudInfo.php';
@@ -33,3 +33,6 @@ final LinkaddLike = '$linkServerName/addLike.php';
 final removeLike = '$linkServerName/removeLike.php';
 final getComments = '$linkServerName/getComments.php';
 final addComment = '$linkServerName/addComment.php';
+final LinkincComments = '$linkServerName/incComments.php';
+final LinkdeleteStudent = '$linkServerName/deleteStudent.php';
+final getPhoneNumber = '$linkServerName/getPhoneNumber.php';

@@ -68,8 +68,14 @@ class _enterState extends State<enter> {
           response2['status'] == "success") {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("تمت اضافة الاستاذ")));
-        await SignNewUser.signUpFunction(nameController.text,
-            num + "@gmail.com", false, "1", "19", passwordController.text);
+        await SignNewUser.signUpFunction(
+            nameController.text,
+            num + "@gmail.com",
+            false,
+            Data.user.institute.toString(),
+            Data.user.regiment,
+            passwordController.text,
+            Data.user.inistituteName);
       } else
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("لم يتم التسجيل")));
@@ -79,8 +85,8 @@ class _enterState extends State<enter> {
         "password": passwordController.text,
         "num": num,
         "groupNum": "1",
-        "instituteNum": "1",
-        "reginmentNum": "19",
+        "instituteNum": Data.user.institute,
+        "reginmentNum": Data.user.regiment,
       });
 
       var response2 = await request.postRequest(linkStData, {
@@ -93,7 +99,7 @@ class _enterState extends State<enter> {
         "motherPhone": "",
         "house": "",
         "instituteName": "مركز بلاطة",
-        "instituteNum": "1",
+        "instituteNum": Data.user.institute.toString(),
         "finishedParts": "0",
       });
 
@@ -106,12 +112,18 @@ class _enterState extends State<enter> {
         String user = Data.user.email;
         String password = Data.user.password;
 
-        await SignNewUser.signUpFunction(nameController.text,
-            num + "@gmail.com", true, "1", "19", passwordController.text);
+        await SignNewUser.signUpFunction(
+            nameController.text,
+            num + "@gmail.com",
+            true,
+            Data.user.institute,
+            Data.user.regiment,
+            passwordController.text,
+            Data.user.inistituteName);
 
         final _auth = await FirebaseAuth.instance;
 
-        await _auth.signInWithEmailAndPassword(email: user, password: password);
+        //await _auth.signInWithEmailAndPassword(email: user, password: password);
 
         await GetUser.userSignedIn(user);
 
@@ -228,34 +240,6 @@ class _enterState extends State<enter> {
                           actions: [
                             ElevatedButton(
                                 onPressed: () async {
-                                  // final EmailSignUpResults response =
-                                  //     await this
-                                  //         ._emailAndPasswordAuth
-                                  //         .signUpAuth(
-                                  //             email: PhoneController.text +
-                                  //                 "@google.com",
-                                  //             pwd: passwordController.text);
-
-                                  // if (response ==
-                                  //     EmailSignUpResults.SignUpCompleted) {
-                                  //   Navigator.push(context,
-                                  //       MaterialPageRoute(builder: (context) {
-                                  //     return ChatsScreen();
-                                  //   }));
-                                  // } else {
-                                  //   final String msg = response ==
-                                  //           EmailSignUpResults
-                                  //               .EmailAlreadyPresent
-                                  //       ? ''
-                                  //       : 'لم يكتمل االتسجيل';
-                                  //   ScaffoldMessenger.of(context)
-                                  //       .showSnackBar(
-                                  //           SnackBar(content: Text(msg)));
-                                  // }
-                                  // Navigator.pushReplacement(context,
-                                  //     MaterialPageRoute(builder: (context) {
-                                  //   return Signin();
-                                  // }));
                                   Navigator.pop(context);
                                   await signup();
                                 },

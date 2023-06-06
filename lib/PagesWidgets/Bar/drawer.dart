@@ -57,7 +57,11 @@ var teacherlist = [
     'go': scheduleteacher()
   },
   {'page': 'المنشورات', 'icon': Icon(Icons.post_add), 'go': posts()},
-  {'page': 'الطلاب', 'icon': Icon(Icons.people), 'go': student_Data(null)},
+  {
+    'page': 'الطلاب',
+    'icon': Icon(Icons.people),
+    'go': student_Data(null, false)
+  },
   {
     'page': 'التواصل مع الأهل',
     'icon': Icon(Icons.chat),
@@ -73,21 +77,26 @@ var teacherlist = [
     'icon': Icon(Icons.insert_drive_file_rounded),
     'go': Personal_info()
   },
-
   {
-    'page': 'إضافة الطلاب',
+    'page': 'إضافة طالب',
     'icon': Icon(Icons.people_alt_rounded),
     'go': Signup(false)
   },
-
+  {
+    'page': 'حذف طالب',
+    'icon': Icon(Icons.remove_circle_rounded),
+    'go': student_Data(null, true)
+  },
   {'page': 'تسجيل الخروج ', 'icon': Icon(Icons.exit_to_app), 'go': Signin()}
 ];
 
 class drawer extends StatefulWidget {
   double drawer_width;
   bool student;
+  bool mainPage;
 
-  drawer({Key myKey, this.student, this.drawer_width}) : super(key: myKey);
+  drawer({Key myKey, this.student, this.drawer_width, this.mainPage})
+      : super(key: myKey);
 
   @override
   State<drawer> createState() => _drawerState();
@@ -162,19 +171,26 @@ class _drawerState extends State<drawer> {
                         if (i == drawerlist.length - 1) {
                           await FirebaseAuth.instance.signOut();
                           Data.user = null;
-
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  drawerlist[i]['go'],
-                            ),
+                                builder: (BuildContext context) =>
+                                    drawerlist[i]['go']),
+                            (route) =>
+                                false, // Remove all previous routes from the stack
                           );
+                        } else {
+                          widget.mainPage == null || i == 0
+                              ? Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          drawerlist[i]['go']))
+                              : Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                  return drawerlist[i]['go'];
+                                }));
                         }
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return drawerlist[i]['go'];
-                        }));
                       },
                     );
                   }),

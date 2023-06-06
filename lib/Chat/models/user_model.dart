@@ -11,6 +11,7 @@ class UserModel {
   String institute;
   String regiment;
   String password;
+  String inistituteName;
 
   UserModel(
       {this.email,

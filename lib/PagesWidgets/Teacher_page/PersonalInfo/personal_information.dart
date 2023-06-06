@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ro_run/PagesWidgets/new_pass/enter.dart';
 
+import '../../../Chat/screens/auth_screen.dart';
 import '../../../Links.dart';
 import '../../../User/Data.dart';
-import '../../../pages/posts.dart';
+import '../../../pages/teacherPage.dart';
 import '../../../request.dart';
 import '../../../tables/tableTitle.dart';
 import '../../Bar/drawer.dart';
-import '../../Bar/notification.dart';
 import '../report/lecture/dropdown.dart';
 
 class Personal_info extends StatefulWidget {
@@ -36,50 +36,70 @@ class _Personal_infoState extends State<Personal_info> {
   TextEditingController phone = TextEditingController();
   TextEditingController telephone = TextEditingController();
   TextEditingController remark = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   Requst request = new Requst();
-  String social;
-  String tajoeedLevel;
+  String social = "متزوج";
+  String tajoeedLevel = "أتقن التجويد وحصلت على شهادة";
   String dateS = "";
   bool init = false;
 
   initial(AsyncSnapshot<dynamic> snapshot) {
-    name.text = snapshot.data['data'][0]['name'];
-    id.text = snapshot.data['data'][0]['id'];
-    country.text = snapshot.data['data'][0]['country'];
-    work.text = snapshot.data['data'][0]['currentJob'];
-    preWork.text = snapshot.data['data'][0]['lastJob'];
-    qualification.text = snapshot.data['data'][0]['study'];
-    university.text = snapshot.data['data'][0]['university'];
-    certificate.text = snapshot.data['data'][0]['certificate'];
-    tajoeed.text = snapshot.data['data'][0]['tajoeedLevel'];
-    mosque.text = snapshot.data['data'][0]['mosque'];
-    teacher.text = snapshot.data['data'][0]['personTeachYou'];
-    location.text = snapshot.data['data'][0]['region'];
-    phone.text = snapshot.data['data'][0]['Yourphone'];
-    telephone.text = snapshot.data['data'][0]['housePhone'];
-    remark.text = snapshot.data['data'][0]['remark'];
-    if (snapshot.data['data'][0]['social'] != "")
-      social = snapshot.data['data'][0]['social'];
-    if (snapshot.data['data'][0]['tajoeedYear'] != "")
-      tajoeedLevel = snapshot.data['data'][0]['tajoeedYear'];
-    if (snapshot.data['data'][0]['birth'] != "")
-      dateS = snapshot.data['data'][0]['birth'];
+    password.text = snapshot.data['data']['password'];
+    name.text = snapshot.data['data']['name'];
+    id.text = snapshot.data['data']['id'];
+    country.text = snapshot.data['data']['country'];
+    work.text = snapshot.data['data']['currentJob'];
+    preWork.text = snapshot.data['data']['lastJob'];
+    qualification.text = snapshot.data['data']['study'];
+    university.text = snapshot.data['data']['university'];
+    certificate.text = snapshot.data['data']['certificate'];
+    tajoeed.text = snapshot.data['data']['tajoeedLevel'];
+    mosque.text = snapshot.data['data']['mosque'];
+    teacher.text = snapshot.data['data']['personTeachYou'];
+    location.text = snapshot.data['data']['region'];
+    phone.text = snapshot.data['data']['Yourphone'];
+    telephone.text = snapshot.data['data']['housePhone'];
+    remark.text = snapshot.data['data']['remark'];
+    if (snapshot.data['data']['social'] != "")
+      social = snapshot.data['data']['social'];
+    if (snapshot.data['data']['tajoeedYear'] != "")
+      tajoeedLevel = snapshot.data['data']['tajoeedYear'];
+    if (snapshot.data['data']['birth'] != "")
+      dateS = snapshot.data['data']['birth'];
     else
       dateS = "${date.year}/${date.month}/${date.day}";
 
     init = true;
   }
 
+  updateName() async {
+    try {
+      var collection = await FirebaseFirestore.instance.collection('users');
+
+      await collection.doc(Data.user.email).update({
+        'name': name.text,
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
   send() async {
     //var formdata = formstate.currentState;
     // if (formdata.validate()) {
     await update();
-    //   }
+    await updateName();
+    await ChangePassword.changeUserPassword(Data.user.email, password.text);
+
+    Future.delayed(Duration(seconds: 1));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => teacher_page()));
   }
 
   update() async {
     var response = await request.postRequest(linkupdateTeacherInfo, {
+      "password": password.text,
       "name": name.text,
       "id": id.text,
       "country": country.text,
@@ -100,14 +120,17 @@ class _Personal_infoState extends State<Personal_info> {
       "remark": remark.text,
       "num": Data.user.email.replaceAll("@gmail.com", "")
     });
-    ScaffoldMessenger.of(context)
+    await ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("تمت حفظ البيانات")));
     return response;
   }
 
   getInfo() async {
-    var response = await request.postRequest(linkgetTeacherInfo,
-        {"num": Data.user.email.replaceAll("@gmail.com", "")});
+    var response = await request.postRequest(linkgetTeacherInfo, {
+      "num": Data.user.email.replaceAll("@gmail.com", ""),
+      "instituteNum": Data.user.institute,
+      "regimentNum": Data.user.regiment
+    });
 
     return response;
   }
@@ -123,6 +146,7 @@ class _Personal_infoState extends State<Personal_info> {
     ];
     List title = [
       tableTitle().titles('الاسم الرباعي'),
+      tableTitle().titles('الرقم السري'),
       tableTitle().titles('رقم الهوية'),
       tableTitle().titles(
         'البلد',
@@ -172,6 +196,19 @@ class _Personal_infoState extends State<Personal_info> {
                 height: 40,
                 child: TextFormField(
                   controller: name,
+                  keyboardType: TextInputType.name,
+                  validator: (text) {
+                    if (text.isEmpty) {
+                      return req;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                height: 40,
+                child: TextFormField(
+                  controller: password,
                   keyboardType: TextInputType.name,
                   validator: (text) {
                     if (text.isEmpty) {
@@ -290,7 +327,7 @@ class _Personal_infoState extends State<Personal_info> {
                     },
                     controller: certificate,
                   )),
-                   Container(
+              Container(
                 height: 60,
                 child: Expanded(
                   // add Expanded to have your dropdown button fill remaining space
@@ -324,7 +361,6 @@ class _Personal_infoState extends State<Personal_info> {
                     },
                     controller: tajoeed,
                   )),
-             
               Container(
                 height: 20,
                 child: TextFormField(

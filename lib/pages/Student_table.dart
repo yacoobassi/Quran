@@ -154,7 +154,7 @@ class _Table_student1State extends State<Table_student1> {
                               children: [
                                 snapshot.data['data'].length > 0
                                     ? tableExam(columnTitle, rowexa, numcol,
-                                        numcel, snapshot)
+                                        numcel, snapshot, false, null)
                                     : Center(child: Text("  لا يوجد علامات"))
                               ],
                             ),
